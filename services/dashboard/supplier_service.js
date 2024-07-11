@@ -1,4 +1,5 @@
 import { SuppliersModel } from '../../models/dashboard/suppliers.js';
+import ProductsService from '../../services/dashboard/product_service.js';
 
 const getSuppliers = async () => {
   try {
@@ -40,6 +41,8 @@ const deleteSupplier = async (id) => {
   try {
     const res = await SuppliersModel.findByIdAndDelete(id);
     if (!res) throw 'Failed deleting object';
+
+    await ProductsService.deleteProductBySupplierId(id);
 
     return res;
   } catch (error) {

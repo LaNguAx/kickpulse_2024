@@ -1,4 +1,5 @@
 import SupplierService from '../../services/dashboard/supplier_service.js';
+
 // restapi
 export async function getSuppliers(req, res) {
   const suppliers = await SupplierService.getSuppliers();
@@ -22,7 +23,15 @@ export async function deleteSupplier(req, res) {
   try {
     const deletedSupplier = await SupplierService.deleteSupplier(id);
     if (!deletedSupplier) throw 'error';
+    
+    // delete all related products to supplier
+    const products = 
+
+    
     res.json(deletedSupplier);
+
+
+
   } catch (err) {
     console.log(err);
   }

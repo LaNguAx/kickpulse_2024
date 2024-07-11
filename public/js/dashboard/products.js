@@ -49,8 +49,25 @@ class Products {
       // form validation
       const sizes = validatedForm.sizes.split(',').map((item) => item.trim());
       validatedForm.sizes = sizes;
+
+      validatedForm.supplier = this.getSupplierData();
+
       this.addProduct(validatedForm);
     });
+  }
+
+  getSupplierData() {
+    const selectElement = document.getElementById('suppliers-option');
+    const selectedOption = selectElement.options[selectElement.selectedIndex];
+
+    const supplierId = selectedOption.value;
+    const supplierName = selectedOption.getAttribute('data-supplier-name');
+
+    const supplierData = {
+      id: supplierId,
+      name: supplierName,
+    };
+    return supplierData;
   }
 
   renderSpinner() {
@@ -120,8 +137,8 @@ class Products {
             <p class="card-text">Price: $${product.price}</p>
             <p class="card-text">Sizes: ${product.sizes.join(', ')}</p>
             <p class="card-text">Quantity: ${product.quantity}</p>
-            <p class="card-text">Supplier: ${product.supplier}</p>
-            <p class="card-text">Brand: ${product.brand}</p>
+            <p class="card-text">Supplier: ${product.supplier.name}</p>
+    <p class="card-text">Brand: ${product.brand}</p>
             <p class="card-text">Category: ${product.category}</p>
             <p class="card-text">Gender: ${product.gender}</p>
           </div>
@@ -171,7 +188,7 @@ class Products {
       const data = await response.json();
       if (!response.ok) throw new Error('Failed getting response');
 
-      console.log('Deleted Product: ', data.name);
+      this.loadProducts();
       e.target.closest('.col-md-4.col-sm-6').remove();
     } catch (error) {
       console.log(error);

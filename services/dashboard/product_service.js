@@ -29,7 +29,7 @@ const createProduct = async (product) => {
       price: product.price,
       quantity: product.quantity,
       description: product.description,
-      supplier: product.supplier,
+      supplier: { name: product.supplier.name, id: product.supplier.id },
       image: product.image,
       brand: product.brand,
       category: product.category,
@@ -54,6 +54,20 @@ const deleteProduct = async (id) => {
   }
 };
 
+const deleteProductBySupplierId = async (supplierId) => {
+  try {
+    const response = await ProductsModel.deleteMany({
+      'supplier.id': supplierId,
+    });
+    if (!response)
+      throw new Error('Error deleting products after deleting supplier!');
+
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const editProduct = async (id, options) => {
   try {
     const res = await ProductsModel.findByIdAndUpdate(id, options);
@@ -70,5 +84,6 @@ export default {
   getProduct,
   createProduct,
   deleteProduct,
+  deleteProductBySupplierId,
   editProduct,
 };

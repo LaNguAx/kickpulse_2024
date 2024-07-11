@@ -90,6 +90,8 @@ class Suppliers {
       const data = await response.json();
       this.renderSuppliers(data);
     } catch (error) {
+      this.suppliersContainer.innerHTML =
+        '<h4>Failed fetching suppliers..</h4>';
       this.showMessage(`Error loading suppliers\nError message: ${error}`);
     }
   }
@@ -171,7 +173,6 @@ class Suppliers {
       const data = await response.json();
       if (!response.ok) throw new Error('Failed getting response');
       this.loadSuppliers();
-      console.log('Deleted Supplier: ', data.name);
       e.target.closest('.col-md-4.col-sm-6').remove();
     } catch (error) {
       console.log(error);

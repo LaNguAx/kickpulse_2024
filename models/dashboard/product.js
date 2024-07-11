@@ -25,8 +25,14 @@ const ProductSchema = new Schema(
       required: true,
     },
     supplier: {
-      type: Number,
-      required: true,
+      name: {
+        type: String,
+        required: true,
+      },
+      id: {
+        type: String,
+        required: true,
+      },
     },
     image: {
       type: String, // URL to the product image

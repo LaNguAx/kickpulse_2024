@@ -17,21 +17,20 @@ app.use('/api', apiRouter);
 app.set('view engine', 'ejs');
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  const connectToDb = () => {
-    mongoose
-      .connect(
-        'mongodb+srv://itayakni:kick.pulse.cs@cluster0.yl5rjk1.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
-      )
-      .then(() => {
-        console.log('connected to mongo');
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  connectToDb();
+const connectToDb = async () => {
+  try {
+    await mongoose.connect(
+      'mongodb+srv://itayakni:kick.pulse.cs@cluster0.yl5rjk1.mongodb.net/kickpulse_2024?retryWrites=true&w=majority&appName=Cluster0'
+    );
+    console.log('Connected to MongoDB');
+  } catch (err) {
+    console.error('Error connecting to MongoDB:', err);
+  }
+};
+
+app.listen(PORT, async () => {
   console.log(`Server is running on port ${PORT}`);
+  await connectToDb();
 });
 
 //mongodb+srv://margolin23:nYbjAMqvAGBtsmdZ@cluster1.3slcbul.mongodb.net/?retryWrites=true&w=majority&appName=Cluster1
