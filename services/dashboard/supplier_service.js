@@ -1,24 +1,22 @@
 import { SuppliersModel } from '../../models/dashboard/suppliers.js';
-import ProductsService from '../../services/dashboard/product_service.js';
 
 const getSuppliers = async () => {
   try {
-    const suppliers = await SuppliersModel.find();
-    return suppliers;
+    return await SuppliersModel.find();
   } catch (err) {
     console.error('Error retrieving suppliers:', err);
-    throw err;
+    throw new Error('Failed to retrieve suppliers');
   }
 };
 
 const getSupplier = async (id) => {
   try {
     const supplier = await SuppliersModel.findById(id);
-    if (!supplier) throw 'Error finding supplier';
-
+    if (!supplier) throw new Error('Supplier not found');
     return supplier;
-  } catch (error) {
-    console.log(`${error} on object ${id}`);
+  } catch (err) {
+    console.error(`Error finding supplier with ID ${id}:`, err);
+    throw new Error('Failed to retrieve supplier');
   }
 };
 
@@ -29,35 +27,36 @@ const createSupplier = async (supplier) => {
       location: supplier.location,
       brands: supplier.brands,
     });
-
-    const savedSupplier = await newSupplier.save();
-    return savedSupplier;
+    return await newSupplier.save();
   } catch (err) {
     console.error('Error saving supplier:', err);
+    throw new Error('Failed to save supplier');
   }
 };
 
 const deleteSupplier = async (id) => {
   try {
-    const res = await SuppliersModel.findByIdAndDelete(id);
-    if (!res) throw 'Failed deleting object';
-
-    await ProductsService.deleteProductBySupplierId(id);
-
-    return res;
-  } catch (error) {
-    console.log(error);
+    const deletedSupplier = await SuppliersModel.findByIdAndDelete(id);
+    if (!deletedSupplier) throw new Error('Supplier not found');
+    return deletedSupplier;
+  } catch (err) {
+    console.error(`Error deleting supplier with ID ${id}:`, err);
+    throw new Error('Failed to delete supplier');
   }
 };
 
 const editSupplier = async (id, options) => {
   try {
-    const res = await SuppliersModel.findByIdAndUpdate(id, options);
-    if (!res) throw 'Failed deleting object';
-
-    return res;
-  } catch (error) {
-    console.log(error);
+    const updatedSupplier = await SuppliersModel.findByIdAndUpdate(
+      id,
+      options,
+      { new: true, runValidators: true }
+    );
+    if (!updatedSupplier) throw new Error('Supplier not found');
+    return updatedSupplier;
+  } catch (err) {
+    console.error(`Error editing supplier with ID ${id}:`, err);
+    throw new Error('Failed to edit supplier');
   }
 };
 

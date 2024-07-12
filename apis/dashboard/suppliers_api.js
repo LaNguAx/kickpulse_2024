@@ -1,38 +1,63 @@
 import SupplierService from '../../services/dashboard/supplier_service.js';
+import ProductsService from '../../services/dashboard/product_service.js';
 
-// restapi
+// Get all suppliers
 export async function getSuppliers(req, res) {
-  const suppliers = await SupplierService.getSuppliers();
-  res.json(suppliers);
+  try {
+    const suppliers = await SupplierService.getSuppliers();
+    res.status(200).json({ success: true, data: suppliers });
+  } catch (err) {
+    console.error('Error fetching suppliers:', err);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
 }
+
+// Create a new supplier
 export async function createSupplier(req, res) {
-  const supplier = { ...req.body };
-  const newSupplier = await SupplierService.createSupplier(supplier);
-
-  res.json(newSupplier);
+  try {
+    const supplier = { ...req.body };
+    const newSupplier = await SupplierService.createSupplier(supplier);
+    res.status(201).json({ success: true, data: newSupplier });
+  } catch (err) {
+    console.error('Error creating supplier:', err);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
 }
 
+// Get a single supplier by ID
 export async function getSupplier(req, res) {
   const { id } = req.params;
-  const supplier = await SupplierService.getSupplier(id);
-  res.json(supplier);
+  try {
+    const supplier = await SupplierService.getSupplier(id);
+    if (!supplier) {
+      return res
+        .status(404)
+        .json({ success: false, message: 'Supplier not found' });
+    }
+    res.status(200).json({ success: true, data: supplier });
+  } catch (err) {
+    console.error('Error fetching supplier:', err);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
 }
 
+// Delete a supplier by ID
 export async function deleteSupplier(req, res) {
   const { id } = req.params;
   try {
     const deletedSupplier = await SupplierService.deleteSupplier(id);
-    if (!deletedSupplier) throw 'error';
-    
-    // delete all related products to supplier
-    const products = 
+    if (!deletedSupplier) {
+      return res
+        .status(404)
+        .json({ success: false, message: 'Supplier not found' });
+    }
 
-    
-    res.json(deletedSupplier);
+    // Delete all related products to supplier
+    await ProductsService.deleteProductsBySupplierId(id);
 
-
-
+    res.status(200).json({ success: true, data: deletedSupplier });
   } catch (err) {
-    console.log(err);
+    console.error('Error deleting supplier:', err);
+    res.status(500).json({ success: false, message: 'Server error' });
   }
 }

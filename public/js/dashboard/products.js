@@ -3,7 +3,6 @@ class Products {
   addProductTab;
   productsContainer;
   addProductContainer;
-
   formAddProduct;
   feedbackAddProduct;
   feedbackMessage;
@@ -12,15 +11,13 @@ class Products {
   constructor() {
     this.productsTab = document.querySelector('.all-products-tab');
     this.addProductTab = document.querySelector('.add-product-tab');
-
     this.productsContainer = document.querySelector('.products');
     this.addProductContainer = document.querySelector('.add-product');
-
     this.formAddProduct = document.querySelector('.add-product-form');
     this.feedbackAddProduct = document.querySelector('.feedback-add-product');
-
     this.spinner = document.querySelector('.spinner-border');
     this.feedbackMessage = document.querySelector('.feedback-message');
+
     this.initEventListeners();
   }
 
@@ -29,45 +26,64 @@ class Products {
       this.showProducts(e);
       this.loadProducts();
     });
+
     this.addProductTab.addEventListener('click', (e) => this.showAddProduct(e));
 
     this.productsContainer.addEventListener('click', (e) => {
-      if (!e.target.classList.contains('delete-product')) return;
-      else this.deleteProduct(e);
+      if (e.target.classList.contains('delete-product')) {
+        this.deleteProduct(e);
+      }
     });
 
     this.formAddProduct.addEventListener('submit', (e) => {
       e.preventDefault();
-
-      const validatedForm = {};
-
       const formData = new FormData(this.formAddProduct);
-      formData.forEach((val, key) => {
-        validatedForm[key] = val;
-      });
+      const form = Object.fromEntries(formData.entries());
 
-      // form validation
-      const sizes = validatedForm.sizes.split(',').map((item) => item.trim());
-      validatedForm.sizes = sizes;
-
-      validatedForm.supplier = this.getSupplierData();
+      const validatedForm = this.validateForm(form);
 
       this.addProduct(validatedForm);
     });
   }
 
+  validateForm(form) {
+    // generate sizes array
+    form.sizes = form.sizes.split(',').map((item) => item.trim());
+
+    // supplier
+    form.supplier = this.getSupplierData();
+
+    // brand
+    form.brand = this.getBrandData();
+    //category
+    form.category = this.getCategoryData();
+
+    return form;
+  }
+
   getSupplierData() {
     const selectElement = document.getElementById('suppliers-option');
     const selectedOption = selectElement.options[selectElement.selectedIndex];
-
-    const supplierId = selectedOption.value;
-    const supplierName = selectedOption.getAttribute('data-supplier-name');
-
-    const supplierData = {
-      id: supplierId,
-      name: supplierName,
+    return {
+      id: selectedOption.value,
+      name: selectedOption.getAttribute('data-supplier-name'),
     };
-    return supplierData;
+  }
+  getCategoryData() {
+    const selectElement = document.getElementById('category-option');
+    const selectedOption = selectElement.options[selectElement.selectedIndex];
+    return {
+      id: selectedOption.value,
+      name: selectedOption.getAttribute('data-category-name'),
+    };
+  }
+  getBrandData() {
+    const selectElement = document.getElementById('brand-option');
+    const selectedOption = selectElement.options[selectElement.selectedIndex];
+    return {
+      id: selectedOption.value,
+      name: selectedOption.getAttribute('data-brand-name'),
+    };
   }
 
   renderSpinner() {
@@ -95,36 +111,33 @@ class Products {
   }
 
   async loadProducts() {
-    this.productsContainer.innerHTML = ` <div class="mt-5 mx-auto">
-            <div class="spinner-border text-center" role="status">
-              <span class="sr-only display-4">Loading...</span>
-            </div>
-          </div>`;
+    this.productsContainer.innerHTML = `
+      <div class="mt-5 mx-auto">
+        <div class="spinner-border text-center" role="status">
+          <span class="sr-only display-4">Loading...</span>
+        </div>
+      </div>`;
 
     try {
       const response = await fetch(`/api/products/`);
       if (!response.ok) throw new Error('Failed fetching!');
-      const data = await response.json();
-      this.renderProducts(data);
+      const result = await response.json();
+      this.renderProducts(result.data);
     } catch (error) {
       this.showMessage(`Error loading products\nError message: ${error}`);
     }
   }
 
   renderProducts(data) {
-    // Clear the container first
     this.productsContainer.innerHTML = '';
-    if (data.length == 0) {
+    if (data.length === 0) {
       this.productsContainer.innerHTML = `<h4>You don't have any products..</h4>`;
       return;
     }
 
     data.forEach((product) => {
-      // Create a div element for the product
       const productElement = document.createElement('div');
       productElement.className = 'col-md-4 col-sm-6 col-12 mb-4';
-
-      // Populate the inner HTML with the product details
       productElement.innerHTML = `
         <div class="card position-relative" data-product-id="${product._id}">
           <button type="button" class="btn btn-outline-danger delete-product">X</button>
@@ -138,21 +151,17 @@ class Products {
             <p class="card-text">Sizes: ${product.sizes.join(', ')}</p>
             <p class="card-text">Quantity: ${product.quantity}</p>
             <p class="card-text">Supplier: ${product.supplier.name}</p>
-    <p class="card-text">Brand: ${product.brand}</p>
+            <p class="card-text">Brand: ${product.brand}</p>
             <p class="card-text">Category: ${product.category}</p>
             <p class="card-text">Gender: ${product.gender}</p>
           </div>
-        </div>
-      `;
-
-      // Append the product element to the container
+        </div>`;
       this.productsContainer.appendChild(productElement);
     });
   }
 
   async addProduct(product) {
     this.renderSpinner();
-
     try {
       const response = await fetch(`/api/products/`, {
         method: 'POST',
@@ -162,9 +171,10 @@ class Products {
         body: JSON.stringify(product),
       });
 
-      const data = await response.json();
-      if (!response.ok) throw new Error('Failed getting response');
+      console.log(product);
 
+      if (!response.ok) throw new Error('Failed getting response');
+      await response.json();
       this.showMessage('Successfully added product!');
       this.renderSpinner();
       this.formAddProduct.reset();
@@ -185,9 +195,8 @@ class Products {
         },
       });
 
-      const data = await response.json();
       if (!response.ok) throw new Error('Failed getting response');
-
+      await response.json();
       this.loadProducts();
       e.target.closest('.col-md-4.col-sm-6').remove();
     } catch (error) {

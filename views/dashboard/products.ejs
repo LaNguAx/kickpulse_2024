@@ -224,15 +224,18 @@ TEST DESCRIPTION</textarea
                 <select
                   class="form-select form-select-lg mb-3"
                   name="brand"
+                  id="brand-option"
                   aria-label=".form-select-lg example"
                   required
                 >
                   <option value="" disabled selected>
                     Please select a brand
                   </option>
-                  <option value="1">One</option>
-                  <option value="2" selected>Two</option>
-                  <option value="3">Three</option>
+                  <% suppliers.forEach(el => { %>
+                  <option value="<%= el.id %>" data-brand-name="<%= el.name %>">
+                    <%= el.name %>
+                  </option>
+                  <% }) %>
                 </select>
               </div>
             </div>
@@ -242,15 +245,21 @@ TEST DESCRIPTION</textarea
                 <select
                   class="form-select form-select-lg mb-3"
                   name="category"
+                  id="category-option"
                   aria-label=".form-select-lg example"
                   required
                 >
                   <option value="" disabled selected>
                     Please select a category
                   </option>
-                  <option value="1">One</option>
-                  <option value="2" selected>Two</option>
-                  <option value="3">Three</option>
+                  <% suppliers.forEach(el => { %>
+                  <option
+                    value="<%= el.id %>"
+                    data-category-name="<%= el.name %>"
+                  >
+                    <%= el.name %>
+                  </option>
+                  <% }) %>
                 </select>
               </div>
               <div class="form-group col-md-6">
@@ -264,9 +273,9 @@ TEST DESCRIPTION</textarea
                   <option value="" disabled selected>
                     Please select a gender
                   </option>
-                  <option value="1">Men</option>
-                  <option value="2">Women</option>
-                  <option value="3" selected>Kids</option>
+                  <option value="men">Men</option>
+                  <option value="women">Women</option>
+                  <option value="kids" selected>Kids</option>
                 </select>
               </div>
             </div>

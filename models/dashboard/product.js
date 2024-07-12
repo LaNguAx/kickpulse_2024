@@ -39,15 +39,27 @@ const ProductSchema = new Schema(
       required: true,
     },
     brand: {
-      type: String,
-      required: true,
+      name: {
+        type: String,
+        required: true,
+      },
+      id: {
+        type: String,
+        required: true,
+      },
     },
     category: {
-      type: Number,
-      required: true,
+      name: {
+        type: String,
+        required: true,
+      },
+      id: {
+        type: String,
+        required: true,
+      },
     },
     gender: {
-      type: Number,
+      type: String,
       required: true,
     },
   },
