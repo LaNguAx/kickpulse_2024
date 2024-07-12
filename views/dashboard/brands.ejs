@@ -38,7 +38,7 @@
               <li class="nav-item">
                 <a class="nav-link" href="/dashboard/products">Products</a>
               </li>
-              <li class="nav-item active">
+              <li class="nav-item">
                 <a class="nav-link" href="/dashboard/suppliers">Suppliers</a>
               </li>
               <li class="nav-item">
@@ -47,7 +47,7 @@
               <li class="nav-item">
                 <a class="nav-link" href="/dashboard/orders">Orders</a>
               </li>
-              <li class="nav-item">
+              <li class="nav-item active">
                 <a class="nav-link" href="/dashboard/brands">Brands</a>
               </li>
               <li class="nav-item">
@@ -60,78 +60,64 @@
     </div>
 
     <main class="main-content container mt-5 mb-5">
-      <h6 class="text-center mb-3">WARNING: Delete a supplier will delete all of it's supplied products</h4>
-
+      <h6 class="text-center mb-3">
+        WARNING: Deleting a brand will delete all of its products
+      </h6>
 
       <div class="row">
-        
         <div
           class="list-group col-lg-2 col-sm-3 col-12 mb-4"
           id="list-tab"
           role="tablist"
         >
           <a
-            class="list-group-item list-group-item-action active all-suppliers-tab"
+            class="list-group-item list-group-item-action active all-brands-tab"
             id="list-home-list"
             data-toggle="list"
-            href="#all_suppliers"
+            href="#all_brands"
             role="tab"
             aria-controls="home"
-            >All Suppliers</a
+            >All Brands</a
           >
           <a
-            class="list-group-item list-group-item-action add-supplier-tab"
+            class="list-group-item list-group-item-action add-brand-tab"
             id="list-profile-list"
             data-toggle="list"
-            href="#add_suppliers"
+            href="#add_brands"
             role="tab"
             aria-controls="profile"
-            >Add Supplier</a
+            >Add Brand</a
           >
         </div>
-        <div class="col-lg-8 col-sm-9 col-12 suppliers d-flex flex-wrap">
-          <% if(suppliers.length == 0) { %>
-          <h4>You don't have any suppliers..</h4>
-          <% } suppliers.forEach(supplier => { %>
+        <div class="col-lg-8 col-sm-9 col-12 brands d-flex flex-wrap">
+          <% if (brands.length == 0) { %>
+          <h4>You don't have any brands..</h4>
+          <% } brands.forEach(brand => { %>
           <div class="col-md-4 col-sm-6 col-12 mb-4">
             <div
               class="card position-relative"
-              data-supplier-id="<%= supplier._id %>"
+              data-brand-id="<%= brand._id %>"
             >
-              <button
-                type="button"
-                class="btn btn-outline-danger delete-supplier"
-              >
+              <button type="button" class="btn btn-outline-danger delete-brand">
                 X
               </button>
               <div class="card-body">
-                <h5 class="card-title"><%= supplier.name %></h5>
-                <p class="card-text">
-                  <strong>Location:</strong> <%= supplier.location %>
-                </p>
-                <p class="card-text">
-                  <strong>Brands:</strong>
-                   <% 
-                  const supplierBrands = [];
-                  supplier.brands.forEach(brand => {
-                    supplierBrands.push(brand.name);
-                     }); 
-                     console.log(supplierBrands)
-                 %>
-                 <%= supplierBrands.join(', '); %>
-                </p>
+                <h5 class="card-title"><%= brand.name %></h5>
+                <p class="card-text">Brand ID: <%= brand._id %></p>
               </div>
             </div>
           </div>
           <% }); %>
         </div>
 
-        <div class="col-lg-6 col-sm-8 col-12 offset-lg-1 add-supplier hidden">
-          <h1 class="text-center">Add Supplier</h1>
-          <form class="add-supplier-form" action="/api/suppliers" method="POST">
-            <div class="form-row">
+        <div class="col-lg-6 col-sm-8 col-12 offset-lg-1 add-brand hidden">
+          <h1 class="text-center">Add Brand</h1>
+          <form class="add-brand-form" action="/api/brands" method="POST">
+            <div
+              class="form-row d-flex align-items-center justify-content-center"
+            >
               <div class="form-group col-md-6">
-                <label for="name">Supplier Name</label>
+                <label for="name">Brand Name</label>
                 <input
                   type="text"
                   class="form-control"
@@ -141,52 +127,11 @@
                   required
                 />
               </div>
-              <div class="form-group col-md-6">
-                <p>Location</p>
-                <select
-                  class="form-select form-select-lg mb-3"
-                  name="location"
-                  aria-label=".form-select-lg example"
-                  required
-                >
-                  <option value="" disabled selected>
-                    Please select a location
-                  </option>
-                  <option value="1">Israel</option>
-                  <option value="2" selected>England</option>
-                  <option value="3">Japan</option>
-                </select>
-              </div>
-              <div class="form-group col-md-6">
-                <div class="form-check form-switch">
-                  <label for="brands">Select Brands</label><br />
-                  <% if (brands.length == 0) { %>
-                    <p>You don't have any brands.. Please add some first</p>
-                  <% } else { %>
-                    <% brands.forEach(brand => { %>
-                      <div class="form-check">
-                        <input
-                          class="form-check-input"
-                          type="checkbox"
-                          id="brand-<%= brand._id %>"
-                          name="brands"
-                          value="<%= brand._id %>"
-                          data-brand-name="<%=brand.name %>"
-                        />
-                        <label class="form-check-label" for="brand-<%= brand._id %>">
-                          <%= brand.name %>
-                        </label>
-                      </div>
-                    <% }); %>
-                  <% } %>
-                  
-              </div>
             </div>
-            <div class="form-row"></div>
 
             <div class="d-flex align-items-center justify-content-center">
               <button type="submit" class="btn btn-primary mx-auto">
-                Add Supplier
+                Add Brand
               </button>
             </div>
           </form>
@@ -205,6 +150,6 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="/js/dashboard/suppliers.js"></script>
+    <script src="/js/dashboard/brands.js"></script>
   </body>
 </html>

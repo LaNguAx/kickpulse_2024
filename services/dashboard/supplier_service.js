@@ -60,10 +60,25 @@ const editSupplier = async (id, options) => {
   }
 };
 
+const getSupplierBrands = async (id) => {
+  try {
+    const supplier = await getSupplier(id);
+    const brands = supplier.brands;
+    return brands;
+  } catch (err) {
+    console.log(
+      `Error getting supplier's brands for supplier ID ${id} error code: `,
+      err
+    );
+    throw new Error('Failed getting supplier brands!');
+  }
+};
+
 export default {
   getSuppliers,
   getSupplier,
   createSupplier,
   deleteSupplier,
   editSupplier,
+  getSupplierBrands,
 };

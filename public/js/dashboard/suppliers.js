@@ -35,10 +35,37 @@ class Suppliers {
     this.formAddSupplier.addEventListener('submit', (e) => {
       e.preventDefault();
       const formData = new FormData(this.formAddSupplier);
-      const validatedForm = Object.fromEntries(formData.entries());
+      const form = Object.fromEntries(formData.entries());
       // form validation
+
+      const brands = this.validateForm();
+      form.brands = brands;
+
+      const validatedForm = form;
       this.addSupplier(validatedForm);
     });
+  }
+
+  validateForm() {
+    const selectedBrands = [];
+
+    // Get all checkboxes with name "brands"
+    const brandCheckboxes = document.querySelectorAll(
+      'input[name="brands"]:checked'
+    );
+
+    brandCheckboxes.forEach((checkbox) => {
+      const brandId = checkbox.value;
+      const brandName = checkbox.getAttribute('data-brand-name');
+
+      selectedBrands.push({ id: brandId, name: brandName });
+    });
+
+    if (selectedBrands.length === 0) {
+      throw new Error('Please select at least one brand.');
+    }
+
+    return selectedBrands;
   }
 
   showSuppliers(e) {
@@ -95,6 +122,10 @@ class Suppliers {
 
     data.forEach((supplier) => {
       const supplierElement = document.createElement('div');
+      const supplierBrands = [];
+      supplier.brands.forEach((brand) => {
+        supplierBrands.push(brand.name);
+      });
       supplierElement.className = 'col-md-4 col-sm-6 col-12 mb-4';
       supplierElement.innerHTML = `
         <div class="card position-relative" data-supplier-id="${supplier._id}">
@@ -104,7 +135,7 @@ class Suppliers {
             <p class="card-text"><strong>Location:</strong> ${
               supplier.location
             }</p>
-            <p class="card-text"><strong>Brands:</strong> ${supplier.brands.join(
+            <p class="card-text"><strong>Brands:</strong> ${supplierBrands.join(
               ', '
             )}</p>
           </div>

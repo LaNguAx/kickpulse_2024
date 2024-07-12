@@ -12,10 +12,14 @@ const SupplierSchema = new Schema(
       type: String,
       required: true,
     },
-    brands: {
-      type: [String],
-      required: true,
-    },
+    brands: [
+      {
+        name: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
   },
   {
     timestamps: true, // Adds createdAt and updatedAt timestamps

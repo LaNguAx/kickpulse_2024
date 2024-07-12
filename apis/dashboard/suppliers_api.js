@@ -61,3 +61,22 @@ export async function deleteSupplier(req, res) {
     res.status(500).json({ success: false, message: 'Server error' });
   }
 }
+
+// Get Suppliers Brands
+
+export async function getSupplierBrands(req, res) {
+  const { id } = req.params;
+  console.log(id);
+  try {
+    const supplierBrands = await SupplierService.getSupplierBrands(id);
+    if (supplierBrands.length == 0) {
+      return res
+        .status(404)
+        .json({ success: false, message: `Supplier doesn't have brands` });
+    }
+    res.status(200).json({ success: true, data: supplierBrands });
+  } catch (error) {
+    console.error(`Error getting supplier's brands:`, error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+}

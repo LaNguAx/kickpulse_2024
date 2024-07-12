@@ -7,7 +7,7 @@ class Products {
   feedbackAddProduct;
   feedbackMessage;
   spinner;
-
+  suppliersOption;
   constructor() {
     this.productsTab = document.querySelector('.all-products-tab');
     this.addProductTab = document.querySelector('.add-product-tab');
@@ -17,7 +17,7 @@ class Products {
     this.feedbackAddProduct = document.querySelector('.feedback-add-product');
     this.spinner = document.querySelector('.spinner-border');
     this.feedbackMessage = document.querySelector('.feedback-message');
-
+    this.suppliersOption = document.querySelector('#suppliers-option');
     this.initEventListeners();
   }
 
@@ -44,6 +44,10 @@ class Products {
 
       this.addProduct(validatedForm);
     });
+
+    this.suppliersOption.addEventListener('change', (e) =>
+      this.handleSupplierChange(e)
+    );
   }
 
   validateForm(form) {
@@ -84,6 +88,27 @@ class Products {
       id: selectedOption.value,
       name: selectedOption.getAttribute('data-brand-name'),
     };
+  }
+
+  async handleSupplierChange(event) {
+    const selectedSupplierId = event.target.value;
+    // getting the supplier's brands
+    const response = await fetch(`/api/suppliers/${selectedSupplierId}/brands`);
+    const result = await response.json();
+    const supplierBrands = result.data;
+    // change the select of the brands according to selected supplier
+    const brandsSelect = document.querySelector('#brand-option');
+    brandsSelect.innerHTML = `<option value="" disabled selected>
+                    Please select a brand
+                  </option>`;
+    supplierBrands.forEach((brand) => {
+      const optionElement = document.createElement('option');
+      optionElement.innerText = brand.name;
+      optionElement.value = brand.id;
+      optionElement.setAttribute('data-brand-name', brand.name);
+
+      brandsSelect.appendChild(optionElement);
+    });
   }
 
   renderSpinner() {
@@ -151,8 +176,8 @@ class Products {
             <p class="card-text">Sizes: ${product.sizes.join(', ')}</p>
             <p class="card-text">Quantity: ${product.quantity}</p>
             <p class="card-text">Supplier: ${product.supplier.name}</p>
-            <p class="card-text">Brand: ${product.brand}</p>
-            <p class="card-text">Category: ${product.category}</p>
+            <p class="card-text">Brand: ${product.brand.name}</p>
+            <p class="card-text">Category: ${product.category.name}</p>
             <p class="card-text">Gender: ${product.gender}</p>
           </div>
         </div>`;

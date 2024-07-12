@@ -71,6 +71,21 @@ const deleteProductsBySupplierId = async (supplierId) => {
   }
 };
 
+const deleteProductsByBrandId = async (brandId) => {
+  try {
+    const result = await ProductsModel.deleteMany({
+      'brand.id': brandId,
+    });
+    /*if (result.deletedCount === 0)
+      throw new Error('No products found for supplier');
+    */
+    return result;
+  } catch (err) {
+    console.error(`Error deleting products for brand ID ${brandId}:`, err);
+    throw new Error('Failed to delete products by brand ID');
+  }
+};
+
 const editProduct = async (id, options) => {
   try {
     const updatedProduct = await ProductsModel.findByIdAndUpdate(id, options, {
@@ -91,5 +106,6 @@ export default {
   createProduct,
   deleteProduct,
   deleteProductsBySupplierId,
+  deleteProductsByBrandId,
   editProduct,
 };

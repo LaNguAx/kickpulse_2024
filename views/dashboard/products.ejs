@@ -48,10 +48,10 @@
                 <a class="nav-link" href="/dashboard/orders">Orders</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="/dashboard/orders">Brand</a>
+                <a class="nav-link" href="/dashboard/brands">Brands</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="/dashboard/orders">Category</a>
+                <a class="nav-link" href="/dashboard/categories">Categories</a>
               </li>
             </ul>
           </div>
@@ -109,8 +109,8 @@
                 <p class="card-text">Sizes: <%= el.sizes.join(', ') %></p>
                 <p class="card-text">Quantity: <%= el.quantity %></p>
                 <p class="card-text">Supplier: <%= el.supplier.name %></p>
-                <p class="card-text">Brand: <%= el.brand %></p>
-                <p class="card-text">Category: <%= el.category %></p>
+                <p class="card-text">Brand: <%= el.brand.name %></p>
+                <p class="card-text">Category: <%= el.category.name %></p>
                 <p class="card-text">Gender: <%= el.gender %></p>
               </div>
             </div>
@@ -231,11 +231,6 @@ TEST DESCRIPTION</textarea
                   <option value="" disabled selected>
                     Please select a brand
                   </option>
-                  <% suppliers.forEach(el => { %>
-                  <option value="<%= el.id %>" data-brand-name="<%= el.name %>">
-                    <%= el.name %>
-                  </option>
-                  <% }) %>
                 </select>
               </div>
             </div>
