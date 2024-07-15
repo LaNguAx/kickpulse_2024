@@ -57,6 +57,18 @@ const ProductSchema = new Schema(
         type: String,
         required: true,
       },
+      subcategories: [
+        {
+          name: {
+            type: String,
+            required: true,
+          },
+          id: {
+            type: String,
+            required: true,
+          },
+        },
+      ],
     },
     gender: {
       type: String,

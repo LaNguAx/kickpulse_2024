@@ -19,6 +19,13 @@ import {
   getBrand,
   getBrands,
 } from './dashboard/brands_api.js';
+import {
+  createCategory,
+  deleteCategory,
+  getCategories,
+  getCategory,
+  getCategoryProducts
+} from './dashboard/categories_api.js';
 const router = express.Router();
 
 router.route('/products').get(getProducts).post(createProduct);
@@ -30,5 +37,9 @@ router.route('/suppliers/:id/brands').get(getSupplierBrands);
 
 router.route('/brands').get(getBrands).post(createBrand);
 router.route('/brands/:id').get(getBrand).delete(deleteBrand);
+
+router.route('/categories').get(getCategories).post(createCategory);
+router.route('/categories/:id').get(getCategory).delete(deleteCategory);
+router.route('/categories/products/:id').get(getCategoryProducts);
 
 export default router;

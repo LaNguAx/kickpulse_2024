@@ -22,6 +22,7 @@ const getSupplier = async (id) => {
 
 const createSupplier = async (supplier) => {
   try {
+    console.log(supplier);
     const newSupplier = new SuppliersModel({
       name: supplier.name,
       location: supplier.location,

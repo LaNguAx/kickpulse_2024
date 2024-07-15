@@ -111,6 +111,12 @@
                 <p class="card-text">Supplier: <%= el.supplier.name %></p>
                 <p class="card-text">Brand: <%= el.brand.name %></p>
                 <p class="card-text">Category: <%= el.category.name %></p>
+                <p class="card-text">
+                  Sub Categories: <% const subCategories = [];
+                  el.category.subcategories.forEach(subcat =>
+                  subCategories.push(subcat.name)); %> <%= subCategories.join(`,
+                  `); %>
+                </p>
                 <p class="card-text">Gender: <%= el.gender %></p>
               </div>
             </div>
@@ -247,9 +253,9 @@ TEST DESCRIPTION</textarea
                   <option value="" disabled selected>
                     Please select a category
                   </option>
-                  <% suppliers.forEach(el => { %>
+                  <% categories.forEach(el => { %>
                   <option
-                    value="<%= el.id %>"
+                    value="<%= el._id %>"
                     data-category-name="<%= el.name %>"
                   >
                     <%= el.name %>
@@ -270,9 +276,12 @@ TEST DESCRIPTION</textarea
                   </option>
                   <option value="men">Men</option>
                   <option value="women">Women</option>
-                  <option value="kids" selected>Kids</option>
+                  <option value="kids">Kids</option>
                 </select>
               </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6 subcategories-container"></div>
             </div>
             <div class="d-flex align-items-center justify-content-center">
               <button type="submit" class="btn btn-primary mx-auto">

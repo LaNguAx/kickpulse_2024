@@ -31,7 +31,11 @@ const createProduct = async (product) => {
       supplier: { name: product.supplier.name, id: product.supplier.id },
       image: product.image,
       brand: { name: product.brand.name, id: product.brand.id },
-      category: { name: product.category.name, id: product.category.id },
+      category: {
+        name: product.category.name,
+        id: product.category.id,
+        subcategories: product.category.subcategories,
+      },
       gender: product.gender,
     });
 
@@ -100,9 +104,29 @@ const editProduct = async (id, options) => {
   }
 };
 
+const getProductsByCategoryId = async (id) => {
+  try {
+    const allProducts = await getProducts();
+
+    const filteredProducts = allProducts.filter(
+      (product) =>
+        product.category.id == id ||
+        product.category.subcategories.some(
+          (subcategory) => subcategory.id == id
+        )
+    );
+    if (filteredProducts.length == 0) throw new Error('No products found');
+    return filteredProducts;
+  } catch (e) {
+    console.error(`Error getting product with category id ${id}:`, e);
+    throw new Error('Failed to get product by category ID');
+  }
+};
+
 export default {
   getProducts,
   getProduct,
+  getProductsByCategoryId,
   createProduct,
   deleteProduct,
   deleteProductsBySupplierId,

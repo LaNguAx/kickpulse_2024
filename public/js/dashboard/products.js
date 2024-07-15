@@ -8,6 +8,8 @@ class Products {
   feedbackMessage;
   spinner;
   suppliersOption;
+  categoriesOption;
+
   constructor() {
     this.productsTab = document.querySelector('.all-products-tab');
     this.addProductTab = document.querySelector('.add-product-tab');
@@ -18,6 +20,7 @@ class Products {
     this.spinner = document.querySelector('.spinner-border');
     this.feedbackMessage = document.querySelector('.feedback-message');
     this.suppliersOption = document.querySelector('#suppliers-option');
+    this.categoriesOption = document.querySelector('#category-option');
     this.initEventListeners();
   }
 
@@ -48,6 +51,9 @@ class Products {
     this.suppliersOption.addEventListener('change', (e) =>
       this.handleSupplierChange(e)
     );
+    this.categoriesOption.addEventListener('change', (e) =>
+      this.handleCategoriesChange(e)
+    );
   }
 
   validateForm(form) {
@@ -61,7 +67,6 @@ class Products {
     form.brand = this.getBrandData();
     //category
     form.category = this.getCategoryData();
-
     return form;
   }
 
@@ -74,11 +79,25 @@ class Products {
     };
   }
   getCategoryData() {
+    const selectedSubCategories = [];
+
     const selectElement = document.getElementById('category-option');
     const selectedOption = selectElement.options[selectElement.selectedIndex];
+    const subCategoryCheckboxes = document.querySelectorAll(
+      'input[data-subcategory-name]:checked'
+    );
+
+    subCategoryCheckboxes.forEach((checkbox) => {
+      const subCategoryId = checkbox.value;
+      const subCategoryName = checkbox.getAttribute('data-subcategory-name');
+
+      selectedSubCategories.push({ name: subCategoryName, id: subCategoryId });
+    });
+
     return {
       id: selectedOption.value,
       name: selectedOption.getAttribute('data-category-name'),
+      subcategories: selectedSubCategories,
     };
   }
   getBrandData() {
@@ -109,6 +128,46 @@ class Products {
 
       brandsSelect.appendChild(optionElement);
     });
+  }
+
+  async handleCategoriesChange(e) {
+    const selectedCategoryId = e.target.value;
+    const subCategeoriesContainer = document.querySelector(
+      '.subcategories-container'
+    );
+
+    subCategeoriesContainer.innerHTML = '';
+    // getting subcategories of selected category
+    try {
+      const response = await fetch(`/api/categories/${selectedCategoryId}`);
+      const result = await response.json();
+      const subCategories = result.data.subcategories;
+
+      subCategories.forEach((subcat) => {
+        const container = document.createElement('div');
+        container.setAttribute('class', 'form-check form-check-inline');
+
+        const checkbox = document.createElement('input');
+        checkbox.setAttribute('class', 'form-check-input');
+        checkbox.setAttribute('type', 'checkbox');
+        checkbox.setAttribute('id', `subcategory-${subcat._id}`);
+        // checkbox.setAttribute('name', 'subcategfffory');
+        checkbox.setAttribute('value', subcat._id);
+        checkbox.setAttribute('data-subcategory-name', subcat.name);
+
+        const label = document.createElement('label');
+        label.setAttribute('class', 'form-check-label');
+        label.setAttribute('for', `subcategory-${subcat._id}`);
+        label.innerText = subcat.name;
+
+        container.insertAdjacentElement('beforeend', checkbox);
+        container.insertAdjacentElement('beforeend', label);
+        subCategeoriesContainer.insertAdjacentElement('beforeend', container);
+      });
+    } catch (e) {
+      console.error(e);
+      this.showMessage('Failed getting subcategories');
+    }
   }
 
   renderSpinner() {
@@ -162,6 +221,15 @@ class Products {
 
     data.forEach((product) => {
       const productElement = document.createElement('div');
+      const subCategories = [];
+      product.category.subcategories.forEach((subcat) =>
+        subCategories.push(subcat.name)
+      );
+      // console.log(subCategories);
+      // console.log(subCategories.length);
+
+      // const response = await fetch('/api/products/');
+
       productElement.className = 'col-md-4 col-sm-6 col-12 mb-4';
       productElement.innerHTML = `
         <div class="card position-relative" data-product-id="${product._id}">
@@ -178,6 +246,11 @@ class Products {
             <p class="card-text">Supplier: ${product.supplier.name}</p>
             <p class="card-text">Brand: ${product.brand.name}</p>
             <p class="card-text">Category: ${product.category.name}</p>
+            <p class="card-text">
+                  Sub Categories: ${
+                    subCategories.length != 0 ? subCategories.join(', ') : ''
+                  }
+                </p>
             <p class="card-text">Gender: ${product.gender}</p>
           </div>
         </div>`;
@@ -187,6 +260,7 @@ class Products {
 
   async addProduct(product) {
     this.renderSpinner();
+    console.log(product);
     try {
       const response = await fetch(`/api/products/`, {
         method: 'POST',
@@ -195,8 +269,6 @@ class Products {
         },
         body: JSON.stringify(product),
       });
-
-      console.log(product);
 
       if (!response.ok) throw new Error('Failed getting response');
       await response.json();
