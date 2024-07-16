@@ -21,13 +21,24 @@ class Suppliers {
   }
 
   initEventListeners() {
-    this.suppliersTab.addEventListener('click', (e) => {
+    this.suppliersTab.addEventListener('click', async (e) => {
+      this.highlightTab(e);
       this.showSuppliers(e);
-      this.loadSuppliers();
+
+      this.renderSpinner(this.suppliersContainer, true);
+      const loaded = await this.loadSuppliers();
+      this.renderSpinner(this.suppliersContainer, false);
+      this.renderSuppliers(loaded);
+
+
     });
-    this.addSupplierTab.addEventListener('click', (e) =>
-      this.showAddSupplier(e)
+    this.addSupplierTab.addEventListener('click', (e) => {
+      this.highlightTab(e);
+
+      this.showAddSupplier(e);
+    }
     );
+
     this.suppliersContainer.addEventListener('click', (e) => {
       if (!e.target.classList.contains('delete-supplier')) return;
       else this.deleteSupplier(e);
@@ -39,6 +50,8 @@ class Suppliers {
       // form validation
 
       const brands = this.validateForm();
+      if (!brands) return;
+
       form.brands = brands;
 
       const validatedForm = form;
@@ -62,10 +75,18 @@ class Suppliers {
     });
 
     if (selectedBrands.length === 0) {
-      throw new Error('Please select at least one brand.');
+      this.showMessage('Please select a brand!')
+      return false;
     }
 
     return selectedBrands;
+  }
+
+  highlightTab(e) {
+    document
+      .querySelectorAll('.tab')
+      .forEach((tab) => tab.classList.remove('active'));
+    e.target.classList.toggle('active');
   }
 
   showSuppliers(e) {
@@ -80,32 +101,35 @@ class Suppliers {
     this.suppliersContainer.classList.add('hidden');
   }
 
-  renderSpinner() {
-    this.spinner.classList.toggle('hidden');
-  }
+  renderSpinner(element, on = true) {
+    const previousHTML = element.innerHTML;
 
-  showMessage(message) {
-    this.feedbackMessage.classList.toggle('hidden');
-    this.feedbackMessage.innerHTML = `<p style="font-size:1.4rem;">${message}</p>`;
-    setTimeout(() => {
-      this.feedbackMessage.classList.toggle('hidden');
-    }, 5000);
-  }
-
-  async loadSuppliers() {
-    this.suppliersContainer.innerHTML = `
-      <div class="mt-5 mx-auto">
+    if (on)
+      element.innerHTML = ` <div class="mt-5 mx-auto d-flex align-items-center justify-content-center">
         <div class="spinner-border text-center" role="status">
-          <span class="sr-only display-4">Loading...</span>
+          <span class="sr-only display-4"></span>
         </div>
       </div>`;
 
+    else element.innerHTML = '';
+
+    return previousHTML;
+  }
+
+  showMessage(message) {
+    this.feedbackMessage.innerHTML = `<p style="font-size:1.4rem;">${message}</p>`;
+    setTimeout(() => {
+      this.feedbackMessage.classList.toggle('hidden');
+      this.feedbackMessage.innerHTML = '';
+    }, 1000);
+  }
+
+  async loadSuppliers() {
     try {
       const response = await fetch(`/api/suppliers/`);
       if (!response.ok) throw new Error('Failed fetching!');
       const result = await response.json();
-      const data = result.data;
-      this.renderSuppliers(data);
+      return result.data;
     } catch (error) {
       this.suppliersContainer.innerHTML =
         '<h4>Failed fetching suppliers..</h4>';
@@ -126,18 +150,17 @@ class Suppliers {
       supplier.brands.forEach((brand) => {
         supplierBrands.push(brand.name);
       });
-      supplierElement.className = 'col-md-4 col-sm-6 col-12 mb-4';
+      supplierElement.className = 'col-md-3 col-sm-6 col-12 mb-4';
       supplierElement.innerHTML = `
         <div class="card position-relative" data-supplier-id="${supplier._id}">
           <button type="button" class="btn btn-outline-danger delete-supplier">X</button>
           <div class="card-body">
             <h5 class="card-title">${supplier.name}</h5>
-            <p class="card-text"><strong>Location:</strong> ${
-              supplier.location
-            }</p>
+            <p class="card-text"><strong>Location:</strong> ${supplier.location
+        }</p>
             <p class="card-text"><strong>Brands:</strong> ${supplierBrands.join(
-              ', '
-            )}</p>
+          ', '
+        )}</p>
           </div>
         </div>`;
       this.suppliersContainer.appendChild(supplierElement);
@@ -145,7 +168,10 @@ class Suppliers {
   }
 
   async addSupplier(supplier) {
-    this.renderSpinner();
+
+    this.feedbackMessage.classList.toggle('hidden');
+    this.renderSpinner(this.feedbackMessage, true);
+
     try {
       const response = await fetch(`/api/suppliers/`, {
         method: 'POST',
@@ -153,11 +179,16 @@ class Suppliers {
         body: JSON.stringify(supplier),
       });
 
-      const data = await response.json();
+      await response.json();
+
       if (!response.ok) throw new Error('Failed getting response');
+
+      this.renderSpinner(this.feedbackMessage, false);
+
       this.showMessage('Successfully added supplier!');
-      this.renderSpinner();
+
       this.formAddSupplier.reset();
+
     } catch (error) {
       console.log(error);
       this.showMessage('Error adding supplier..');
@@ -166,24 +197,23 @@ class Suppliers {
   }
 
   async deleteSupplier(e) {
+    this.renderSpinner(this.suppliersContainer, true);
+
     const supplierId = e.target.closest('.card').dataset.supplierId;
-    this.suppliersContainer.innerHTML = `
-      <div class="mt-5 mx-auto">
-        <div class="spinner-border text-center" role="status">
-          <span class="sr-only display-4">Loading...</span>
-        </div>
-      </div>`;
     try {
       const response = await fetch(`/api/suppliers/${supplierId}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
       });
 
+      await response.json();
       if (!response.ok) throw new Error('Failed getting response');
-      const result = await response.json();
-      const data = result.data;
-      this.loadSuppliers();
-      e.target.closest('.col-md-4.col-sm-6').remove();
+
+
+      const loaded = await this.loadSuppliers();
+      this.renderSpinner(this.suppliersContainer, false);
+      this.renderSuppliers(loaded);
+
     } catch (error) {
       console.log(error);
     }

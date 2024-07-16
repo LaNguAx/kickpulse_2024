@@ -36,7 +36,6 @@ const getCategory = async (id) => {
 
 const createCategory = async (category) => {
   try {
-    // console.log(category)
     const newCategory = new CategoriesModel({
       name: category.name,
       subcategories: category.subcategories,

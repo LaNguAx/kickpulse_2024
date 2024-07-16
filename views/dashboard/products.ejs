@@ -1,42 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="/css/dashboard.css" />
-    <title>KickPulse Dashboard</title>
-  </head>
-  <body>
-    <div class="container mt-5">
-      <h1 class="text-center">Admin Dashboard</h1>
-      <h4 class="text-center">
-        Welcome to your control panel<br />
-        Control your store with ease.
-      </h4>
-    </div>
-    <div class="d-flex align-items-center justify-content-center">
-      <div>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css" />
+  <link rel="stylesheet" href="/css/dashboard.css" />
+  <title>KickPulse Dashboard</title>
+</head>
+
+<body>
+  <div class="container mt-5">
+    <h1 class="text-center">Admin Dashboard</h1>
+    <h4 class="text-center">
+      Welcome to your control panel<br />
+      Control your store with ease.
+    </h4>
+  </div>
+  <div class="d-flex align-items-center justify-content-center">
+    <div>
+      <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
           <a class="navbar-brand" href="#">KICK-PULSE</a>
-          <button
-            class="navbar-toggler"
-            type="button"
-            data-toggle="collapse"
-            data-target="#navbarNav"
-            aria-controls="navbarNav"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
-              <li class="nav-item active">
-                <a class="nav-link" href="/dashboard/products">Products</a>
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/dashboard/products">Products</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="/dashboard/suppliers">Suppliers</a>
@@ -55,53 +51,32 @@
               </li>
             </ul>
           </div>
-        </nav>
-      </div>
-    </div>
-
-    <main class="main-content container mt-5 mb-5">
-      <div class="row">
-        <div
-          class="list-group col-lg-2 col-sm-3 col-12 mb-4"
-          id="list-tab"
-          role="tablist"
-        >
-          <a
-            class="list-group-item list-group-item-action active all-products-tab"
-            id="list-home-list"
-            data-toggle="list"
-            href="#all_products"
-            role="tab"
-            aria-controls="home"
-            >All Products</a
-          >
-          <a
-            class="list-group-item list-group-item-action add-product-tab"
-            id="list-profile-list"
-            data-toggle="list"
-            href="#add_product"
-            role="tab"
-            aria-controls="profile"
-            >Add Product</a
-          >
         </div>
-        <div class="col-lg-8 col-sm-9 col-12 products d-flex flex-wrap">
+      </nav>
+    </div>
+  </div>
+
+
+  <main class="container mt-5 mb-5">
+    <div class="row">
+      <div class="list-group col-lg-2 col-sm-3 tabs-container">
+        <a class="list-group-item list-group-item-action active tab all-products-tab" id="list-home-list"
+          data-toggle="list" href="#all_products" role="tab" aria-controls="home">All Products</a>
+        <a class="list-group-item list-group-item-action tab add-product-tab" id="list-profile-list" data-toggle="list"
+          href="#add_product" role="tab" aria-controls="profile">Add Product</a>
+
+      </div>
+      <div class="col-8 main-content">
+        <div class="row products">
           <% if(products.length == 0) { %>
           <h4>You don't have any products..</h4>
           <% } products.forEach(el => { %>
           <div class="col-md-4 col-sm-6 col-12 mb-4">
             <div class="card position-relative" data-product-id="<%=el._id %>">
-              <button
-                type="button"
-                class="btn btn-outline-danger delete-product"
-              >
+              <button type="button" class="btn btn-outline-danger delete-product">
                 X
               </button>
-              <img
-                src="<%= el.image %>"
-                class="card-img-top"
-                alt="<%= el.name %>"
-              />
+              <img src="<%= el.image %>" class="card-img-top" alt="<%= el.name %>" />
               <div class="card-body">
                 <h5 class="card-title"><%= el.name %></h5>
                 <p class="card-text"><%= el.description %></p>
@@ -113,9 +88,9 @@
                 <p class="card-text">Category: <%= el.category.name %></p>
                 <p class="card-text">
                   Sub Categories: <% const subCategories = [];
-                  el.category.subcategories.forEach(subcat =>
-                  subCategories.push(subcat.name)); %> <%= subCategories.join(`,
-                  `); %>
+                        el.category.subcategories.forEach(subcat =>
+                        subCategories.push(subcat.name)); %> <%= subCategories.join(`,
+                        `); %>
                 </p>
                 <p class="card-text">Gender: <%= el.gender %></p>
               </div>
@@ -123,187 +98,143 @@
           </div>
           <% }); %>
         </div>
-        <div class="col-lg-6 col-sm-8 col-12 offset-lg-1 add-product hidden">
-          <h1 class="text-center">Add Product</h1>
-          <form class="add-product-form" action="/api/products" method="POST">
-            <div class="form-row">
-              <div class="form-group col-md-6">
-                <label for="name">Product Name</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="name"
-                  name="name"
-                  value="test1"
-                  required
-                />
-              </div>
-              <div class="form-group col-md-6">
-                <label for="sizes">Sizes (comma separated)</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="sizes"
-                  name="sizes"
-                  value="1,2,3"
-                  required
-                />
-              </div>
+        <div class="col add-product hidden">
+          <h1 class="text-center mb-4">Add Product</h1>
+
+          <form class="row add-product-form" action="/api/products" method="POST">
+            <div class="col-6 mb-3">
+              <label for="name" class="form-label">Product Name</label>
+              <input type="text" class="form-control" name="name" id="name" value="test1" placeholder="" required>
             </div>
-            <div class="form-row">
-              <div class="form-group col-md-6">
-                <label for="price">Price</label>
-                <input
-                  type="number"
-                  class="form-control"
-                  id="price"
-                  name="price"
-                  step="0.01"
-                  min="0"
-                  value="500"
-                  required
-                />
-              </div>
-              <div class="form-group col-md-6">
-                <label for="quantity">Quantity</label>
-                <input
-                  type="number"
-                  class="form-control"
-                  id="quantity"
-                  name="quantity"
-                  min="0"
-                  value="5"
-                  required
-                />
-              </div>
+
+            <div class="col-6 mb-3">
+              <label for="sizes" class="form-label">Sizes (comma seperated)</label>
+              <input type="text" class="form-control" name="sizes" id="sizes" value="1,2,3" placeholder="" required>
             </div>
-            <div class="form-row">
-              <div class="form-group col-md-6">
-                <label for="description">Description</label>
-                <textarea
-                  class="form-control"
-                  id="description"
-                  name="description"
-                  rows="3"
-                  required
-                >
-TEST DESCRIPTION</textarea
-                >
-              </div>
-              <div class="form-group col-md-6">
-                <p>Supplier</p>
-                <select
-                  class="form-select form-select-lg mb-3"
-                  name="supplier"
-                  id="suppliers-option"
-                  aria-label=".form-select-lg example"
-                  required
-                >
-                  <option value="" disabled selected>
-                    Please select a supplier
-                  </option>
-                  <% suppliers.forEach(el => { %>
-                  <option
-                    value="<%= el.id %>"
-                    data-supplier-name="<%= el.name %>"
-                  >
-                    <%= el.name %>
-                  </option>
-                  <% }) %>
-                </select>
-              </div>
+
+            <div class="col-6 mb-3">
+              <label for="price" class="form-label">Price</label>
+              <input type="number" class="form-control" name="price" id="price" step="0.01" min="0" value="500"
+                required>
             </div>
-            <div class="form-row">
-              <div class="form-group col-md-6">
-                <label for="image">Image URL</label>
-                <input
-                  type="url"
-                  class="form-control"
-                  id="image"
-                  name="image"
-                  value="https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/digital_camera_photo-980x653.jpg"
-                  required
-                />
-              </div>
-              <div class="form-group col-md-6">
-                <p>Brand</p>
-                <select
-                  class="form-select form-select-lg mb-3"
-                  name="brand"
-                  id="brand-option"
-                  aria-label=".form-select-lg example"
-                  required
-                >
-                  <option value="" disabled selected>
-                    Please select a brand
-                  </option>
-                </select>
-              </div>
+
+            <div class="col-6 mb-3">
+              <label for="quantity" class="form-label">Quantity</label>
+              <input type="number" class="form-control" name="quantity" id="quantity" min="0" value="5" required>
             </div>
-            <div class="form-row">
-              <div class="form-group col-md-6">
-                <p>Category</p>
-                <select
-                  class="form-select form-select-lg mb-3"
-                  name="category"
-                  id="category-option"
-                  aria-label=".form-select-lg example"
-                  required
-                >
-                  <option value="" disabled selected>
-                    Please select a category
-                  </option>
-                  <% categories.forEach(el => { %>
-                  <option
-                    value="<%= el._id %>"
-                    data-category-name="<%= el.name %>"
-                  >
-                    <%= el.name %>
-                  </option>
-                  <% }) %>
-                </select>
-              </div>
-              <div class="form-group col-md-6">
-                <p>Gender</p>
-                <select
-                  class="form-select form-select-lg mb-3"
-                  name="gender"
-                  aria-label=".form-select-lg example"
-                  required
-                >
-                  <option value="" disabled selected>
-                    Please select a gender
-                  </option>
-                  <option value="men">Men</option>
-                  <option value="women">Women</option>
-                  <option value="kids">Kids</option>
-                </select>
-              </div>
+
+            <div class="col-6 mb-3">
+              <label for="description" class="form-label">Description</label>
+              <textarea type="text" class="form-control" name="description" id="description" rows="3"
+                required> TEST DESCRIPTION</textarea>
             </div>
-            <div class="form-row">
-              <div class="form-group col-md-6 subcategories-container"></div>
+
+            <div class="col-6 mb-3">
+              <label for="supplier" class="form-label">Supplier</label>
+              <select class="form-select" name="supplier" id="suppliers-option" required>
+
+                <% if(suppliers.length == 0) { %>
+
+                <option value="" disabled selected>
+                  You need to add suppliers first!
+                </option>
+
+                <% } else { %>
+                <option value="" disabled selected>
+                  Please select a supplier
+                </option>
+
+                <% suppliers.forEach(el => { %>
+                <option value="<%= el.id %>" data-supplier-name="<%= el.name %>">
+                  <%= el.name %>
+                </option>
+                <% }) %>
+
+                <% } %>
+
+
+              </select>
             </div>
+
+            <div class="col-6 mb-3">
+              <label for="image" class="form-label">Image URL</label>
+              <input type="url" class="form-control" name="image" id="image"
+                value="https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/digital_camera_photo-980x653.jpg"
+                required>
+            </div>
+
+
+            <div class="col-6 mb-3">
+              <label for="brand" class="form-label">Brand</label>
+              <select class="form-select" name="brand" id="brand-option" required>
+                <option value="" disabled selected>
+                  Please select a brand
+                </option>
+              </select>
+            </div>
+
+
+            <div class="col-6 mb-3">
+              <label for="category" class="form-label">Category</label>
+              <select class="form-select" name="category" id="category-option" required>
+
+
+                <% if(categories.length == 0) { %>
+                <option value="" disabled selected>
+                  You need to add categories first!
+                </option>
+
+
+                <% } else { %>
+                <option value="" disabled selected>
+                  Please select a category
+                </option>
+                <% categories.forEach(el => { %>
+                <option value="<%= el._id %>" data-category-name="<%= el.name %>">
+                  <%= el.name %>
+                </option>
+                <% }) %>
+
+
+                <% } %>
+
+
+
+              </select>
+            </div>
+
+
+
+            <div class="col-6 mb-3">
+              <label for="gender" class="form-label">Gender</label>
+              <select class="form-select" name="gender" id="gender-option" required>
+                <option value="" disabled selected>
+                  Please select a gender
+                </option>
+                <option value="men">Men</option>
+                <option value="women">Women</option>
+                <option value="kids">Kids</option>
+              </select>
+            </div>
+            <div class="form-group col-md-6 subcategories-container"></div>
+
             <div class="d-flex align-items-center justify-content-center">
               <button type="submit" class="btn btn-primary mx-auto">
-                Add Product
+                Add Supplier
               </button>
             </div>
           </form>
-          <div class="mt-4 d-flex align-items-center justify-content-center">
-            <div class="spinner-border text-center hidden" role="status">
-              <span class="sr-only">Loading...</span>
-            </div>
-          </div>
-          <div
-            class="feedback-message container text-center mt-4 hidden fs-2"
-          ></div>
+          <div class="feedback-message container text-center mt-4 hidden fs-3"></div>
         </div>
       </div>
-    </main>
+    </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="/js/dashboard/products.js"></script>
-  </body>
+
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+  <script src="/js/dashboard/products.js"></script>
+</body>
+
 </html>

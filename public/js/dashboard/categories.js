@@ -24,14 +24,23 @@ class Categories {
   }
 
   initEventListeners() {
-    this.categoriesTab.addEventListener('click', (e) => {
+    this.categoriesTab.addEventListener('click', async (e) => {
+      this.highlightTab(e);
       this.showCategories(e);
-      this.loadCategories();
+
+      this.renderSpinner(this.categoriesContainer, true);
+      const categories = await this.loadCategories();
+
+      this.renderSpinner(this.categoriesContainer, false);
+
+      this.renderCategories(categories);
+
     });
 
-    this.addCategoryTab.addEventListener('click', (e) =>
-      this.showAddCategory(e)
-    );
+    this.addCategoryTab.addEventListener('click', (e) => {
+      this.highlightTab(e);
+      this.showAddCategory(e);
+    });
 
     this.categoriesContainer.addEventListener('click', (e) => {
       if (e.target.classList.contains('delete-category')) {
@@ -60,18 +69,36 @@ class Categories {
     );
   }
 
-  renderSpinner() {
-    this.spinner.classList.toggle('hidden');
+  renderSpinner(element, on = true) {
+    const previousHTML = element.innerHTML;
+
+    if (on)
+      element.innerHTML = ` <div class="mt-5 mx-auto d-flex align-items-center justify-content-center">
+        <div class="spinner-border text-center" role="status">
+          <span class="sr-only display-4"></span>
+        </div>
+      </div>`;
+
+    else element.innerHTML = '';
+
+    return previousHTML;
   }
 
   showMessage(message) {
-    this.feedbackMessage.classList.toggle('hidden');
     this.feedbackMessage.innerHTML = `<p style="font-size:1.4rem;">${message}</p>`;
     setTimeout(() => {
       this.feedbackMessage.classList.toggle('hidden');
-    }, 5000);
+      this.feedbackMessage.innerHTML = '';
+    }, 1000);
   }
 
+
+  highlightTab(e) {
+    document
+      .querySelectorAll('.tab')
+      .forEach((tab) => tab.classList.remove('active'));
+    e.target.classList.toggle('active');
+  }
   showCategories(e) {
     e.preventDefault();
     this.categoriesContainer.classList.remove('hidden');
@@ -85,18 +112,11 @@ class Categories {
   }
 
   async loadCategories() {
-    this.categoriesContainer.innerHTML = `
-      <div class="mt-5 mx-auto">
-        <div class="spinner-border text-center" role="status">
-          <span class="sr-only display-4">Loading...</span>
-        </div>
-      </div>`;
-
     try {
       const response = await fetch(`/api/categories/`);
       if (!response.ok) throw new Error('Failed fetching!');
       const result = await response.json();
-      this.renderCategories(result.data);
+      return result.data;
     } catch (error) {
       this.showMessage(`Error loading categories\nError message: ${error}`);
     }
@@ -131,14 +151,13 @@ class Categories {
       this.categoriesContainer.innerHTML = `<h4>You don't have any categories..</h4>`;
       return;
     }
-    console.log(data);
     data.forEach((category) => {
       const categoryElement = document.createElement('div');
       const subCategories = category.subcategories
         .map((subcat) => subcat.name)
         .join(', ');
 
-      categoryElement.className = 'col-md-4 col-sm-6 col-12 mb-4';
+      categoryElement.className = 'col-md-3 col-sm-6 col-12 mb-4';
       categoryElement.innerHTML = `
         <div class="card position-relative" data-category-id="${category._id}">
           <button type="button" class="btn btn-outline-danger delete-category">X</button>
@@ -148,14 +167,19 @@ class Categories {
             <p class="card-text"><strong>Sub Categories:</strong> ${subCategories}</p>
 
             </div>
+            <button type="button" class="btn btn-outline-secondary">
+                <i class="bi bi-pencil-square"></i>
+                <span class="visually-hidden">Edit Category</span>
+              </button>
         </div>`;
       this.categoriesContainer.appendChild(categoryElement);
     });
   }
 
   async addCategory(category) {
-    this.renderSpinner();
-    console.log(category);
+    this.feedbackMessage.classList.toggle('hidden');
+
+    this.renderSpinner(this.feedbackMessage, true);
     try {
       const response = await fetch(`/api/categories/`, {
         method: 'POST',
@@ -167,9 +191,13 @@ class Categories {
 
       if (!response.ok) throw new Error('Failed getting response');
       await response.json();
+      this.renderSpinner(this.feedbackMessage, false);
+
       this.showMessage('Successfully added category!');
-      this.renderSpinner();
+
       this.formAddCategory.reset();
+      this.formAddCategory.querySelectorAll('.subcategory-input-container:not(.hidden)').forEach(el => el.remove());
+
     } catch (error) {
       console.log(error);
       this.showMessage('Error adding category..');
@@ -188,11 +216,11 @@ class Categories {
   }
 
   deleteSubCategory(e) {
-    console.log('hi');
     e.target.closest('.subcategory-input-container').remove();
   }
 
   async deleteCategory(e) {
+    this.renderSpinner(this.categoriesContainer, true);
     const categoryId = e.target.closest('.card').dataset.categoryId;
     try {
       const response = await fetch(`/api/categories/${categoryId}`, {
@@ -204,8 +232,13 @@ class Categories {
 
       if (!response.ok) throw new Error('Failed getting response');
       await response.json();
-      this.loadCategories();
-      e.target.closest('.col-md-4.col-sm-6').remove();
+
+      const categories = await this.loadCategories();
+
+      this.renderSpinner(this.categoriesContainer, false);
+
+      this.renderCategories(categories);
+
     } catch (error) {
       console.log(error);
     }

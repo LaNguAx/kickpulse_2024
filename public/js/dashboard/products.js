@@ -25,12 +25,30 @@ class Products {
   }
 
   initEventListeners() {
-    this.productsTab.addEventListener('click', (e) => {
+    this.productsTab.addEventListener('click', async (e) => {
+
+      this.highlightTab(e);
       this.showProducts(e);
-      this.loadProducts();
+
+      this.renderSpinner(this.productsContainer, true);
+      const loaded = await this.loadProducts();
+      this.renderSpinner(this.productsContainer, false);
+      this.renderProducts(loaded);
+
+
     });
 
-    this.addProductTab.addEventListener('click', (e) => this.showAddProduct(e));
+    this.addProductTab.addEventListener('click', (e) => {
+      this.highlightTab(e);
+      this.showAddProduct(e);
+
+      const subCategeoriesContainer = document.querySelector(
+        '.subcategories-container'
+      );
+      subCategeoriesContainer.innerHTML = '';
+
+
+    });
 
     this.productsContainer.addEventListener('click', (e) => {
       if (e.target.classList.contains('delete-product')) {
@@ -55,6 +73,14 @@ class Products {
       this.handleCategoriesChange(e)
     );
   }
+
+  highlightTab(e) {
+    document
+      .querySelectorAll('.tab')
+      .forEach((tab) => tab.classList.remove('active'));
+    e.target.classList.toggle('active');
+  }
+
 
   validateForm(form) {
     // generate sizes array
@@ -143,26 +169,42 @@ class Products {
       const result = await response.json();
       const subCategories = result.data.subcategories;
 
+      if (subCategories.length == 0) {
+        subCategeoriesContainer.innerHTML = `<p>This category doesn't have sub categories.. </p>`
+      }
+
+      subCategeoriesContainer.insertAdjacentHTML('beforeend', `          <label class="form label mb-2">Select Sub Category</label><br>
+`);
       subCategories.forEach((subcat) => {
-        const container = document.createElement('div');
-        container.setAttribute('class', 'form-check form-check-inline');
 
-        const checkbox = document.createElement('input');
-        checkbox.setAttribute('class', 'form-check-input');
-        checkbox.setAttribute('type', 'checkbox');
-        checkbox.setAttribute('id', `subcategory-${subcat._id}`);
-        // checkbox.setAttribute('name', 'subcategfffory');
-        checkbox.setAttribute('value', subcat._id);
-        checkbox.setAttribute('data-subcategory-name', subcat.name);
+        subCategeoriesContainer.insertAdjacentHTML('beforeend', `
+        
+              <input type="checkbox" class="btn-check" id="subcategory-${subcat._id}" autocomplete="off"
+                data-subcategory-name="${subcat.name}" value="${subcat._id}">
+              <label class="btn btn-outline-primary" for="subcategory-${subcat._id}">${subcat.name}</label><br><br>
+          
+          `)
 
-        const label = document.createElement('label');
-        label.setAttribute('class', 'form-check-label');
-        label.setAttribute('for', `subcategory-${subcat._id}`);
-        label.innerText = subcat.name;
 
-        container.insertAdjacentElement('beforeend', checkbox);
-        container.insertAdjacentElement('beforeend', label);
-        subCategeoriesContainer.insertAdjacentElement('beforeend', container);
+        // const container = document.createElement('div');
+        // container.setAttribute('class', 'form-check form-check-inline');
+
+        // const checkbox = document.createElement('input');
+        // checkbox.setAttribute('class', 'form-check-input');
+        // checkbox.setAttribute('type', 'checkbox');
+        // checkbox.setAttribute('id', `subcategory-${subcat._id}`);
+        // // checkbox.setAttribute('name', 'subcategfffory');
+        // checkbox.setAttribute('value', subcat._id);
+        // checkbox.setAttribute('data-subcategory-name', subcat.name);
+
+        // const label = document.createElement('label');
+        // label.setAttribute('class', 'form-check-label');
+        // label.setAttribute('for', `subcategory-${subcat._id}`);
+        // label.innerText = subcat.name;
+
+        // container.insertAdjacentElement('beforeend', checkbox);
+        // container.insertAdjacentElement('beforeend', label);
+        // subCategeoriesContainer.insertAdjacentElement('beforeend', container);
       });
     } catch (e) {
       console.error(e);
@@ -170,16 +212,27 @@ class Products {
     }
   }
 
-  renderSpinner() {
-    this.spinner.classList.toggle('hidden');
+  renderSpinner(element, on = true) {
+    const previousHTML = element.innerHTML;
+
+    if (on)
+      element.innerHTML = ` <div class="mt-5 mx-auto d-flex align-items-center justify-content-center">
+        <div class="spinner-border text-center" role="status">
+          <span class="sr-only display-4"></span>
+        </div>
+      </div>`;
+
+    else element.innerHTML = '';
+
+    return previousHTML;
   }
 
   showMessage(message) {
-    this.feedbackMessage.classList.toggle('hidden');
     this.feedbackMessage.innerHTML = `<p style="font-size:1.4rem;">${message}</p>`;
     setTimeout(() => {
       this.feedbackMessage.classList.toggle('hidden');
-    }, 5000);
+      this.feedbackMessage.innerHTML = '';
+    }, 1000);
   }
 
   showProducts(e) {
@@ -195,18 +248,11 @@ class Products {
   }
 
   async loadProducts() {
-    this.productsContainer.innerHTML = `
-      <div class="mt-5 mx-auto">
-        <div class="spinner-border text-center" role="status">
-          <span class="sr-only display-4">Loading...</span>
-        </div>
-      </div>`;
-
     try {
       const response = await fetch(`/api/products/`);
       if (!response.ok) throw new Error('Failed fetching!');
       const result = await response.json();
-      this.renderProducts(result.data);
+      return result.data;
     } catch (error) {
       this.showMessage(`Error loading products\nError message: ${error}`);
     }
@@ -225,8 +271,6 @@ class Products {
       product.category.subcategories.forEach((subcat) =>
         subCategories.push(subcat.name)
       );
-      // console.log(subCategories);
-      // console.log(subCategories.length);
 
       // const response = await fetch('/api/products/');
 
@@ -234,9 +278,8 @@ class Products {
       productElement.innerHTML = `
         <div class="card position-relative" data-product-id="${product._id}">
           <button type="button" class="btn btn-outline-danger delete-product">X</button>
-          <img src="${product.image}" class="card-img-top" alt="${
-        product.name
-      }" />
+          <img src="${product.image}" class="card-img-top" alt="${product.name
+        }" />
           <div class="card-body">
             <h5 class="card-title">${product.name}</h5>
             <p class="card-text">${product.description}</p>
@@ -247,9 +290,8 @@ class Products {
             <p class="card-text">Brand: ${product.brand.name}</p>
             <p class="card-text">Category: ${product.category.name}</p>
             <p class="card-text">
-                  Sub Categories: ${
-                    subCategories.length != 0 ? subCategories.join(', ') : ''
-                  }
+                  Sub Categories: ${subCategories.length != 0 ? subCategories.join(', ') : ''
+        }
                 </p>
             <p class="card-text">Gender: ${product.gender}</p>
           </div>
@@ -259,8 +301,9 @@ class Products {
   }
 
   async addProduct(product) {
-    this.renderSpinner();
-    console.log(product);
+    this.feedbackMessage.classList.toggle('hidden');
+    this.renderSpinner(this.feedbackMessage, true);
+
     try {
       const response = await fetch(`/api/products/`, {
         method: 'POST',
@@ -270,11 +313,16 @@ class Products {
         body: JSON.stringify(product),
       });
 
-      if (!response.ok) throw new Error('Failed getting response');
       await response.json();
+      if (!response.ok) throw new Error('Failed getting response');
+
+      this.renderSpinner(this.feedbackMessage, false);
+
       this.showMessage('Successfully added product!');
-      this.renderSpinner();
+
       this.formAddProduct.reset();
+
+
     } catch (error) {
       console.log(error);
       this.showMessage('Error adding product..');
@@ -283,6 +331,8 @@ class Products {
   }
 
   async deleteProduct(e) {
+    this.renderSpinner(this.productsContainer, true);
+
     const productId = e.target.closest('.card').dataset.productId;
     try {
       const response = await fetch(`/api/products/${productId}`, {
@@ -292,10 +342,13 @@ class Products {
         },
       });
 
-      if (!response.ok) throw new Error('Failed getting response');
       await response.json();
-      this.loadProducts();
-      e.target.closest('.col-md-4.col-sm-6').remove();
+      if (!response.ok) throw new Error('Failed getting response');
+
+      const loaded = await this.loadProducts();
+      this.renderSpinner(this.productsContainer, false);
+      this.renderProducts(loaded);
+
     } catch (error) {
       console.log(error);
     }

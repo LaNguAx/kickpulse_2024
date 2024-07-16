@@ -66,7 +66,6 @@ export async function deleteSupplier(req, res) {
 
 export async function getSupplierBrands(req, res) {
   const { id } = req.params;
-  console.log(id);
   try {
     const supplierBrands = await SupplierService.getSupplierBrands(id);
     if (supplierBrands.length == 0) {
