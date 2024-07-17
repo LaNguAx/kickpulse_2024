@@ -13,6 +13,8 @@ app.use(express.json());
 
 //-------------------------------
 
+
+//ALERT FROM MORIEL
 app.use('/dashboard', dashboardRouter);
 app.use('/api', apiRouter);
 
