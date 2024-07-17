@@ -55,7 +55,6 @@ export async function updateCategory(req, res) {
       await ProductsService.deleteProductsByCategoryId(subcat._id);
     }
   });
-  //test
   try {
     const category = await CategoryService.updateCategory(id, newCategory);
     if (!category) {
