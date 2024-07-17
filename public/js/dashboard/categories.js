@@ -8,6 +8,8 @@ class Categories {
   feedbackMessage;
   spinner;
   addSubCategoryBtn;
+  formEditCategory;
+  editCategoryContainer;
 
   constructor() {
     this.categoriesTab = document.querySelector('.all-categories-tab');
@@ -18,15 +20,35 @@ class Categories {
     this.feedbackAddCategory = document.querySelector('.feedback-add-category');
     this.spinner = document.querySelector('.spinner-border');
     this.feedbackMessage = document.querySelector('.feedback-message');
-    this.addSubCategoryBtn = document.querySelector('.add-subcategory-btn');
+    this.addSubCategoryBtn = document.querySelectorAll('.add-subcategory-btn');
+
+    this.formEditCategory = document.querySelector('.edit-category-form');
+    this.editCategoryContainer = document.querySelector('.edit-category');
 
     this.initEventListeners();
   }
 
   initEventListeners() {
+
+    this.formEditCategory.addEventListener('submit', async e => {
+      e.preventDefault();
+
+      const validatedForm = this.validateForm(e);
+
+      //laroz al hakayam velhapes bahadash im lo nimza ze omer shemanehel mahak et ha tat categoria izarih limhok muzarim shela
+      //CONTINUE HERE U NEED TO DELETE SUB CATEGORIES PRODUCTS WHEN SAVING, DAMNN THIS IS HARD.
+      // IT PROLLY NEEDS TO HAPPEN ON THE BACK END 
+
+      this.updateCategory(validatedForm);
+
+
+    })
+
     this.categoriesTab.addEventListener('click', async (e) => {
       this.highlightTab(e);
       this.showCategories(e);
+      document.querySelectorAll('.subcategory-input-container:not(.hidden)').forEach(el => el.remove());
+
 
       this.renderSpinner(this.categoriesContainer, true);
       const categories = await this.loadCategories();
@@ -39,19 +61,28 @@ class Categories {
 
     this.addCategoryTab.addEventListener('click', (e) => {
       this.highlightTab(e);
+      document.querySelectorAll('.subcategory-input-container:not(.hidden)').forEach(el => el.remove());
+
       this.showAddCategory(e);
     });
 
-    this.categoriesContainer.addEventListener('click', (e) => {
-      if (e.target.classList.contains('delete-category')) {
+    this.categoriesContainer.addEventListener('click', async (e) => {
+      if (e.target.closest('.delete-category')) {
         this.deleteCategory(e);
       }
+
+      if (e.target.closest('.edit-category-btn')) {
+
+        await this.editCategory(e);
+
+      }
+
     });
 
     this.formAddCategory.addEventListener('submit', (e) => {
       e.preventDefault();
 
-      const validatedForm = this.validateForm();
+      const validatedForm = this.validateForm(e);
 
       this.addCategory(validatedForm);
     });
@@ -64,11 +95,21 @@ class Categories {
       }
     });
 
-    this.addSubCategoryBtn.addEventListener('click', (e) =>
-      this.addSubCategory(e)
-    );
-  }
+    this.formEditCategory.addEventListener('click', async (e) => {
+      // if delete subcategory button is pressed
+      if (e.target.classList.contains('delete-subcategory')) {
+        await this.deleteSubCategory(e);
+        return;
+      }
+    });
 
+
+    this.addSubCategoryBtn.forEach(el =>
+      el.addEventListener('click', (e) =>
+        this.addSubCategory(e))
+    )
+
+  }
   renderSpinner(element, on = true) {
     const previousHTML = element.innerHTML;
 
@@ -93,6 +134,35 @@ class Categories {
   }
 
 
+  async editCategory(e) {
+    const categoryId = e.target.closest('.card').getAttribute('data-category-id');
+    this.formEditCategory.setAttribute('data-category-id', categoryId)
+    const prevHTML = this.renderSpinner(this.categoriesContainer, true);
+    const category = await this.getCategory(categoryId);
+
+    // remove tab highlighting 
+    document
+      .querySelectorAll('.tab')
+      .forEach((tab) => tab.classList.remove('active'));
+    this.hideAll();
+    //end 
+
+    this.categoriesContainer.innerHTML = prevHTML;
+    this.editCategoryContainer.classList.remove('hidden');
+
+    this.formEditCategory.querySelector('input[name="name"]').value = category.name;
+    category.subcategories.forEach(subcat => {
+      const generatedField = this.addSubCategory({ target: this.formEditCategory });
+      const input = generatedField.querySelector('input[name="subcategory-name"]');
+
+      input.value = subcat.name
+        ;
+
+      input.setAttribute('data-subcategory-id', subcat._id);
+    });
+  }
+
+
   highlightTab(e) {
     document
       .querySelectorAll('.tab')
@@ -101,14 +171,16 @@ class Categories {
   }
   showCategories(e) {
     e.preventDefault();
+
+
+    this.hideAll();
     this.categoriesContainer.classList.remove('hidden');
-    this.addCategoryContainer.classList.add('hidden');
   }
 
   showAddCategory(e) {
     e.preventDefault();
+    this.hideAll();
     this.addCategoryContainer.classList.remove('hidden');
-    this.categoriesContainer.classList.add('hidden');
   }
 
   async loadCategories() {
@@ -122,24 +194,36 @@ class Categories {
     }
   }
 
-  validateForm() {
-    const formData = new FormData(this.formAddCategory);
+  hideAll() {
+    document.querySelectorAll('.content-container').forEach(container => {
+      if (!container.classList.contains('hidden')) container.classList.add('hidden');
+    });
+  }
+
+  validateForm(e) {
+    const formData = new FormData(e.target.closest('form'));
     const form = Object.fromEntries(formData.entries());
 
-    const subcategoryInputs = document.querySelectorAll(
+    const subcategoryInputs = e.target.closest('form').querySelectorAll(
       'input[name="subcategory-name"]'
     );
 
     const subCategories = [];
-    subcategoryInputs.forEach((subcat) =>
-      subCategories.push({ name: subcat.value })
-    );
+    subcategoryInputs.forEach((subcat) => {
+      const id = subcat.getAttribute('data-subcategory-id');
+
+      const subCatObj = { name: subcat.value };
+      if (id) subCatObj._id = id;
+
+      subCategories.push(subCatObj);
+    });
 
     // remove first element because of the hidden trick I did with the HTML
     subCategories.splice(0, 1);
 
     const CategoryObj = {
       name: form.name,
+      _id: e.target.closest('form').getAttribute('data-category-id'),
       subcategories: subCategories,
     };
     return CategoryObj;
@@ -167,7 +251,7 @@ class Categories {
             <p class="card-text"><strong>Sub Categories:</strong> ${subCategories}</p>
 
             </div>
-            <button type="button" class="btn btn-outline-secondary">
+            <button type="button" class="btn btn-outline-secondary edit-category-btn">
                 <i class="bi bi-pencil-square"></i>
                 <span class="visually-hidden">Edit Category</span>
               </button>
@@ -196,27 +280,73 @@ class Categories {
       this.showMessage('Successfully added category!');
 
       this.formAddCategory.reset();
-      this.formAddCategory.querySelectorAll('.subcategory-input-container:not(.hidden)').forEach(el => el.remove());
 
     } catch (error) {
       console.log(error);
       this.showMessage('Error adding category..');
-      this.renderSpinner();
+    }
+  }
+
+  async updateCategory(category) {
+    const categoryId = this.formEditCategory.getAttribute('data-category-id');
+    // this.feedbackMessage.classList.toggle('hidden');
+
+    // this.renderSpinner(this.feedbackMessage, true);
+    console.log(category);
+    console.log(categoryId);
+    try {
+      const response = await fetch(`/api/categories/${categoryId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(category),
+      });
+
+      if (!response.ok) throw new Error('Failed getting response');
+      await response.json();
+      // this.renderSpinner(this.feedbackMessage, false);
+
+      // this.showMessage('Successfully updated category!');
+
+      this.formEditCategory.reset();
+
+      this.categoriesTab.dispatchEvent(new Event('click'));
+
+    } catch (error) {
+      console.log(error);
+      this.showMessage('Error adding category..');
     }
   }
 
   addSubCategory(e) {
-    const subCategoryElement = document.querySelector(
+    const subCategoryElement = e.target.closest('form').querySelector(
       '.subcategory-input-container'
     );
     const clonedElement = subCategoryElement.cloneNode(true);
     clonedElement.classList.toggle('hidden');
-    const formBtnsContainer = document.querySelector('.form-btns-container');
+    const formBtnsContainer = e.target.closest('form').querySelector('.form-btns-container');
     formBtnsContainer.insertAdjacentElement('beforebegin', clonedElement);
+    return clonedElement;
   }
 
-  deleteSubCategory(e) {
+  async deleteSubCategory(e) {
     e.target.closest('.subcategory-input-container').remove();
+
+
+
+  }
+
+
+  async getCategory(id) {
+    try {
+      const response = await fetch(`/api/categories/${id}`);
+      if (!response.ok) throw new Error('Failed fetching!');
+      const result = await response.json();
+      return result.data;
+    } catch (error) {
+      this.showMessage(`Error loading category\nError message: ${error}`);
+    }
   }
 
   async deleteCategory(e) {

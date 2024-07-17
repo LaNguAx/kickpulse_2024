@@ -90,6 +90,25 @@ const deleteProductsByBrandId = async (brandId) => {
   }
 };
 
+const deleteProductsByCategoryId = async (categoryId) => {
+  try {
+    const products = await getProductsByCategoryId(categoryId);
+
+    const productIds = products.map(product => product._id);
+
+    const result = await ProductsModel.deleteMany({ _id: { $in: productIds } })
+
+    /*
+    if (result.deletedCount === 0)
+      throw new Error('No products found for category');
+    */
+    return result;
+  } catch (err) {
+    console.error(`Error deleting products for category ID ${categoryId}:`, err);
+    throw new Error('Failed to delete products by category ID');
+  }
+};
+
 const editProduct = async (id, options) => {
   try {
     const updatedProduct = await ProductsModel.findByIdAndUpdate(id, options, {
@@ -115,7 +134,6 @@ const getProductsByCategoryId = async (id) => {
           (subcategory) => subcategory.id == id
         )
     );
-    if (filteredProducts.length == 0) throw new Error('No products found');
     return filteredProducts;
   } catch (e) {
     console.error(`Error getting product with category id ${id}:`, e);
@@ -131,5 +149,6 @@ export default {
   deleteProduct,
   deleteProductsBySupplierId,
   deleteProductsByBrandId,
+  deleteProductsByCategoryId,
   editProduct,
 };

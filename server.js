@@ -35,5 +35,5 @@ app.listen(PORT, async () => {
 
 /* 
 PORT=3000
-MONGO_URI=mongodb+srv://itayakni:kick.pulse.cs@cluster0.yl5rjk1.mongodb.net/kickpulse_2024?retryWrites=true&w=majority&appName=Cluster0
+MONGO_URI=mongodb+srv://itayakni:kick.pulse.c  s@cluster0.yl5rjk1.mongodb.net/kickpulse_2024?retryWrites=true&w=majority&appName=Cluster0
 */

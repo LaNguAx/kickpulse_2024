@@ -12,7 +12,7 @@ const getCategories = async () => {
 const getCategory = async (id) => {
   try {
     const specificCategory = await CategoriesModel.findById(id);
-    const allCategories = await CategoriesModel.find({});
+    const allCategories = await getCategories();
 
     const subCategories = allCategories.map(
       (category) => category.subcategories
@@ -48,8 +48,34 @@ const createCategory = async (category) => {
   }
 };
 
+const updateCategory = async (id, category) => {
+  try {
+    // Find the category by ID and update it with the new data
+    const updatedCategory = await CategoriesModel.findByIdAndUpdate(
+      id,
+      {
+        name: category.name,
+        subcategories: category.subcategories,
+      },
+      { new: true } // Return the updated document
+    );
+
+    // Check if the category was found and updated
+    if (!updatedCategory) {
+      throw new Error('Category not found');
+    }
+
+    return updatedCategory;
+  } catch (err) {
+    console.error('Error updating category:', err);
+    throw new Error('Failed to update category');
+  }
+};
+
+
 const deleteCategory = async (id) => {
   try {
+
     const deletedCategory = await CategoriesModel.findByIdAndDelete(id);
     if (!deletedCategory) throw new Error('Category not found');
     return deletedCategory;
@@ -58,6 +84,7 @@ const deleteCategory = async (id) => {
     throw new Error('Failed to delete category');
   }
 };
+
 
 const editCategory = async (id, options) => {
   try {
@@ -81,6 +108,7 @@ export default {
   getCategories,
   getCategory,
   createCategory,
+  updateCategory,
   deleteCategory,
   editCategory,
 };
