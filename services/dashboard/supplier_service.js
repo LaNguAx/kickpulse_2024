@@ -45,7 +45,7 @@ const deleteSupplier = async (id) => {
   }
 };
 
-const editSupplier = async (id, options) => {
+const updateSupplier = async (id, options) => {
   try {
     const updatedSupplier = await SuppliersModel.findByIdAndUpdate(
       id,
@@ -74,11 +74,47 @@ const getSupplierBrands = async (id) => {
   }
 };
 
+const deleteBrandFromSuppliers = async(id) => {
+
+  try {
+    //thisll run over the suppliers array and for each supplier go through the brands array and check for equality, if so the 2nd arg is the action to perform on such document and it'll be to remove the brand in the brands array that matches id.
+    await SuppliersModel.updateMany(
+      { 'brands.id': id }, // Find suppliers where brands array contains the brand with the given id
+      { $pull: { brands: { id } } } // Remove the brand with the specified id from the brands array
+    );
+
+
+  }
+  catch(e) {
+    console.log('Error deleting a brand from suppliers, brand id: ', id);
+    throw new Error('Failed deleting brand from supplier!');
+  }
+
+}
+
+const updateSuppliersBrandName = async(brandId, newName) => {
+  try {
+    await SuppliersModel.updateMany(
+      { 'brands.id': brandId },
+      { $set: { 'brands.$[elem].name': newName} },
+      {arrayFilters: [{'elem.id': brandId}]}
+
+    );
+  } catch(e) {
+    console.log('Error deleting a brand from suppliers, brand id: ', id);
+    throw new Error('Failed deleting brand from supplier!');
+  }
+
+}
+
+
 export default {
   getSuppliers,
   getSupplier,
   createSupplier,
   deleteSupplier,
-  editSupplier,
+  updateSupplier,
   getSupplierBrands,
+  deleteBrandFromSuppliers,
+  updateSuppliersBrandName
 };

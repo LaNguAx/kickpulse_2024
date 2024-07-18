@@ -55,6 +55,11 @@
       </nav>
     </div>
   </div>
+  <div class="text-center mt-5">
+    <h5>Warning: Deleting a category/sub category will DELETE all of it's related products.</h5>
+    <h6>Note: Changing category/sub category name will CHANGE all of it's related products' category/sub category
+      name.</h6>
+  </div>
 
   <main class="container mt-5 mb-5">
     <div class="row">
@@ -103,7 +108,6 @@
 
         <div class="col add-category content-container hidden">
           <h1 class="text-center mb-4">Add Category</h1>
-
           <form class="row add-category-form align-items-center flex-column" action="/api/categories" method="POST"
             data-category-id="">
             <div class="col-6 mb-3 ">

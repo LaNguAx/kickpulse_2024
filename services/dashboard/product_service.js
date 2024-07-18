@@ -93,9 +93,7 @@ const deleteProductsByBrandId = async (brandId) => {
 const deleteProductsByCategoryId = async (categoryId) => {
   try {
     const products = await getProductsByCategoryId(categoryId);
-
     const productIds = products.map(product => product._id);
-
     const result = await ProductsModel.deleteMany({ _id: { $in: productIds } })
 
     /*
@@ -125,19 +123,69 @@ const editProduct = async (id, options) => {
 
 const getProductsByCategoryId = async (id) => {
   try {
-    const allProducts = await getProducts();
+    const filteredProducts = await ProductsModel.find({
+      $or: [
+        { 'category.id': id },
+        { 'category.subcategories.id': id }
+      ]
+    });
 
-    const filteredProducts = allProducts.filter(
-      (product) =>
-        product.category.id == id ||
-        product.category.subcategories.some(
-          (subcategory) => subcategory.id == id
-        )
-    );
     return filteredProducts;
   } catch (e) {
+    f
     console.error(`Error getting product with category id ${id}:`, e);
     throw new Error('Failed to get product by category ID');
+  }
+};
+
+
+const updateProductsBrandName = async (brandId, newName) => {
+  try {
+    await ProductsModel.updateMany(
+      { 'brand.id': brandId }, // Find documents where brand.id matches brandId
+      { $set: { 'brand.name': newName } } // Update the brand.name field to newName
+      , { new: true });
+
+    // console.log(`Updated brand name for products with brand ID ${brandId} to '${newName}'.`);
+
+  } catch (e) {
+    console.error('Error updating brand name for products:', e);
+    throw new Error('Failed updating brand name for products!');
+  }
+};
+
+const updateProductsCategoryName = async (category) => {
+  try {
+    // Update products that only have the category without subcategories
+    await ProductsModel.updateMany(
+      { 'category.id': category.id, 'category.subcategories': { $size: 0 } },
+      {
+        $set: {
+          'category.name': category.name
+        }
+      }
+    );
+
+    // Update products that have subcategories
+    for (let subcategory of category.subcategories) {
+      await ProductsModel.updateMany(
+        { 'category.id': category.id, 'category.subcategories.id': subcategory.id },
+        {
+          $set: {
+            'category.name': category.name,
+            'category.subcategories.$[elem].name': subcategory.name
+          }
+        },
+        {
+          arrayFilters: [{ 'elem.id': subcategory.id }]
+        }
+      );
+    }
+
+    // console.log(`Updated products for category ID ${category.id}.`);
+  } catch (e) {
+    console.error('Error updating category name for products:', e);
+    throw new Error('Failed updating category name for products!');
   }
 };
 
@@ -151,4 +199,6 @@ export default {
   deleteProductsByBrandId,
   deleteProductsByCategoryId,
   editProduct,
+  updateProductsBrandName,
+  updateProductsCategoryName,
 };

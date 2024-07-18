@@ -44,7 +44,7 @@ const deleteBrand = async (id) => {
   }
 };
 
-const editBrand = async (id, options) => {
+const updateBrand = async (id, options) => {
   try {
     const updatedBrand = await BrandsModel.findByIdAndUpdate(id, options, {
       new: true,
@@ -63,5 +63,5 @@ export default {
   getBrand,
   createBrand,
   deleteBrand,
-  editBrand,
+  updateBrand,
 };

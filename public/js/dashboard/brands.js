@@ -7,6 +7,8 @@ class Brands {
   feedbackAddBrand;
   feedbackMessage;
   spinner;
+  formEditBrand;
+  editBrandContainer;
 
   constructor() {
     this.brandsTab = document.querySelector('.all-brands-tab');
@@ -18,6 +20,8 @@ class Brands {
     this.spinner = document.querySelector('.spinner-border');
     this.feedbackMessage = document.querySelector('.feedback-message');
 
+    this.formEditBrand = document.querySelector('.edit-brand-form')
+    this.editBrandContainer = document.querySelector('.edit-brand');
     this.initEventListeners();
   }
 
@@ -43,6 +47,11 @@ class Brands {
       if (e.target.classList.contains('delete-brand')) {
         this.deleteBrand(e);
       }
+
+      if(e.target.closest('.edit-brand-btn')) {
+        // this doesnt need to be an async data because getting the brand name is simple from the dom itself.
+        this.editBrand(e);
+      }
     });
 
     this.formAddBrand.addEventListener('submit', (e) => {
@@ -51,6 +60,41 @@ class Brands {
       const form = Object.fromEntries(formData.entries());
 
       this.addBrand(form);
+    });
+
+    this.formEditBrand.addEventListener('submit', e => {
+      e.preventDefault();
+      const validatedForm = this.validateForm(e);
+    })
+  }
+
+  editBrand(e) {
+    const brandName = e.target.closest('.card').querySelector('.card-title').innerText;
+    const brandId = e.target.closest('.card').getAttribute('data-brand-id');
+    this.formEditBrand.setAttribute('data-brand-id', brandId);
+    this.formEditBrand.querySelector('input[name="name"]').setAttribute('value', brandName);
+
+    
+    // const prevHTML = this.renderSpinner(this.brandsContainer, true);
+
+    document.querySelectorAll('.tab').forEach(tab=>  tab.classList.remove('active'));
+    this.hideAll();
+
+    this.editBrandContainer.classList.remove('hidden');
+  
+  }
+  validateForm(e) {
+    const formData = new FormData(e.target.closest('form'));
+    const brand = Object.fromEntries(formData.entries());
+    brand._id = e.target.closest('form').getAttribute('data-brand-id');
+
+
+    this.updateBrand(brand);
+  }
+
+  hideAll() {
+    document.querySelectorAll('.content-container').forEach(container => {
+      if (!container.classList.contains('hidden')) container.classList.add('hidden');
     });
   }
 
@@ -85,14 +129,14 @@ class Brands {
 
   showBrands(e) {
     e.preventDefault();
+    this.hideAll();
     this.brandsContainer.classList.remove('hidden');
-    this.addBrandContainer.classList.add('hidden');
   }
 
   showAddBrand(e) {
     e.preventDefault();
+    this.hideAll();
     this.addBrandContainer.classList.remove('hidden');
-    this.brandsContainer.classList.add('hidden');
   }
 
   async loadBrands() {
@@ -122,7 +166,7 @@ class Brands {
             <h5 class="card-title">${brand.name}</h5>
             <p class="card-text">Brand ID: ${brand._id}</p>
           </div>
-           <button type="button" class="btn btn-outline-secondary">
+           <button type="button" class="btn btn-outline-secondary edit-brand-btn">
                 <i class="bi bi-pencil-square"></i>
                 <span class="visually-hidden">Edit Brand</span>
               </button>
@@ -158,6 +202,37 @@ class Brands {
       this.showMessage('Error adding brand..');
       this.renderSpinner();
     }
+  }
+
+  async updateBrand(brand) {
+    // this.feedbackMessage.classList.toggle('hidden');
+    // this.renderSpinner(this.feedbackMessage, true);
+
+    try {
+      const response = await fetch(`/api/brands/${brand._id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(brand),
+      });
+
+      if (!response.ok) throw new Error('Failed getting response');
+      await response.json();
+      // this.renderSpinner(this.feedbackMessage, false);
+
+      // this.showMessage('Successfully updated category!');
+
+      this.formEditBrand.reset();
+
+      this.brandsTab.dispatchEvent(new Event('click'));
+
+    } catch (error) {
+      console.log(error);
+      this.showMessage('Error adding category..');
+    }
+
+    
   }
 
   async deleteBrand(e) {

@@ -55,6 +55,12 @@
     </div>
   </div>
 
+  <div class="text-center mt-5">
+    <h5>Warning: Deleting a brand will DELETE all of its products & delete it from all suppliers who are supplying this
+      brand.</h5>
+    <h6>Note: Changing brand name will CHANGE the name in all suppliers who are supplying this brand.</h6>
+  </div>
+
   <main class="container mt-5 mb-5">
     <div class="row">
       <div class="list-group col-lg-2 col-sm-3 tabs-container">
@@ -65,7 +71,7 @@
 
       </div>
       <div class="col-8 main-content">
-        <div class="row brands">
+        <div class="row brands content-container">
 
           <% if (brands.length == 0) { %>
           <h4>You don't have any brands..</h4>
@@ -79,7 +85,7 @@
                 <h5 class="card-title"><%= brand.name %></h5>
                 <p class="card-text">Brand ID: <%= brand._id %></p>
               </div>
-              <button type="button" class="btn btn-outline-secondary">
+              <button type="button" class="btn btn-outline-secondary edit-brand-btn">
                 <i class="bi bi-pencil-square"></i>
                 <span class="visually-hidden">Edit Brand</span>
               </button>
@@ -90,7 +96,7 @@
         </div>
 
 
-        <div class="col add-brand hidden">
+        <div class="col add-brand content-container hidden">
           <h1 class="text-center mb-4">Add Brand</h1>
 
           <form class="row add-brand-form align-items-center flex-column" action="/api/brands" method="POST">
@@ -106,6 +112,27 @@
           </form>
           <div class="feedback-message container text-center mt-4 hidden fs-3"></div>
         </div>
+
+
+
+        <!-- EDIT -->
+        <div class="col edit-brand content-container hidden">
+          <h1 class="text-center mb-4">Edit Brand</h1>
+
+          <form class="row edit-brand-form align-items-center flex-column" action="/api/brands" method="PUT">
+            <div class="col-6 mb-3 ">
+              <label for="name" class="form-label">Brand name</label>
+              <input type="text" class="form-control" name="name" id="name" value="test1" placeholder="" required>
+            </div>
+            <div class="d-flex align-items-center justify-content-center form-btns-container">
+              <button type="submit" class="btn btn-primary mx-auto">
+                Edit & Save Brand
+              </button>
+            </div>
+          </form>
+          <div class="feedback-message container text-center mt-4 hidden fs-3"></div>
+        </div>
+
       </div>
     </div>
 

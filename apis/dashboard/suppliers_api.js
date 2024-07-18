@@ -79,3 +79,4 @@ export async function getSupplierBrands(req, res) {
     res.status(500).json({ success: false, message: 'Server error' });
   }
 }
+

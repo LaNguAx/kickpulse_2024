@@ -30,7 +30,7 @@ const ProductSchema = new Schema(
         required: true,
       },
       id: {
-        type: String,
+        type: mongoose.Types.ObjectId,
         required: true,
       },
     },
@@ -44,7 +44,7 @@ const ProductSchema = new Schema(
         required: true,
       },
       id: {
-        type: String,
+        type: mongoose.Types.ObjectId,
         required: true,
       },
     },
@@ -54,7 +54,7 @@ const ProductSchema = new Schema(
         required: true,
       },
       id: {
-        type: String,
+        type: mongoose.Types.ObjectId,
         required: true,
       },
       subcategories: [
@@ -64,9 +64,10 @@ const ProductSchema = new Schema(
             required: true,
           },
           id: {
-            type: String,
+            type: mongoose.Types.ObjectId,
             required: true,
           },
+          _id: false
         },
       ],
     },
