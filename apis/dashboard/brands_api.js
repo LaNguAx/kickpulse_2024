@@ -1,5 +1,6 @@
 import BrandService from '../../services/dashboard/brand_service.js';
 import ProductsService from '../../services/dashboard/product_service.js';
+import SuppliersService from '../../services/dashboard/supplier_service.js';
 
 // Get all brands
 export async function getBrands(req, res) {
@@ -42,6 +43,34 @@ export async function getBrand(req, res) {
   }
 }
 
+export async function updateBrand(req, res) {
+  const {id} = req.params;
+  const newBrandData = {...req.body};
+
+  try {
+    const updatedBrand = await BrandService.updateBrand(id, newBrandData);
+    if (!updatedBrand) {
+      return res
+        .status(404)
+        .json({ success: false, message: 'Brand not found' });
+    }
+
+    // delete all products related to a specific Brand
+    // update all suppliers to have new brand name
+    await SuppliersService.updateSuppliersBrandName(id, newBrandData.name);
+
+
+    // update all products to have new brand name
+    await ProductsService.updateProductsBrandName(id, newBrandData.name);
+
+    res.status(200).json({ success: true, data: updatedBrand });
+  } catch (error) {
+    console.error('Error updating brand:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+}
+
+
 // Delete a brand by ID
 export async function deleteBrand(req, res) {
   const { id } = req.params;
@@ -55,6 +84,10 @@ export async function deleteBrand(req, res) {
 
     // delete all products related to a specific Brand
     await ProductsService.deleteProductsByBrandId(id);
+
+    // make suppliers who supply the deleted brand not supply it anymore
+    console.log(id)
+    await SuppliersService.deleteBrandFromSuppliers(id);
 
     res.status(200).json({ success: true, data: deletedBrand });
   } catch (error) {

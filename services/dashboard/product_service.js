@@ -96,6 +96,8 @@ const deleteProductsByCategoryId = async (categoryId) => {
 
     const productIds = products.map(product => product._id);
 
+      console.log(categoryId)
+      console.log(productIds)
     const result = await ProductsModel.deleteMany({ _id: { $in: productIds } })
 
     /*
@@ -141,6 +143,45 @@ const getProductsByCategoryId = async (id) => {
   }
 };
 
+
+const updateProductsBrandName = async (brandId, newName) => {
+  try {
+    await ProductsModel.updateMany(
+      { 'brand.id': brandId }, // Find documents where brand.id matches brandId
+      { $set: { 'brand.name': newName } } // Update the brand.name field to newName
+    ,    { new: true } );
+
+    console.log(`Updated brand name for products with brand ID ${brandId} to '${newName}'.`);
+
+  } catch (e) {
+    console.error('Error updating brand name for products:', e);
+    throw new Error('Failed updating brand name for products!');
+  }
+};
+
+const updateProductsCategoryName = async (category) => {
+  try { 
+    await ProductsModel.updateMany(
+      { 'category.id': category.id },
+      { $set: {category} } 
+    );
+
+    
+    
+    // CONTINUE FROM HERE
+    // U NEED TO UPDATE PRODUCT CATEGORY NAME AND SUBCATEGORIES NAME UPON CATEGORY NAME UPDATE. U ARE UPDATING THE CATEGORY CORRECTLY BUT UPDATING THE PRODUCT FOR IT IS DONE WRONG BECUASE WHAT U DID HERE WAS SIMPLY GIVING THE PRODUCT THE SAME CATEGORY AS UPDATED AND THAT IS WRONG BECAUSE A PRODUCT MIGHT HAVE ONLY A PART OF THE CATEGORY AND NOT ALL OF IT.
+
+    // ALSO MAKE SURE TO DEBUG THE CODE BECAUSE IT PROBABLY HAS MANY BUGS THAT NEED TO BE HANDLED, TRY INSERTING SOME IRREGULAR INPUTS.
+    
+
+    console.log(`Updated subcategory name for products with category ID ${category._id}.`);
+
+  } catch (e) {
+    console.error('Error updating subcategory name for products:', e);
+    throw new Error('Failed updating subcategory name for products!');
+  }
+};
+
 export default {
   getProducts,
   getProduct,
@@ -151,4 +192,6 @@ export default {
   deleteProductsByBrandId,
   deleteProductsByCategoryId,
   editProduct,
+  updateProductsBrandName,
+  updateProductsCategoryName,
 };

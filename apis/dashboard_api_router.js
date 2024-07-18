@@ -15,6 +15,7 @@ import {
 } from './dashboard/suppliers_api.js';
 import {
   createBrand,
+  updateBrand,
   deleteBrand,
   getBrand,
   getBrands,
@@ -37,7 +38,8 @@ router.route('/suppliers/:id').get(getSupplier).delete(deleteSupplier);
 router.route('/suppliers/:id/brands').get(getSupplierBrands);
 
 router.route('/brands').get(getBrands).post(createBrand);
-router.route('/brands/:id').get(getBrand).delete(deleteBrand);
+router.route('/brands/:id').get(getBrand).put(updateBrand).delete(deleteBrand);
+
 
 router.route('/categories').get(getCategories).post(createCategory);
 router.route('/categories/:id').get(getCategory).delete(deleteCategory).put(updateCategory);
