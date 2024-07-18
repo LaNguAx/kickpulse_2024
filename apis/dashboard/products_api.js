@@ -15,7 +15,6 @@ export async function getProducts(req, res) {
 export async function createProduct(req, res) {
   try {
     const product = { ...req.body };
-
     const newProduct = await ProductService.createProduct(product);
     res.status(201).json({ success: true, data: newProduct });
   } catch (error) {

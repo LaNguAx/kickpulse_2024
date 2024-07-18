@@ -289,11 +289,7 @@ class Categories {
 
   async updateCategory(category) {
     const categoryId = this.formEditCategory.getAttribute('data-category-id');
-    // this.feedbackMessage.classList.toggle('hidden');
 
-    // this.renderSpinner(this.feedbackMessage, true);
-    console.log(category);
-    console.log(categoryId);
     try {
       const response = await fetch(`/api/categories/${categoryId}`, {
         method: 'PUT',

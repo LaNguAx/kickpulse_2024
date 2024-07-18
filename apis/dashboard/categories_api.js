@@ -56,7 +56,6 @@ export async function updateCategory(req, res) {
     }
   });
 
-
   try {
     const category = await CategoryService.updateCategory(id, newCategory);
     if (!category) {
@@ -66,8 +65,8 @@ export async function updateCategory(req, res) {
     }
 
     // update related products category name // CONTINUE HERE TMRW
-    category.id = category._id;
-    category.subcategories.forEach(subcat => subcat.id = subcat._id);
+    // category.id = category._id;
+    // category.subcategories.forEach(subcat => subcat.id = subcat._id);
     await ProductsService.updateProductsCategoryName(category);
 
     res.status(200).json({ success: true, data: category });

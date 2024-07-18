@@ -94,7 +94,6 @@ const deleteBrandFromSuppliers = async(id) => {
 
 const updateSuppliersBrandName = async(brandId, newName) => {
   try {
-    console.log(brandId, newName)
     await SuppliersModel.updateMany(
       { 'brands.id': brandId },
       { $set: { 'brands.$[elem].name': newName} },

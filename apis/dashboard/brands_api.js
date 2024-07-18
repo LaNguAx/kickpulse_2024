@@ -44,8 +44,8 @@ export async function getBrand(req, res) {
 }
 
 export async function updateBrand(req, res) {
-  const {id} = req.params;
-  const newBrandData = {...req.body};
+  const { id } = req.params;
+  const newBrandData = { ...req.body };
 
   try {
     const updatedBrand = await BrandService.updateBrand(id, newBrandData);
@@ -86,7 +86,6 @@ export async function deleteBrand(req, res) {
     await ProductsService.deleteProductsByBrandId(id);
 
     // make suppliers who supply the deleted brand not supply it anymore
-    console.log(id)
     await SuppliersService.deleteBrandFromSuppliers(id);
 
     res.status(200).json({ success: true, data: deletedBrand });
