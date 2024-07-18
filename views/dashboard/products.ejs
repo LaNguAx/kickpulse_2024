@@ -66,8 +66,8 @@
           href="#add_product" role="tab" aria-controls="profile">Add Product</a>
 
       </div>
-      <div class="col-8 main-content">
-        <div class="row products">
+      <div class="col-8 main-content ">
+        <div class="row products content-container">
           <% if(products.length == 0) { %>
           <h4>You don't have any products..</h4>
           <% } products.forEach(el => { %>
@@ -98,7 +98,7 @@
           </div>
           <% }); %>
         </div>
-        <div class="col add-product hidden">
+        <div class="col add-product content-container hidden">
           <h1 class="text-center mb-4">Add Product</h1>
 
           <form class="row add-product-form" action="/api/products" method="POST">

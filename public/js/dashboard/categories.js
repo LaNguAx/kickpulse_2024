@@ -45,6 +45,8 @@ class Categories {
     })
 
     this.categoriesTab.addEventListener('click', async (e) => {
+      if (e.target.classList.contains('active')) return;
+
       this.highlightTab(e);
       this.showCategories(e);
       document.querySelectorAll('.subcategory-input-container:not(.hidden)').forEach(el => el.remove());
@@ -60,6 +62,8 @@ class Categories {
     });
 
     this.addCategoryTab.addEventListener('click', (e) => {
+      if (e.target.classList.contains('active')) return;
+
       this.highlightTab(e);
       document.querySelectorAll('.subcategory-input-container:not(.hidden)').forEach(el => el.remove());
 
@@ -170,7 +174,6 @@ class Categories {
     e.target.classList.toggle('active');
   }
   showCategories(e) {
-    e.preventDefault();
 
 
     this.hideAll();
@@ -178,7 +181,6 @@ class Categories {
   }
 
   showAddCategory(e) {
-    e.preventDefault();
     this.hideAll();
     this.addCategoryContainer.classList.remove('hidden');
   }
@@ -279,12 +281,17 @@ class Categories {
 
       this.showMessage('Successfully added category!');
 
-      this.formAddCategory.reset();
+      this.resetForm(this.formAddCategory);
 
     } catch (error) {
       console.log(error);
       this.showMessage('Error adding category..');
     }
+  }
+
+  resetForm(form) {
+    form.reset();
+    document.querySelectorAll('.subcategory-input-container:not(.hidden)').forEach(el => el.remove());
   }
 
   async updateCategory(category) {
@@ -328,9 +335,6 @@ class Categories {
 
   async deleteSubCategory(e) {
     e.target.closest('.subcategory-input-container').remove();
-
-
-
   }
 
 
@@ -365,6 +369,7 @@ class Categories {
 
       this.renderCategories(categories);
 
+      // this.categoriesTab.dispatchEvent(new Event('click'));
     } catch (error) {
       console.log(error);
     }

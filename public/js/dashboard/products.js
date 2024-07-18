@@ -26,6 +26,7 @@ class Products {
 
   initEventListeners() {
     this.productsTab.addEventListener('click', async (e) => {
+      if (e.target.classList.contains('active')) return;
 
       this.highlightTab(e);
       this.showProducts(e);
@@ -39,14 +40,9 @@ class Products {
     });
 
     this.addProductTab.addEventListener('click', (e) => {
+      // if (e.target.classList.contains('active')) return;
       this.highlightTab(e);
       this.showAddProduct(e);
-
-      const subCategeoriesContainer = document.querySelector(
-        '.subcategories-container'
-      );
-      subCategeoriesContainer.innerHTML = '';
-
 
     });
 
@@ -136,16 +132,27 @@ class Products {
   }
 
   async handleSupplierChange(event) {
+    const brandsSelect = document.querySelector('#brand-option');
+
     const selectedSupplierId = event.target.value;
     // getting the supplier's brands
     const response = await fetch(`/api/suppliers/${selectedSupplierId}/brands`);
+
+    // if no brands found
+    if (response.status == 404) {
+      brandsSelect.innerHTML = '';
+      brandsSelect.insertAdjacentHTML('beforeend',
+        `<option value="" disabled selected>This supplier doesn't sell any brands</option>`
+      );
+      return;
+    }
     const result = await response.json();
     const supplierBrands = result.data;
+
     // change the select of the brands according to selected supplier
-    const brandsSelect = document.querySelector('#brand-option');
-    brandsSelect.innerHTML = `<option value="" disabled selected>
-                    Please select a brand
-                  </option>`;
+    brandsSelect.innerHTML = `
+    <option value="" disabled selected>Please select a brand</option>`;
+
     supplierBrands.forEach((brand) => {
       const optionElement = document.createElement('option');
       optionElement.innerText = brand.name;
@@ -173,8 +180,9 @@ class Products {
         subCategeoriesContainer.innerHTML = `<p>This category doesn't have sub categories.. </p>`
       }
 
-      subCategeoriesContainer.insertAdjacentHTML('beforeend', `          <label class="form label mb-2">Select Sub Category</label><br>
-`);
+      subCategeoriesContainer.insertAdjacentHTML('beforeend',
+        `<label class="form label mb-2">Select Sub Category</label><br>`
+      );
       subCategories.forEach((subcat) => {
 
         subCategeoriesContainer.insertAdjacentHTML('beforeend', `
@@ -184,27 +192,6 @@ class Products {
               <label class="btn btn-outline-primary" for="subcategory-${subcat._id}">${subcat.name}</label><br><br>
           
           `)
-
-
-        // const container = document.createElement('div');
-        // container.setAttribute('class', 'form-check form-check-inline');
-
-        // const checkbox = document.createElement('input');
-        // checkbox.setAttribute('class', 'form-check-input');
-        // checkbox.setAttribute('type', 'checkbox');
-        // checkbox.setAttribute('id', `subcategory-${subcat._id}`);
-        // // checkbox.setAttribute('name', 'subcategfffory');
-        // checkbox.setAttribute('value', subcat._id);
-        // checkbox.setAttribute('data-subcategory-name', subcat.name);
-
-        // const label = document.createElement('label');
-        // label.setAttribute('class', 'form-check-label');
-        // label.setAttribute('for', `subcategory-${subcat._id}`);
-        // label.innerText = subcat.name;
-
-        // container.insertAdjacentElement('beforeend', checkbox);
-        // container.insertAdjacentElement('beforeend', label);
-        // subCategeoriesContainer.insertAdjacentElement('beforeend', container);
       });
     } catch (e) {
       console.error(e);
@@ -237,14 +224,31 @@ class Products {
 
   showProducts(e) {
     e.preventDefault();
+    this.hideAll();
     this.productsContainer.classList.remove('hidden');
-    this.addProductContainer.classList.add('hidden');
   }
 
   showAddProduct(e) {
     e.preventDefault();
+    this.hideAll();
+
+    this.suppliersOption.selectedIndex = 0;
+
+    const subCategeoriesContainer = document.querySelector(
+      '.subcategories-container'
+    );
+
+    subCategeoriesContainer.innerHTML = '';
+
+    const brandsSelect = document.querySelector('#brand-option').innerHTML = `<option value="" disabled selected>Please select a brand</option>`
+
     this.addProductContainer.classList.remove('hidden');
-    this.productsContainer.classList.add('hidden');
+  }
+
+  hideAll() {
+    document.querySelectorAll('.content-container').forEach(container => {
+      if (!container.classList.contains('hidden')) container.classList.add('hidden');
+    });
   }
 
   async loadProducts() {
@@ -313,14 +317,16 @@ class Products {
         body: JSON.stringify(product),
       });
 
-      await response.json();
       if (!response.ok) throw new Error('Failed getting response');
+      await response.json();
 
       this.renderSpinner(this.feedbackMessage, false);
 
       this.showMessage('Successfully added product!');
 
       this.formAddProduct.reset();
+
+      this.addProductTab.dispatchEvent(new Event('click'));
 
 
     } catch (error) {
@@ -342,8 +348,8 @@ class Products {
         },
       });
 
-      await response.json();
       if (!response.ok) throw new Error('Failed getting response');
+      await response.json();
 
       const loaded = await this.loadProducts();
       this.renderSpinner(this.productsContainer, false);

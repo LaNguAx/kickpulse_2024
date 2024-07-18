@@ -7,6 +7,8 @@ class Suppliers {
   feedbackAddSupplier;
   feedbackMessage;
   spinner;
+  locationsSelect;
+  countriesLoaded = false;
 
   constructor() {
     this.suppliersTab = document.querySelector('.all-suppliers-tab');
@@ -17,14 +19,16 @@ class Suppliers {
     this.feedbackAddSupplier = document.querySelector('.feedback-add-supplier');
     this.spinner = document.querySelector('.spinner-border');
     this.feedbackMessage = document.querySelector('.feedback-message');
+    this.locationsSelect = document.querySelector('select[name="location"]');
     this.initEventListeners();
   }
 
   initEventListeners() {
     this.suppliersTab.addEventListener('click', async (e) => {
+
+      if (e.target.classList.contains('active')) return;
       this.highlightTab(e);
       this.showSuppliers(e);
-
       this.renderSpinner(this.suppliersContainer, true);
       const loaded = await this.loadSuppliers();
       this.renderSpinner(this.suppliersContainer, false);
@@ -33,8 +37,8 @@ class Suppliers {
 
     });
     this.addSupplierTab.addEventListener('click', (e) => {
+      if (e.target.classList.contains('active')) return;
       this.highlightTab(e);
-
       this.showAddSupplier(e);
     }
     );
@@ -53,6 +57,7 @@ class Suppliers {
       if (!brands) return;
 
       form.brands = brands;
+      form.location = this.locationsSelect.value;
 
       const validatedForm = form;
       this.addSupplier(validatedForm);
@@ -83,6 +88,8 @@ class Suppliers {
   }
 
   highlightTab(e) {
+    if (e.target.classList.contains('active')) return;
+
     document
       .querySelectorAll('.tab')
       .forEach((tab) => tab.classList.remove('active'));
@@ -90,15 +97,34 @@ class Suppliers {
   }
 
   showSuppliers(e) {
-    e.preventDefault();
     this.suppliersContainer.classList.remove('hidden');
     this.addSupplierContainer.classList.add('hidden');
   }
 
-  showAddSupplier(e) {
-    e.preventDefault();
+  async showAddSupplier(e) {
     this.addSupplierContainer.classList.remove('hidden');
     this.suppliersContainer.classList.add('hidden');
+
+    // if user already loaded countries then skip
+    if (this.countriesLoaded) return;
+
+    const response = await fetch(`https://restcountries.com/v3.1/all`);
+    if (!response.ok) {
+      this.locationsSelect.insertAdjacentHTML('beforeend', `<option value="undefined">Failed to get countries! Reload page..</option>`);
+    }
+    else {
+      const countries = await response.json();
+      const countryNames = countries.map(country => country.name.common);
+      countryNames.sort((a, b) => a.localeCompare(b));
+      countryNames.forEach(country => {
+        this.locationsSelect.insertAdjacentHTML('beforeend', `
+          <option value="${country}">${country}  </option>
+        `);
+
+      })
+    }
+
+    this.countriesLoaded = true;
   }
 
   renderSpinner(element, on = true) {
@@ -119,7 +145,7 @@ class Suppliers {
   showMessage(message) {
     this.feedbackMessage.innerHTML = `<p style="font-size:1.4rem;">${message}</p>`;
     setTimeout(() => {
-      this.feedbackMessage.classList.toggle('hidden');
+      this.feedbackMessage.classList.remove('hidden');
       this.feedbackMessage.innerHTML = '';
     }, 1000);
   }
@@ -158,9 +184,8 @@ class Suppliers {
             <h5 class="card-title">${supplier.name}</h5>
             <p class="card-text"><strong>Location:</strong> ${supplier.location
         }</p>
-            <p class="card-text"><strong>Brands:</strong> ${supplierBrands.join(
-          ', '
-        )}</p>
+            <p class="card-text"><strong>Brands:</strong> ${supplierBrands.length == 0 ? `                <p>Supplier doesn't have brands..<br>Please add some first</p>
+` : supplierBrands.join(', ')}</p>
           </div>
         </div>`;
       this.suppliersContainer.appendChild(supplierElement);
@@ -168,8 +193,7 @@ class Suppliers {
   }
 
   async addSupplier(supplier) {
-
-    this.feedbackMessage.classList.toggle('hidden');
+    // this.feedbackMessage.classList.toggle('hidden');
     this.renderSpinner(this.feedbackMessage, true);
 
     try {
@@ -191,8 +215,10 @@ class Suppliers {
 
     } catch (error) {
       console.log(error);
+      this.renderSpinner(this.feedbackMessage, true);
       this.showMessage('Error adding supplier..');
-      this.renderSpinner();
+      // this.renderSpinner(this.feedbackMessage, true);
+
     }
   }
 

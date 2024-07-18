@@ -27,6 +27,8 @@ class Brands {
 
   initEventListeners() {
     this.brandsTab.addEventListener('click', async (e) => {
+      if (e.target.classList.contains('active')) return;
+
       this.highlightTab(e);
       this.showBrands(e);
 
@@ -39,6 +41,8 @@ class Brands {
     });
 
     this.addBrandTab.addEventListener('click', (e) => {
+      if (e.target.classList.contains('active')) return;
+
       this.highlightTab(e);
       this.showAddBrand(e);
     });
@@ -48,7 +52,7 @@ class Brands {
         this.deleteBrand(e);
       }
 
-      if(e.target.closest('.edit-brand-btn')) {
+      if (e.target.closest('.edit-brand-btn')) {
         // this doesnt need to be an async data because getting the brand name is simple from the dom itself.
         this.editBrand(e);
       }
@@ -74,14 +78,15 @@ class Brands {
     this.formEditBrand.setAttribute('data-brand-id', brandId);
     this.formEditBrand.querySelector('input[name="name"]').setAttribute('value', brandName);
 
-    
+
     // const prevHTML = this.renderSpinner(this.brandsContainer, true);
 
-    document.querySelectorAll('.tab').forEach(tab=>  tab.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
     this.hideAll();
 
     this.editBrandContainer.classList.remove('hidden');
-  
+
+    location.hash = 'edit_brand';
   }
   validateForm(e) {
     const formData = new FormData(e.target.closest('form'));
@@ -128,13 +133,11 @@ class Brands {
   }
 
   showBrands(e) {
-    e.preventDefault();
     this.hideAll();
     this.brandsContainer.classList.remove('hidden');
   }
 
   showAddBrand(e) {
-    e.preventDefault();
     this.hideAll();
     this.addBrandContainer.classList.remove('hidden');
   }
@@ -232,7 +235,7 @@ class Brands {
       this.showMessage('Error adding category..');
     }
 
-    
+
   }
 
   async deleteBrand(e) {
