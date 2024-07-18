@@ -55,6 +55,9 @@
       </nav>
     </div>
   </div>
+  <div class="text-center mt-5">
+    <h5>Warning: Deleting a supplier will DELETE all of it's supplied products.</h5>
+  </div>
 
   <main class="container mt-5 mb-5">
     <div class="row">
@@ -82,8 +85,13 @@
                 </p>
                 <p class="card-text">
                   <strong>Brands:</strong>
-                  <% const supplierBrands = []; supplier.brands.forEach(brand => { supplierBrands.push(brand.name); }); %>
-                  <%= supplierBrands.join(', '); %>
+                  <% if (supplier.brands.length === 0) { %>
+                <p>Supplier doesn't have brands..<br>Please add some first</p>
+                <% } else { %>
+                <% const supplierBrands = supplier.brands.map(brand => brand.name); %>
+                <%= supplierBrands.join(', ') %>
+                <% } %>
+
                 </p>
               </div>
             </div>
@@ -102,19 +110,16 @@
               <label for="location" class="form-label">Location</label>
               <select class="form-select" name="location" required>
                 <option value="" disabled selected>Please Select a location</option>
-                <option value="1">Israel</option>
-                <option value="2">England</option>
-                <option value="3">Japan</option>
               </select>
             </div>
 
             <div class="col-6 mb-3 form-check form-switch">
-              <label class="form label mb-2">Select Brands</label><br>
 
               <% if(brands.length == 0) { %>
-              <p>You don't have any brands.. Please add some first</p>
-              <% } else { brands.forEach(brand => { %>
-
+              <p>You don't have any brands..<br>Please add some first</p>
+              <% } else { %>
+              <label class="form label mb-2">Select Brands</label><br>
+              <% brands.forEach(brand => { %>
               <input type="checkbox" class="btn-check" id="brand-<%= brand._id %>" autocomplete="off"
                 data-brand-name="<%= brand.name %>" name="brands" value="<%= brand._id %>">
               <label class="btn btn-outline-primary" for="brand-<%= brand._id %>"><%= brand.name %></label><br><br>
@@ -130,7 +135,7 @@
               </button>
             </div>
           </form>
-          <div class="feedback-message container text-center mt-4 hidden fs-3"></div>
+          <div class="feedback-message container text-center mt-4 fs-3"></div>
         </div>
       </div>
     </div>
