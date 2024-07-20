@@ -1,0 +1,230 @@
+body {
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    direction: rtl;
+    text-align: center;
+}
+footer {
+    width: 100%;
+    background-color: black;
+    box-shadow: 8px 4px 8px 4px rgba(0, 0, 0, 0.1);    
+    color: white;
+    padding: 20px 0;
+    display: flex;
+    justify-content: space-around;
+    position: relative;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.footer-column {
+    text-align: center;
+}
+
+.footer-column h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    text-decoration: underline;
+}
+
+.footer-column ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.footer-column ul li {
+    margin-bottom: 5px;
+}
+
+.footer-column ul li a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.footer-column ul li a:hover {
+    color: #ddd;
+}
+
+.terms h1 {
+    font-weight: bold;
+    text-align: center;
+}
+.tophead
+{
+background-color: rgb(88, 3, 3);
+color: white;
+width: 100%;
+padding: 20px;
+border-bottom: 2px solid black;
+}
+
+.sign a {
+    color: black;
+    transition: transform 0.5s ease;
+}
+
+.sign a:hover {
+    cursor: pointer;
+    color: blue;   
+}
+
+.logo-photo img {
+    width: 10vw; /* Use viewport width for resizing */
+}
+
+.logo-photo {
+    position: relative;
+    width: 100%;
+    left: 95%;
+    transform: translateX(-50%);
+    top: 2vw; /* Use viewport width for positioning */
+}
+
+.topleft {
+    position: relative;
+    right: 44%;
+    font-size: 1.5vw; /* Adjust the font size proportionally */
+}
+
+.buttons-top {
+    position: relative;
+    bottom: 6vw; /* Adjust based on viewport size */
+    gap: 1vw; /* Adjust gap based on viewport size */
+    left: 5%;
+}
+
+.buttons-top button {
+    background-color: transparent;
+    border: none;
+    font-size: 1.5vw; /* Adjust font size proportionally */
+}
+
+.buttons-top button:hover {
+    cursor: pointer;
+}
+
+.shopping-bag {
+    position: fixed;
+}
+
+.sign {
+    top: 1vw; /* Adjust based on viewport size */
+    position: relative;
+    font-size: 1.5vw; /* Adjust font size proportionally */
+    left: 7%;
+}
+
+.search-container {
+    position: relative;
+    border: 0.1vw solid black; /* Adjust border thickness proportionally */
+    border-radius: 0.7vw; /* Adjust border radius proportionally */
+    width: fit-content;
+    right: 30%;
+    bottom: 7vw; /* Adjust based on viewport size */
+}
+
+#input_ {
+    background-color: transparent;
+    border: none;
+    padding: 1vw; /* Adjust padding proportionally */
+    font-size: 1.5vw; /* Adjust font size proportionally */
+}
+
+#input_:hover,
+#input_:focus,
+#input_:active {
+    outline: none;
+    border: none;
+}
+
+.searchbox button {
+    background-color: transparent;
+    border: none;
+    align-items: center;
+    font-size: 1.5vw; /* Adjust font size proportionally */
+}
+
+.bi.bi-search {
+    position: relative;
+    top: 0.3vw; /* Adjust based on viewport size */
+}
+
+.searchbox button:hover {
+    cursor: pointer;
+}
+
+.selection-topbuttons {
+    display: flex;
+    gap: 2vw; /* Adjust gap as per your preference */
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    top: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+}
+
+.selection-topbuttons .dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.selection-topbuttons .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.selection-topbuttons .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.selection-topbuttons .dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+.selection-topbuttons .dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.selection-topbuttons button {
+    border: none;
+    color: black;
+    background-color: white;
+    font-weight: bold;
+    padding: 1vw 2vw; /* Use viewport units for padding */
+    font-size: 1.5vw; /* Use viewport units for font size */
+    position: relative;
+    cursor: pointer;
+}
+
+.dropbtn {
+    font-size: 1.5vw; /* Use viewport units for font size */
+}
+.mid
+{
+    display: flex;
+    align-items: center;
+padding: 100px;
+text-align: center; 
+direction: ltr; 
+word-wrap: break-word; 
+line-height: 2.0;
+
+}

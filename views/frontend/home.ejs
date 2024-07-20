@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="frontend/home/home.css">
+    <title>kickpulse</title>
+</head>
+
+<body>
+    <div class=top>
+        <div class="logo-photo">
+            <a href="/">
+                <img src="../photos/logo.png" alt="Kick Pulse Logo" />
+            </a>
+        </div>
+        <div class="topleft">
+            <div class="buttons-top">
+                <button class="member">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor"
+                        class="bi bi-person" viewBox="0 0 16 16">
+                        <path
+                            d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z" />
+                    </svg>
+                </button>
+                <button class="shopping-bag">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-bag"
+                        viewBox="0 0 16 16">
+                        <path
+                            d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1m3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z" />
+                    </svg>
+                </button>
+            </div>
+            <div class="sign">
+                <a href="/login" class="sign-in-btn">Sign In</a> | <a href="/register">Join Now</a>
+            </div>
+            <div class="search-container">
+                <div class="searchbox">
+                    <input type="text" id="input_" placeholder="Search for products" name="search">
+                    <button type="submit">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-search" viewBox="0 0 16 16">
+                            <path
+                                d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+                        </svg>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+        <div class="selection-topbuttons">
+            <div class="dropdown">
+                <button class="dropbtn" onclick="location.href='../launches/launches.html'">RELEASES</button>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">BRANDS</button>
+                <div class="dropdown-content">
+                    <a href="#">Adidas</a>
+                    <a href="#">Nike</a>
+                    <a href="#">Jordan</a>
+                    <a href="#">New Balance</a>
+                    <a href="#">Converse</a>
+                    <a href="#">Vans</a>
+                    <a href="#">On Cloud</a>
+
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">KIDS</button>
+                <div class="dropdown-content">
+                    <a href="#">Sneakers</a>
+                    <a href="#">Running Shoes</a>
+                    <a href="#">Basketball Shoes</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">WOMEN</button>
+                <div class="dropdown-content">
+                    <a href="#">Sneakers</a>
+                    <a href="#">Running Shoes</a>
+                    <a href="#">Basketball Shoes</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">MEN</button>
+                <div class="dropdown-content">
+                    <a href="#">Sneakers</a>
+                    <a href="#">Running Shoes</a>
+                    <a href="#">Basketball Shoes</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">NEW</button>
+            </div>
+
+        </div>
+    </div>
+    <div class="mid">
+        <div class="position-relative">
+            <!-- <button class="shopnow">Shop Now</button> -->
+            <div class="myVideo">
+                <video width="100%" autoplay loop muted>
+                    <source src="../photos/video_entrence.mov" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        </div>
+        <div class="slide-brand-container">
+            <button class="slider-button" id="prev-slide">
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                    class="bi bi-arrow-left-circle-fill" viewBox="0 0 16 16">
+                    <path
+                        d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0m3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z" />
+                </svg>
+            </button>
+            <div class="slide-brand">
+                <button class="adidasbtn"><img src="../photos/adidas.png"></button>
+                <button class="nikebtn"><img src="../photos/nike.jpg"></button>
+                <button class="jordanbtn"><img src="../photos/jordan.png"></button>
+                <button class="newbalancebtn"><img src="../photos/nb.png"></button>
+                <button class="conversebtn"><img src="../photos/converse.png"></button>
+                <button class="vansbtn"><img src="../photos/vans.png"></button>
+                <button class="oncloudbtn"><img src="../photos/oncloud.png"></button>
+            </div>
+            <button class="slider-button" id="next-slide">
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                    class="bi bi-arrow-right-circle-fill" viewBox="0 0 16 16">
+                    <path
+                        d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z" />
+                </svg>
+            </button>
+        </div>
+
+        <div class="just-Dropped">
+            <h1>Just Dropped</h1>
+            <button class="btnjust">Mens</button>
+            <button class="btnjust">Women</button>
+            <button class="btnjust">Kids</button>
+        </div>
+
+        <div class="product-grid-container">
+            <div class="product-grid" id="productGrid">
+                <div class="product-card">
+                    <img src="../photos/campus1.webp" alt="ADIDAS CAMPUS 00s">
+                    <div class="product-info">
+                        <div class="new-badge">NEW</div>
+                        <h3>ADIDAS CAMPUS 00s</h3>
+                        <p>ADIDAS</p>
+                        <p class="price">110$ </p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="../photos/aj1.webp" alt="AIR JORDAN 1 LOW MARINA BLUE ">
+                    <div class="product-info">
+                        <div class="new-badge">NEW</div>
+                        <h3>AIR JORDAN 1 LOW MARINA BLUE</h3>
+                        <p>NIKE</p>
+                        <p class="price">130$ </p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="../photos/airmax90.webp" alt="NIKE AIR MAX 90">
+                    <div class="product-info">
+                        <div class="new-badge">NEW</div>
+                        <h3>NIKE AIR MAX 90</h3>
+                        <p>NIKE</p>
+                        <p class="price">160$ </p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="../photos/nb9060.webp" alt="NEW BALANCE 9060">
+                    <div class="product-info">
+                        <div class="new-badge">NEW</div>
+                        <h3>NEW BALANCE 9060</h3>
+                        <p>NEW BALANCE</p>
+                        <p class="price">270$</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="brand-grid-container">
+            <div class="brand-grid">
+                <div class="brand-card">
+                    <img src="../photos/converse-branch.jpg" alt="CONVERSE">
+                    <button class="shopbranch">SHOP CONVERSE</button>
+                </div>
+                <div class="brand-card">
+                    <img src="../photos/nb-branch.jpg" alt="NEW BALANCE">
+                    <button class="shopbranch">SHOP NEW BALANCE</button>
+                </div>
+                <div class="brand-card">
+                    <img src="../photos/nike branch.jpg" alt="NIKE">
+                    <button class="shopbranch">SHOP NIKE</button>
+                </div>
+                <div class="brand-card">
+                    <img src="../photos/adidas-branch.jpg" alt="ADIDAS">
+                    <button class="shopbranch">SHOP ADIDAS</button>
+                </div>
+            </div>
+
+        </div>
+
+
+        <footer>
+            <div class="footer-column">
+                <h2>Our Brands</h2>
+                <ul>
+                    <li><a href="#">Adidas</a></li>
+                    <li><a href="#">Nike</a></li>
+                    <li><a href="#">Jordan</a></li>
+                    <li><a href="#">New Balance</a></li>
+                    <li><a href="#">Converse</a>
+                    <li>
+                    <li><a href="#">Vans</a></li>
+                    <li><a href="#">On Cloud</a></li>
+
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h2>Customer Service</h2>
+                <ul>
+                    <li><a href="/contactus">Contact Us</a></li>
+                    <li><a href="/ourstores">Our Stores</a></li>
+                    <li><a href="/faq">FAQ</a></li>
+                    <li><a href="/shipping">Shipping and Returns</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h2>About the Company</h2>
+                <ul>
+                    <li><a href="/about-us">About Us</a></li>
+                    <li><a href="/terms">Terms and Conditions</a></li>
+                    <li><a href="/privacy">Privacy Policy</a></li>
+                    <li><a href="/accessibility">Accessibility Statement</a></li>
+                </ul>
+            </div>
+        </footer>
+        <script src="frontend/home/home.js"></script>
+
+</html>

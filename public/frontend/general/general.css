@@ -1,0 +1,246 @@
+body {
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    direction: rtl;
+    text-align: center;
+}
+
+.top {
+    border-bottom: 2px solid black;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 7px;
+    position: relative;
+}
+
+.logo-photo {
+    padding: 10px;
+}
+
+.logo-photo img {
+    margin-top: auto;
+    width: 130px;
+    position: relative;
+}
+
+.buttons-top {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    order: -1;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+.buttons-top button {
+    background-color: transparent;
+    border: none;
+    align-content: center;
+    padding: 0;
+}
+
+.buttons-top button svg {
+    width: 20px;
+    height: 24px;
+    fill: currentColor;
+}
+
+.buttons-top button:hover {
+    cursor: pointer;
+}
+
+.selection-topbuttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    position: absolute;
+    top: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+}
+
+.selection-topbuttons .dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.selection-topbuttons .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 100%;
+}
+
+.selection-topbuttons .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.selection-topbuttons .dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+.selection-topbuttons .dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.selection-topbuttons button {
+    border: none;
+    color: black;
+    background-color: white;
+    font-weight: bold;
+    padding: 10px 20px;
+    position: relative;
+    cursor: pointer;
+}
+
+.dropbtn {
+    font-size: 18px;
+}
+
+.form-container {
+    display: flex;
+    justify-content: space-around;
+    padding: 50px;
+    flex: 1;
+}
+
+.registration-form, .login-form {
+    width: 40%;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background: white;
+}
+
+.registration-form h2, .login-form h2 {
+    margin-bottom: 20px;
+}
+
+.registration-form form, .login-form form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.registration-form label, .login-form label {
+    text-align: right;
+    display: block; 
+}
+
+.gender-options {
+    width: 200px;
+}
+
+.gender-options, .verification-options {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.gender-options label, .verification-options label {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.gender-options input, .verification-options input {
+    margin-left: 5px;
+}
+
+.registration-form input, .login-form input {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 80%;
+    position: relative;
+    right: 20px;
+}
+
+button[type="submit"], .login-button {
+    background-color: black;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+button[type="submit"]:hover, .login-button:hover {
+    background-color: #333;
+}
+
+footer {
+    width: 100%;
+    background-color: white;
+    box-shadow: 8px 4px 8px 4px rgba(0, 0, 0, 0.1);    
+    color: black;
+    padding: 20px 0;
+    display: flex;
+    justify-content: space-around;
+    position: relative;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.footer-column {
+    text-align: center;
+}
+
+.footer-column h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    text-decoration: underline;
+}
+
+.footer-column ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.footer-column ul li {
+    margin-bottom: 5px;
+}
+
+.footer-column ul li a {
+    color: black;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.footer-column ul li a:hover {
+    color: #ddd;
+}
+.sign a
+{
+    color: black;
+    transition: transform 0.5s ease;
+}
+.sign a:hover
+{
+ cursor: pointer;
+ color: blue;   
+
+}
