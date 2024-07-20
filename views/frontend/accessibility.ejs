@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="frontend/accessibility/accessibility.css">
+    <title>Accessibility</title>
+</head>
+
+<body>
+    <div class=top>
+        <div class="logo-photo">
+            <a href="/">
+                <img src="../photos/logo.png" alt="Kick Pulse Logo" />
+            </a>
+        </div>
+        <div class="topleft">
+            <div class="buttons-top">
+                <button class="member">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor"
+                        class="bi bi-person" viewBox="0 0 16 16">
+                        <path
+                            d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z" />
+                    </svg>
+                </button>
+                <button class="shopping-bag">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-bag"
+                        viewBox="0 0 16 16">
+                        <path
+                            d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1m3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z" />
+                    </svg>
+                </button>
+            </div>
+            <div class="sign">
+                <a href="/login" class="sign-in-btn">Sign In</a> | <a href="/register">Join Now</a>
+            </div>
+            <div class="search-container">
+                <div class="searchbox">
+                    <input type="text" id="input_" placeholder="Search for products" name="search">
+                    <button type="submit">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-search" viewBox="0 0 16 16">
+                            <path
+                                d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+                        </svg>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+        <div class="topmid">
+            <div class="selection-topbuttons">
+                <div class="dropdown">
+                    <button class="dropbtn" onclick="location.href='../launches/launches.html'">RELEASES</button>
+                </div>
+                <div class="dropdown">
+                    <button class="dropbtn">BRANDS</button>
+                    <div class="dropdown-content">
+                        <a href="#">Adidas</a>
+                        <a href="#">Nike</a>
+                        <a href="#">Jordan</a>
+                        <a href="#">New Balance</a>
+                        <a href="#">Converse</a>
+                        <a href="#">Vans</a>
+                        <a href="#">On Cloud</a>
+                    </div>
+                </div>
+                <div class="dropdown">
+                    <button class="dropbtn">KIDS</button>
+                    <div class="dropdown-content">
+                        <a href="#">Sneakers</a>
+                        <a href="#">Running Shoes</a>
+                        <a href="#">Basketball Shoes</a>
+                    </div>
+                </div>
+                <div class="dropdown">
+                    <button class="dropbtn">WOMEN</button>
+                    <div class="dropdown-content">
+                        <a href="#">Sneakers</a>
+                        <a href="#">Running Shoes</a>
+                        <a href="#">Basketball Shoes</a>
+                    </div>
+                </div>
+                <div class="dropdown">
+                    <button class="dropbtn">MEN</button>
+                    <div class="dropdown-content">
+                        <a href="#">Sneakers</a>
+                        <a href="#">Running Shoes</a>
+                        <a href="#">Basketball Shoes</a>
+                    </div>
+                </div>
+                <div class="dropdown">
+                    <button class="dropbtn">NEW</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class=tophead>
+        !A Wise Sneakerhead Once Said: One Pair is Never Enough
+    </div>
+    <div class="mid">
+        <div class="Accessibility_text">
+            <h1>Accessibility</h1>
+            <p>We recognise the importance of providing a website that is accessible and usable for all users. To do
+                this we have adhered to a set of standards and guidelines.</p>
+
+            <h2>Approach</h2>
+            <p>We believe that this website meets the requirements of the level A criteria of the World Wide Web
+                Consortium Web Accessibility Initiative (WCAG WAI) 2.0 guidelines.</p>
+
+            <h2>Features</h2>
+            <p><strong>Text size:</strong> You can adjust the text size by using your browser’s text resize options:</p>
+            <ul>
+                View – Text Size br
+                View - Zoom - Your desired zoom option
+            </ul>
+            <p><strong>Alternative text for images:</strong> All images have been given appropriate alternative text.
+            </p>
+            <p><strong>Heading elements:</strong> HTML heading elements have been used to represent page structure,
+                supporting assistive technologies that allow page navigation from heading to heading.</p>
+            <p><strong>Link text:</strong> A hyperlink should make sense out of context and all hyperlinks are clearly
+                presented in a different text style.</p>
+            <p><strong>JavaScript independence:</strong> Where JavaScript or other scripts are used for navigation or
+                functionality, an alternative mechanism has been put in place in case your browser does not support
+                these scripts.</p>
+            <p><strong>Colour contrast:</strong> Text and background colours have been checked to ensure the contrast is
+                adequate. Also, no information is referenced by colour alone.</p>
+            <p><strong>Style Sheets:</strong> We have used Cascading Style Sheets (CSS) to control the presentation of
+                pages and have used properly structured markup for content. If style sheets are not supported or are
+                turned off, information on the site can still be accessed and read.</p>
+            <p><strong>Share price charting:</strong> We have provided a large font version of our share price charting
+                tool.</p>
+            <p>If you have trouble accessing any of the information on the website, please do contact us.</p>
+        </div>
+    </div>
+    <footer>
+        <div class="footer-column">
+            <h2>Our Brands</h2>
+            <ul>
+                <li><a href="#">Adidas</a></li>
+                <li><a href="#">Nike</a></li>
+                <li><a href="#">Jordan</a></li>
+                <li><a href="#">New Balance</a></li>
+                <li><a href="#">Converse</a></li>
+                <li><a href="#">Vans</a></li>
+                <li><a href="#">On Cloud</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h2>Customer Service</h2>
+            <ul>
+                <li><a href="/contactus">Contact Us</a></li>
+                <li><a href="/ourstores">Our Stores</a></li>
+                <li><a href="/faq">FAQ</a></li>
+                <li><a href="/shipping">Shipping and Returns</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h2>About the Company</h2>
+            <ul>
+                <li><a href="/about-us">About Us</a></li>
+                <li><a href="/terms">Terms and Conditions</a></li>
+                <li><a href="/privacy">Privacy Policy</a></li>
+                <li><a href="/accessibility">Accessibility Statement</a></li>
+            </ul>
+        </div>
+    </footer>
+</body>
+
+</html>

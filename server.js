@@ -1,7 +1,8 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import dashboardRouter from './routes/dashboard/dashboard_router.js';
+import dashboardRouter from './routes/dashboard_router.js';
 import apiRouter from './apis/dashboard_api_router.js';
+import frontEndRouter from './routes/frontend_router.js';
 import dotenv from 'dotenv';
 
 const app = express();
@@ -13,10 +14,9 @@ app.use(express.json());
 
 //-------------------------------
 
-
-//ALERT FROM MORIEL
 app.use('/dashboard', dashboardRouter);
 app.use('/api', apiRouter);
+app.use('/', frontEndRouter);
 
 app.set('view engine', 'ejs');
 
