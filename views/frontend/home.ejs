@@ -2,241 +2,387 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css" />
+
+    <link rel="stylesheet" href="frontend/main.css">
     <link rel="stylesheet" href="frontend/home/home.css">
-    <title>kickpulse</title>
+    <title>KickPulse Dashboard</title>
 </head>
 
-<body>
-    <div class=top>
-        <div class="logo-photo">
-            <a href="/">
-                <img src="../photos/logo.png" alt="Kick Pulse Logo" />
-            </a>
-        </div>
-        <div class="topleft">
-            <div class="buttons-top">
-                <button class="member">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor"
-                        class="bi bi-person" viewBox="0 0 16 16">
-                        <path
-                            d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z" />
-                    </svg>
-                </button>
-                <button class="shopping-bag">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-bag"
-                        viewBox="0 0 16 16">
-                        <path
-                            d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1m3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z" />
-                    </svg>
-                </button>
-            </div>
-            <div class="sign">
-                <a href="/login" class="sign-in-btn">Sign In</a> | <a href="/register">Join Now</a>
-            </div>
-            <div class="search-container">
-                <div class="searchbox">
-                    <input type="text" id="input_" placeholder="Search for products" name="search">
-                    <button type="submit">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                            class="bi bi-search" viewBox="0 0 16 16">
-                            <path
-                                d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-                        </svg>
+<body class="mb-5">
+    <div class="content">
+        <header class="container-fluid position-fixed top-0 p-0">
+            <nav class="navbar navbar-expand-lg bg-body-tertiary fs-5">
+                <div class="container-fluid">
+                    <div class="d-flex align-items-center justify-content-center me-2">
+                        <a class="navbar-brand" href="/"> <img src="../../photos/logo.png" alt="Kickpulse Logo"
+                                width="64" height="64">
+                        </a>
+                        <div class="justify-content-end d-flex gap-3 fs-3">
+                            <a class="nav-link" href="#"><i class="bi bi-person-circle"></i></a>
+                            <button type="button" class="btn nav-link" id="cart-btn" data-bs-toggle="modal"
+                                data-bs-target="#cart-modal">
+                                <i class="bi bi-cart2"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="/">Home</a>
+                            </li>
+
+                            <% categories.forEach(category => { %>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    <%= category.name %>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <% category.subcategories.forEach(subcategory => { %>
+                                    <li><a class="dropdown-item" href="#"><%= subcategory.name %></a></li>
+                                    <% }) %>
+                                </ul>
+                            </li>
+                            <% }) %>
+                        </ul>
+                        <form class="d-flex search-form" role="search">
+                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                            <button class="btn btn-outline-success search-btn" type="submit">Search</button>
+                        </form>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <section class="container-fluid hero mb-3 p-0"><video width="100%" height="100%" autoplay loop muted>
+                <source src="../photos/video_entrence.mov" type="video/mp4">
+            </video>
+        </section>
+        <main class="container-fluid mb-5">
+            <!-- <div class="container-fluid hero mb-3"> </div> -->
+
+            <div class="container carousel w-100 mb-5">
+                <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner mx-auto">
+                        <div class="carousel-item active">
+                            <div class=" d-flex align-items-center justify-content-between">
+                                <img src="../photos/adidas.png" class="d-block" style="width: 3rem;" alt="...">
+                                <img src="../photos/nike.jpg" class="d-block" style="width: 3rem;" alt="...">
+                                <img src="../photos/jordan.png" class="d-block" style="width: 3rem;" alt="...">
+                                <img src="../photos/nb.png" class="d-block" style="width: 3rem;" alt="...">
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <div class=" d-flex align-items-center justify-content-between">
+                                <img src="../photos/converse.png" class="d-block" style="width: 3rem;" alt="...">
+                                <img src="../photos/vans.png" class="d-block" style="width: 3rem;" alt="...">
+                                <img src="../photos/oncloud.png" class="d-block" style="width: 3rem;" alt="...">
+                                <img src="../photos/jordan.png" class="d-block" style="width: 3rem;" alt="...">
+                            </div>
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" style="display: none;" type="button"
+                        data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev"
+                        style="background-color: black;">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" style="display:none;" type="button"
+                        data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next"
+                        style="background-color: black;">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
                     </button>
                 </div>
-
-            </div>
-        </div>
-        <div class="selection-topbuttons">
-            <div class="dropdown">
-                <button class="dropbtn" onclick="location.href='../launches/launches.html'">RELEASES</button>
-            </div>
-            <div class="dropdown">
-                <button class="dropbtn">BRANDS</button>
-                <div class="dropdown-content">
-                    <a href="#">Adidas</a>
-                    <a href="#">Nike</a>
-                    <a href="#">Jordan</a>
-                    <a href="#">New Balance</a>
-                    <a href="#">Converse</a>
-                    <a href="#">Vans</a>
-                    <a href="#">On Cloud</a>
-
-                </div>
-            </div>
-            <div class="dropdown">
-                <button class="dropbtn">KIDS</button>
-                <div class="dropdown-content">
-                    <a href="#">Sneakers</a>
-                    <a href="#">Running Shoes</a>
-                    <a href="#">Basketball Shoes</a>
-                </div>
-            </div>
-            <div class="dropdown">
-                <button class="dropbtn">WOMEN</button>
-                <div class="dropdown-content">
-                    <a href="#">Sneakers</a>
-                    <a href="#">Running Shoes</a>
-                    <a href="#">Basketball Shoes</a>
-                </div>
-            </div>
-            <div class="dropdown">
-                <button class="dropbtn">MEN</button>
-                <div class="dropdown-content">
-                    <a href="#">Sneakers</a>
-                    <a href="#">Running Shoes</a>
-                    <a href="#">Basketball Shoes</a>
-                </div>
-            </div>
-            <div class="dropdown">
-                <button class="dropbtn">NEW</button>
             </div>
 
-        </div>
-    </div>
-    <div class="mid">
-        <div class="position-relative">
-            <!-- <button class="shopnow">Shop Now</button> -->
-            <div class="myVideo">
-                <video width="100%" autoplay loop muted>
-                    <source src="../photos/video_entrence.mov" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-            </div>
-        </div>
-        <div class="slide-brand-container">
-            <button class="slider-button" id="prev-slide">
-                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
-                    class="bi bi-arrow-left-circle-fill" viewBox="0 0 16 16">
-                    <path
-                        d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0m3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z" />
-                </svg>
-            </button>
-            <div class="slide-brand">
-                <button class="adidasbtn"><img src="../photos/adidas.png"></button>
-                <button class="nikebtn"><img src="../photos/nike.jpg"></button>
-                <button class="jordanbtn"><img src="../photos/jordan.png"></button>
-                <button class="newbalancebtn"><img src="../photos/nb.png"></button>
-                <button class="conversebtn"><img src="../photos/converse.png"></button>
-                <button class="vansbtn"><img src="../photos/vans.png"></button>
-                <button class="oncloudbtn"><img src="../photos/oncloud.png"></button>
-            </div>
-            <button class="slider-button" id="next-slide">
-                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
-                    class="bi bi-arrow-right-circle-fill" viewBox="0 0 16 16">
-                    <path
-                        d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z" />
-                </svg>
-            </button>
-        </div>
-
-        <div class="just-Dropped">
-            <h1>Just Dropped</h1>
-            <button class="btnjust">Mens</button>
-            <button class="btnjust">Women</button>
-            <button class="btnjust">Kids</button>
-        </div>
-
-        <div class="product-grid-container">
-            <div class="product-grid" id="productGrid">
-                <div class="product-card">
-                    <img src="../photos/campus1.webp" alt="ADIDAS CAMPUS 00s">
-                    <div class="product-info">
-                        <div class="new-badge">NEW</div>
-                        <h3>ADIDAS CAMPUS 00s</h3>
-                        <p>ADIDAS</p>
-                        <p class="price">110$ </p>
+            <section class="container recent-products mb-5">
+                <div class="text-center w-50 mx-auto">
+                    <h4 class="mb-3">Just Dropped</h4>
+                    <div class="d-flex justify-content-between mb-4 fs-5">
+                        <a href="#" class="link-secondary text-decoration-none active">Men</a>
+                        <a href="#" class="link-secondary text-decoration-none">Women</a>
+                        <a href="#" class="link-secondary text-decoration-none">Kids</a>
                     </div>
                 </div>
-                <div class="product-card">
-                    <img src="../photos/aj1.webp" alt="AIR JORDAN 1 LOW MARINA BLUE ">
-                    <div class="product-info">
-                        <div class="new-badge">NEW</div>
-                        <h3>AIR JORDAN 1 LOW MARINA BLUE</h3>
-                        <p>NIKE</p>
-                        <p class="price">130$ </p>
+                <div class="row row-cols-2 row-cols-md-3 row-cols-sm-2 g-4">
+                    <% menProducts.forEach(product => { %>
+                    <div class="col product-card" data-product-id="<%= product._id %>">
+                        <button type="button" class="btn nav-link" data-bs-toggle="modal"
+                            data-bs-target="#quick-view-modal">
+                            <div class="card text-center">
+                                <img src="../photos/campus1.webp" class="card-img-top" alt="...">
+                                <div class="card-body">
+                                    <h5 class="card-title"><%= product.name %></h5>
+                                    <p class="card-text"><%= product.description %></p>
+                                    <strong>Quick View</strong>
+                                </div>
+                            </div>
+                        </button>
+                    </div>
+                    <% }) %>
+                </div>
+            </section>
+
+            <section class="container brands-showcase">
+                <div class="text-center w-50 mx-auto">
+                    <h4 class="mb-5">Shop Brands</h4>
+                </div>
+                <div class="row row-cols-2 row-cols-md-2 row-cols-sm-2 g-4">
+                    <div class="col">
+                        <a href="#" class="link-secondary text-decoration-none">
+                            <div class="card text-center">
+                                <img src="../photos/converse-branch.jpg" class="card-img-top" alt="...">
+                                <div class="card-body">
+                                    <strong>Shop Converse</strong>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a href="#" class="link-secondary text-decoration-none">
+                            <div class="card text-center">
+                                <img src="../photos/converse-branch.jpg" class="card-img-top" alt="...">
+                                <div class="card-body">
+                                    <strong>Shop Converse</strong>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a href="#" class="link-secondary text-decoration-none">
+                            <div class="card text-center">
+                                <img src="../photos/converse-branch.jpg" class="card-img-top" alt="...">
+                                <div class="card-body">
+                                    <strong>Shop Converse</strong>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a href="#" class="link-secondary text-decoration-none">
+                            <div class="card text-center">
+                                <img src="../photos/converse-branch.jpg" class="card-img-top" alt="...">
+                                <div class="card-body">
+                                    <strong>Shop Converse</strong>
+                                </div>
+                            </div>
+                        </a>
                     </div>
                 </div>
-                <div class="product-card">
-                    <img src="../photos/airmax90.webp" alt="NIKE AIR MAX 90">
-                    <div class="product-info">
-                        <div class="new-badge">NEW</div>
-                        <h3>NIKE AIR MAX 90</h3>
-                        <p>NIKE</p>
-                        <p class="price">160$ </p>
-                    </div>
+            </section>
+        </main>
+        <footer class="container-fluid border-top">
+            <div class="row mt-2 gy-4">
+                <div class="col-6">
+                    <h5>Our Brands</h5>
+                    <ul class="list-group">
+                        <a href="#" class="text-decoration-none">
+                            <li class="list-group-item">Nike</li>
+                        </a>
+                        <a href="#" class="text-decoration-none">
+                            <li class="list-group-item">Jordan</li>
+                        </a>
+                        <a href="#" class="text-decoration-none">
+                            <li class="list-group-item">New Balance</li>
+                        </a>
+                        <a href="#" class="text-decoration-none">
+                            <li class="list-group-item">Converse</li>
+                        </a>
+                        <a href="#" class="text-decoration-none">
+                            <li class="list-group-item">Vans</li>
+                        </a>
+                        <a href="#" class="text-decoration-none">
+                            <li class="list-group-item">On Cloud</li>
+                        </a>
+                    </ul>
                 </div>
-                <div class="product-card">
-                    <img src="../photos/nb9060.webp" alt="NEW BALANCE 9060">
-                    <div class="product-info">
-                        <div class="new-badge">NEW</div>
-                        <h3>NEW BALANCE 9060</h3>
-                        <p>NEW BALANCE</p>
-                        <p class="price">270$</p>
-                    </div>
+                <div class="col-6">
+                    <h5>Customer Service</h5>
+                    <ul class="list-group">
+                        <a href="#" class="text-decoration-none">
+                            <li class="list-group-item">Nike</li>
+                        </a>
+                        <a href="#" class="text-decoration-none">
+                            <li class="list-group-item">Jordan</li>
+                        </a>
+                        <a href="#" class="text-decoration-none">
+                            <li class="list-group-item">New Balance</li>
+                        </a>
+                        <a href="#" class="text-decoration-none">
+                            <li class="list-group-item">Converse</li>
+                        </a>
+                        <a href="#" class="text-decoration-none">
+                            <li class="list-group-item">Vans</li>
+                        </a>
+                        <a href="#" class="text-decoration-none">
+                            <li class="list-group-item">On Cloud</li>
+                        </a>
+                    </ul>
                 </div>
-            </div>
-        </div>
-
-        <div class="brand-grid-container">
-            <div class="brand-grid">
-                <div class="brand-card">
-                    <img src="../photos/converse-branch.jpg" alt="CONVERSE">
-                    <button class="shopbranch">SHOP CONVERSE</button>
+                <div class="col-6">
+                    <h5>About Us</h5>
+                    <ul class="list-group">
+                        <a href="#" class="text-decoration-none">
+                            <li class="list-group-item">Company Info</li>
+                        </a>
+                        <a href="#" class="text-decoration-none">
+                            <li class="list-group-item">Careers</li>
+                        </a>
+                        <a href="#" class="text-decoration-none">
+                            <li class="list-group-item">Press</li>
+                        </a>
+                        <a href="#" class="text-decoration-none">
+                            <li class="list-group-item">Blog</li>
+                        </a>
+                        <a href="#" class="text-decoration-none">
+                            <li class="list-group-item">Affiliate Program</li>
+                        </a>
+                        <a href="#" class="text-decoration-none">
+                            <li class="list-group-item">Corporate Responsibility</li>
+                        </a>
+                    </ul>
                 </div>
-                <div class="brand-card">
-                    <img src="../photos/nb-branch.jpg" alt="NEW BALANCE">
-                    <button class="shopbranch">SHOP NEW BALANCE</button>
+                <div class="col-6">
+                    <h5>Contact Us</h5>
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <i class="bi bi-geo-alt"></i> 123 Main St, City, Country
+                        </li>
+                        <li class="list-group-item">
+                            <i class="bi bi-telephone"></i> +1 (123) 456-7890
+                        </li>
+                        <li class="list-group-item">
+                            <i class="bi bi-envelope"></i> info@example.com
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <a href="#" class="text-decoration-none text-black">
+                                <i class="bi bi-facebook"></i>
+                            </a>
+                            <a href="#" class="text-decoration-none text-black">
+                                <i class="bi bi-twitter"></i>
+                            </a>
+                            <a href="#" class="text-decoration-none text-black">
+                                <i class="bi bi-instagram"></i>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
-                <div class="brand-card">
-                    <img src="../photos/nike branch.jpg" alt="NIKE">
-                    <button class="shopbranch">SHOP NIKE</button>
-                </div>
-                <div class="brand-card">
-                    <img src="../photos/adidas-branch.jpg" alt="ADIDAS">
-                    <button class="shopbranch">SHOP ADIDAS</button>
-                </div>
-            </div>
-
-        </div>
-
-
-        <footer>
-            <div class="footer-column">
-                <h2>Our Brands</h2>
-                <ul>
-                    <li><a href="#">Adidas</a></li>
-                    <li><a href="#">Nike</a></li>
-                    <li><a href="#">Jordan</a></li>
-                    <li><a href="#">New Balance</a></li>
-                    <li><a href="#">Converse</a>
-                    <li>
-                    <li><a href="#">Vans</a></li>
-                    <li><a href="#">On Cloud</a></li>
-
-                </ul>
-            </div>
-            <div class="footer-column">
-                <h2>Customer Service</h2>
-                <ul>
-                    <li><a href="/contactus">Contact Us</a></li>
-                    <li><a href="/ourstores">Our Stores</a></li>
-                    <li><a href="/faq">FAQ</a></li>
-                    <li><a href="/shipping">Shipping and Returns</a></li>
-                </ul>
-            </div>
-            <div class="footer-column">
-                <h2>About the Company</h2>
-                <ul>
-                    <li><a href="/about-us">About Us</a></li>
-                    <li><a href="/terms">Terms and Conditions</a></li>
-                    <li><a href="/privacy">Privacy Policy</a></li>
-                    <li><a href="/accessibility">Accessibility Statement</a></li>
-                </ul>
             </div>
         </footer>
-        <script src="frontend/home/home.js"></script>
+
+    </div>
+
+
+    <!-- MODALS -->
+    <!-- Cart Modal -->
+    <div class="modal fade" id="cart-modal" tabindex="-1" aria-labelledby="cart-label" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="cart-label">Your Cart</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Image</th>
+                                <th scope="col">Item</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Size</th>
+                                <th scope="col">&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- <tr>
+                                <td><img src="../photos/campus1.webp" class="img-fluid" alt="Nike Shoes"
+                                        style="width: 50px; height: auto;"></td>
+                                <td>Nike Shoes</td>
+                                <td>1</td>
+                                <td>$100</td>
+                                <td><button type="button" class="btn btn-outline-danger btn-sm">&times;</button></td>
+                            </tr> -->
+
+                        </tbody>
+                    </table>
+                    <div class="d-flex justify-content-between">
+                        <h5>Total</h5>
+                        <h5 class="cart-total">$0.00</h5>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <span class="me-auto hidden fs-5"><strong>Your cart is empty..</strong></span>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Checkout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Product Modal -->
+    <div class="modal fade" id="quick-view-modal" tabindex="-1" aria-labelledby="quick-view-modal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="product-label">Product Quick View</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img src="../photos/campus1.webp" alt="" class="product-modal-image w-100 mb-2">
+                    <div class="product-modal-details text-center mb-3">
+                        <p class="product-modal-title"><strong>Campus Ones</strong></p>
+                        <p class="product-modal-description">High-quality running shoes for all your athletic needs.
+                            Available in multiple sizes.
+                        </p>
+                        <p class="product-modal-price"><strong>139$</strong></p>
+                    </div>
+                    <form class="add-to-cart-form" action="#add-to-cart" method="POST" data-product-id="123">
+                        <div class="mb-2">
+                            <label for="size" class="form-label">Choose Size</label>
+                            <select class="form-select" name="size" id="size-option" required>
+                                <option value="" disabled selected>
+                                    Please select a size
+                                </option>
+                                <option value="39">39</option>
+                                <option value="40">40</option>
+                                <option value="41">41</option>
+                            </select>
+                        </div>
+                        <div class="mb-2">
+                            <label for="quantity" class="form-label">Quantity</label>
+                            <input type="number" class="form-control" name="quantity" id="quantity" min="0" value="5"
+                                required>
+                        </div>
+                        <button type="submit"
+                            class="d-flex justify-content-center btn btn-primary mx-auto mt-3 add-to-cart-btn">
+                            Add To Cart
+                        </button>
+                    </form>
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-primary">View Product</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <script type="module" src="frontend/home/home.js"></script>
+</body>
 
 </html>

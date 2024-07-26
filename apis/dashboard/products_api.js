@@ -26,6 +26,7 @@ export async function createProduct(req, res) {
 // Get a single product by ID
 export async function getProduct(req, res) {
   const { id } = req.params;
+  console.log(id)
   try {
     const product = await ProductService.getProduct(id);
     if (!product) {
@@ -55,4 +56,27 @@ export async function deleteProduct(req, res) {
     console.error('Error deleting product:', error);
     res.status(500).json({ success: false, message: 'Server error' });
   }
+}
+
+// Get Products By Gender
+export async function getProductsByGender(req, res) {
+  const { gender } = req.params;
+
+  try {
+    // Check if gender is provided
+    // const filter = gender ? { gender } : {};
+
+    // Fetch products based on the filter
+    const products = await ProductService.getProductsByGender(gender);
+    if (!products) {
+      return res.status(404).json({ success: false, message: `No products by gender ${gender} found.` });
+    }
+    res.status(200).json(products);
+  } catch (error) {
+    console.error('Error fetching products by gender:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+
+
+
 }

@@ -138,6 +138,25 @@ const getProductsByCategoryId = async (id) => {
   }
 };
 
+const getProductsByGender = async (gender, limit = 6) => {
+  try {
+    // Check if gender is provided
+    const filter = gender ? { gender } : {};
+
+    // Fetch products based on the filter
+    const products = await ProductsModel.find(filter)
+      .sort({ createdAt: -1 }) // Optionally sort by creation date
+      .limit(limit); // Optionally limit the number of results
+
+    if (!products.length) return null;
+
+    return products;
+  } catch (error) {
+    console.error('Error fetching products by gender:', error);
+    throw new Error('Error fetching products by gender');
+  }
+}
+
 
 const updateProductsBrandName = async (brandId, newName) => {
   try {
@@ -201,4 +220,5 @@ export default {
   editProduct,
   updateProductsBrandName,
   updateProductsCategoryName,
+  getProductsByGender
 };

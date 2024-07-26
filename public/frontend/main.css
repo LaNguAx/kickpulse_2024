@@ -1,0 +1,33 @@
+.hidden {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  display: none !important;
+}
+
+header {
+  z-index: 99;
+}
+
+.hero {
+  height: 100vh;
+  padding-bottom: 1rem;
+}
+
+.card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: box-shadow 0.3s ease;
+}
+
+footer li,
+footer li i {
+  transition: background-color 0.3s ease;
+}
+
+footer li:hover {
+  background-color: #000 !important;
+  color: #fff;
+}
+
+footer li:hover i {
+  color: #fff;
+}
