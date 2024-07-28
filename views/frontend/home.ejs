@@ -11,10 +11,17 @@
 
     <link rel="stylesheet" href="frontend/main.css">
     <link rel="stylesheet" href="frontend/home/home.css">
-    <title>KickPulse Dashboard</title>
+    <title>KickPulse Homepage</title>
 </head>
 
 <body class="mb-5">
+    <!-- Pre laoder -->
+    <div class="preloader" id="preloader">
+        <div class="spinner-border text-dark" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
     <div class="content">
         <header class="container-fluid position-fixed top-0 p-0">
             <nav class="navbar navbar-expand-lg bg-body-tertiary fs-5">
@@ -106,29 +113,33 @@
                 </div>
             </div>
 
-            <section class="container recent-products mb-5">
+            <section class="container mb-5">
                 <div class="text-center w-50 mx-auto">
                     <h4 class="mb-3">Just Dropped</h4>
-                    <div class="d-flex justify-content-between mb-4 fs-5">
-                        <a href="#" class="link-secondary text-decoration-none active">Men</a>
-                        <a href="#" class="link-secondary text-decoration-none">Women</a>
-                        <a href="#" class="link-secondary text-decoration-none">Kids</a>
+                    <div class="gender-links d-flex justify-content-between mb-4 fs-5">
+                        <a href="#" class="gender-link link-secondary text-decoration-none active"
+                            data-gender="men">Men</a>
+                        <a href="#" class="gender-link link-secondary text-decoration-none"
+                            data-gender="women">Women</a>
+                        <a href="#" class="gender-link link-secondary text-decoration-none" data-gender="kids">Kids</a>
                     </div>
                 </div>
-                <div class="row row-cols-2 row-cols-md-3 row-cols-sm-2 g-4">
+                <div class="recent-products row row-cols-2 row-cols-md-3 row-cols-sm-2 g-4">
                     <% menProducts.forEach(product => { %>
                     <div class="col product-card" data-product-id="<%= product._id %>">
-                        <button type="button" class="btn nav-link" data-bs-toggle="modal"
-                            data-bs-target="#quick-view-modal">
-                            <div class="card text-center">
-                                <img src="../photos/campus1.webp" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title"><%= product.name %></h5>
-                                    <p class="card-text"><%= product.description %></p>
-                                    <strong>Quick View</strong>
+                        <div>
+                            <button type="button" class="btn nav-link" data-bs-toggle="modal"
+                                data-bs-target="#quick-view-modal">
+                                <div class="card text-center">
+                                    <img src="<%= product.image %>" class="card-img-top" alt="...">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><%= product.name %></h5>
+                                        <!-- <p class="card-text"><%= product.description %></p> -->
+                                        <strong>Quick View</strong>
+                                    </div>
                                 </div>
-                            </div>
-                        </button>
+                            </button>
+                        </div>
                     </div>
                     <% }) %>
                 </div>
@@ -184,7 +195,7 @@
         </main>
         <footer class="container-fluid border-top">
             <div class="row mt-2 gy-4">
-                <div class="col-6">
+                <div class="col-lg-4 col-md-6">
                     <h5>Our Brands</h5>
                     <ul class="list-group">
                         <a href="#" class="text-decoration-none">
@@ -207,7 +218,7 @@
                         </a>
                     </ul>
                 </div>
-                <div class="col-6">
+                <div class="col-lg-4 col-md-6">
                     <h5>Customer Service</h5>
                     <ul class="list-group">
                         <a href="#" class="text-decoration-none">
@@ -230,7 +241,7 @@
                         </a>
                     </ul>
                 </div>
-                <div class="col-6">
+                <div class="col-lg-4 col-md-6">
                     <h5>About Us</h5>
                     <ul class="list-group">
                         <a href="#" class="text-decoration-none">
@@ -253,7 +264,7 @@
                         </a>
                     </ul>
                 </div>
-                <div class="col-6">
+                <div class="col-lg-4 col-md-6 ">
                     <h5>Contact Us</h5>
                     <ul class="list-group">
                         <li class="list-group-item">
@@ -287,7 +298,7 @@
     <!-- MODALS -->
     <!-- Cart Modal -->
     <div class="modal fade" id="cart-modal" tabindex="-1" aria-labelledby="cart-label" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="cart-label">Your Cart</h1>
@@ -334,7 +345,7 @@
 
     <!-- Product Modal -->
     <div class="modal fade" id="quick-view-modal" tabindex="-1" aria-labelledby="quick-view-modal" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="product-label">Product Quick View</h1>
@@ -344,7 +355,8 @@
                     <img src="../photos/campus1.webp" alt="" class="product-modal-image w-100 mb-2">
                     <div class="product-modal-details text-center mb-3">
                         <p class="product-modal-title"><strong>Campus Ones</strong></p>
-                        <p class="product-modal-description">High-quality running shoes for all your athletic needs.
+                        <p class="product-modal-description text-start">High-quality running shoes for all your athletic
+                            needs.
                             Available in multiple sizes.
                         </p>
                         <p class="product-modal-price"><strong>139$</strong></p>
@@ -363,7 +375,7 @@
                         </div>
                         <div class="mb-2">
                             <label for="quantity" class="form-label">Quantity</label>
-                            <input type="number" class="form-control" name="quantity" id="quantity" min="0" value="5"
+                            <input type="number" class="form-control" name="quantity" id="quantity-option" min="1"
                                 required>
                         </div>
                         <button type="submit"

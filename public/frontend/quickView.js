@@ -25,7 +25,7 @@ class QuickView {
   async bodyClickDispatcher(e) {
 
     // if a product was clicked
-    if (e.target.closest('.product-card')) {
+    if (e.target.closest('.product-card > div')) {
       await this.openProductQuickView(e);
       return;
     }
@@ -45,7 +45,7 @@ class QuickView {
     setTimeout(() => {
 
       this.quickViewModalObj.hide();
-      Main.renderMessage(this.quickViewModalForm, false, '', 'beforeend');
+      Main.renderMessage(this.quickViewModalForm, false);
       this.quickViewModalForm.reset();
     }, 1500);
 
@@ -75,10 +75,19 @@ class QuickView {
       const pPrice = this.quickViewModal.querySelector('.product-modal-price');
       const pSize = this.quickViewModal.querySelector('#size-option');
       const pQuantity = this.quickViewModal.querySelector('#quantity-option');
+      const pImage = this.quickViewModal.querySelector('.product-modal-image');
 
       pTitle.innerText = product.name;
       pDescription.innerText = product.description;
       pPrice.innerHTML = `<strong>${product.price}$</strong>`;
+      pImage.src = product.image;
+      pQuantity.value = 1;
+
+      pSize.innerHTML = '';
+      let sizesHTML = '<option value="" disabled selected>Please select a size</option>';
+      product.sizes.forEach(size => sizesHTML += `<option value=${size}>${size}</option>`);
+
+      pSize.innerHTML = sizesHTML;
 
     } catch (err) {
       console.log(err);

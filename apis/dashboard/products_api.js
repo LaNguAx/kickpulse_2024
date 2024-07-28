@@ -63,15 +63,13 @@ export async function getProductsByGender(req, res) {
   const { gender } = req.params;
 
   try {
-    // Check if gender is provided
-    // const filter = gender ? { gender } : {};
 
     // Fetch products based on the filter
     const products = await ProductService.getProductsByGender(gender);
     if (!products) {
       return res.status(404).json({ success: false, message: `No products by gender ${gender} found.` });
     }
-    res.status(200).json(products);
+    res.status(200).json({ success: true, data: products });
   } catch (error) {
     console.error('Error fetching products by gender:', error);
     res.status(500).json({ message: 'Internal Server Error' });
