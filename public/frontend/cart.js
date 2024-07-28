@@ -1,5 +1,3 @@
-import Main from './main.js';
-
 class Cart {
 
   cart;
@@ -41,7 +39,7 @@ class Cart {
     const price = parseInt(form.closest('.modal-body').querySelector('.product-modal-price').innerText);
     const img = form.closest('.modal-body').querySelector('img').getAttribute('src');
     const size = form.querySelector('#size-option').value;
-    const quantity = parseInt(form.querySelector('#quantity').value, 10);
+    const quantity = parseInt(form.querySelector('#quantity-option').value, 10);
 
     const cartItem = {
       _id: productId,
@@ -152,7 +150,6 @@ class Cart {
     localStorage.setItem('cart', JSON.stringify(cart));
     this.cart = Cart.getCart();
   }
-
 
 }
 
