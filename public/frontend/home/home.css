@@ -1,14 +1,19 @@
 
+.video-container {
+  height: 100vh;
+  padding-bottom: 1rem;
+}
 video {
     object-fit: fill;
-  }
+}
   
   @media (max-width: 768px) {
-    .hero {
+    .video-container {
       margin-top: 5rem;
       height: auto;
     }  
     video {
         object-fit:contain;
     }
-  }
+}
+

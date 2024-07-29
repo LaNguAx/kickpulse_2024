@@ -1,0 +1,45 @@
+<!-- Cart Modal -->
+<div class="modal fade" id="cart-modal" tabindex="-1" aria-labelledby="cart-label" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="cart-label">Your Cart</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Image</th>
+              <th scope="col">Item</th>
+              <th scope="col">Quantity</th>
+              <th scope="col">Price</th>
+              <th scope="col">Size</th>
+              <th scope="col">&nbsp;</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- <tr>
+                          <td><img src="../photos/campus1.webp" class="img-fluid" alt="Nike Shoes"
+                                  style="width: 50px; height: auto;"></td>
+                          <td>Nike Shoes</td>
+                          <td>1</td>
+                          <td>$100</td>
+                          <td><button type="button" class="btn btn-outline-danger btn-sm">&times;</button></td>
+                      </tr> -->
+
+          </tbody>
+        </table>
+        <div class="d-flex justify-content-between">
+          <h5>Total</h5>
+          <h5 class="cart-total">$0.00</h5>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <span class="me-auto hidden fs-5"><strong>Your cart is empty..</strong></span>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Checkout</button>
+      </div>
+    </div>
+  </div>
+</div>

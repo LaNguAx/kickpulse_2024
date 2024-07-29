@@ -26,7 +26,6 @@ export async function createProduct(req, res) {
 // Get a single product by ID
 export async function getProduct(req, res) {
   const { id } = req.params;
-  console.log(id)
   try {
     const product = await ProductService.getProduct(id);
     if (!product) {

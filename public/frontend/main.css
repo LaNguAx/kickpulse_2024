@@ -8,10 +8,6 @@ header {
   z-index: 99;
 }
 
-.hero {
-  height: 100vh;
-  padding-bottom: 1rem;
-}
 
 .card:hover {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -44,4 +40,30 @@ footer li:hover i {
   align-items: center;
   justify-content: center;
   z-index: 9999;
+}
+
+
+.card-body,
+.card-body > h5 {
+  font-size: 0.8rem;
+}
+
+.card-img-top {
+  width: 100%;
+  height: 150px;
+}
+
+
+/* For large screens and larger */
+@media (min-width: 1200px) {
+  .card-img-top {
+    height: 300px;
+    width: 100%;
+    object-fit: cover;
+  }
+  .card-body,
+  .card-body > h5 {
+    
+    font-size: 1rem;
+  }
 }

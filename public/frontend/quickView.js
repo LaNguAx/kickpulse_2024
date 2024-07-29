@@ -25,7 +25,8 @@ class QuickView {
   async bodyClickDispatcher(e) {
 
     // if a product was clicked
-    if (e.target.closest('.product-card > div')) {
+    if (e.target.closest('.product-card > div > button')) {
+      console.log('hi')
       await this.openProductQuickView(e);
       return;
     }
