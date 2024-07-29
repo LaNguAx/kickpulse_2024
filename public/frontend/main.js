@@ -1,9 +1,13 @@
 class Main {
 
+  header;
+
   spinner;
   spinnerVisible = false;
   message;
   messageVisible = false;
+
+
 
   static renderSpinner(element, on = true) {
 
@@ -60,10 +64,24 @@ class Main {
   }
 
   static initComponents(components) {
-    document.addEventListener('DOMContentLoaded', () => {
-      components.forEach(Component => {
-        new Component();
+    document.addEventListener('DOMContentLoaded', async () => {
+
+      // fix header margin
+      const header = document.querySelector('header');
+      if (header) {
+        const headerHeight = header.offsetHeight;
+
+        const content = document.querySelector('.content');
+        if (content && content.children[1]) {
+          content.children[1].style.marginTop = `${headerHeight}px`;
+        }
+      }
+
+      // load js components
+      components.forEach(async Component => {
+        await new Component();
       });
+
     });
 
   }

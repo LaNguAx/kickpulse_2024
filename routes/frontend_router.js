@@ -13,6 +13,10 @@ import { getIndex as getFaqIndex } from '../controllers/frontend/faq_Controller.
 import { getIndex as getContactIndex } from '../controllers/frontend/contact_Controller.js';
 import { getIndex as getAccessibilityIndex } from '../controllers/frontend/accessibility_Controller.js';
 import { getIndex as getAboutIndex } from '../controllers/frontend/aboutus_Controller.js';
+
+import { getIndex as getCategoryIndex, categoryMiddleware } from '../controllers/frontend/category_Controller.js';
+import { getIndex as get404Index } from '../controllers/frontend/404_Controller.js';
+
 const router = express.Router();
 
 // homepage
@@ -31,5 +35,14 @@ router.route('/faq').get(getFaqIndex);
 router.route('/contact').get(getContactIndex);
 router.route('/accessibility').get(getAccessibilityIndex);
 router.route('/about-us').get(getAboutIndex);
+
+router.route('/category/id/:id').get(categoryMiddleware);
+router.route('/category/:name').get(getCategoryIndex);
+
+
+
+
+
+router.route('/404').get(get404Index);
 
 export default router;

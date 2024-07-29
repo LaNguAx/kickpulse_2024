@@ -9,12 +9,21 @@ class Home {
     constructor() {
         this.recentProducts = document.querySelector('.recent-products');
         this.genderLinks = document.querySelector('.gender-links');
+
+        this.fixVideoPosition();
         this.initHomeEventListeners();
     }
 
     initHomeEventListeners() {
         this.genderLinks.addEventListener('click', this.handleGenderLinksClick.bind(this));
     }
+
+    fixVideoPosition() {
+        const video = document.querySelector('video');
+        if (!video || !video.parentElement) return;
+        video.parentElement.removeAttribute('style');
+    }
+
 
     async handleGenderLinksClick(e) {
 
@@ -75,26 +84,27 @@ class Home {
         let HTML = '';
         products.forEach(product => {
             HTML += `
-                <div class="col product-card" data-product-id="${product._id}">
-                        <div>
-                            <button type="button" class="btn nav-link" data-bs-toggle="modal"
-                                data-bs-target="#quick-view-modal">
-                                <div class="card text-center">
-                                    <img src="${product.image}" class="card-img-top" alt="...">
-                                    <div class="card-body">
-                                        <h5 class="card-title">${product.name}</h5>
-                                        <strong>Quick View</strong>
-                                    </div>
-                                </div>
-                            </button>
-                        </div>
-                    </div>
+            <div class="col product-card" data-product-id="${product._id}">
+                <div class="card h-100">
+                    <button type="button"
+                        class="btn nav-link p-0 border-0 h-100 d-flex flex-column align-items-center"
+                        data-bs-toggle="modal" data-bs-target="#quick-view-modal">
+                        <img src="${product.image}" class="card-img-top" alt="${product.name}">
+                            <div class="card-body text-center p-2 d-flex flex-column mt-auto">
+                                <h5 class="card-title flex-grow-1 d-flex align-items-center justify-content-center">
+                                    ${product.name}</h5>
+                                <strong class="d-block mt-2">Quick View</strong>
+                            </div>
+                    </button>
+                </div>
+                </div >
             `;
-        })
+        });
 
         this.recentProducts.innerHTML = '';
         this.recentProducts.insertAdjacentHTML('afterbegin', HTML);
     }
+
 
 }
 

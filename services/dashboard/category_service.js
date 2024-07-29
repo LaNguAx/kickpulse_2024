@@ -13,6 +13,8 @@ const getCategories = async () => {
 const getCategory = async (id) => {
   try {
     const specificCategory = await CategoriesModel.findById(id);
+    if (specificCategory) return specificCategory;
+
     const allCategories = await getCategories();
 
     const subCategories = allCategories.map(
@@ -28,7 +30,7 @@ const getCategory = async (id) => {
         .filter((el) => el != null);
 
     if (!category) throw new Error('Category not found');
-    return category;
+    return category[0];
   } catch (err) {
     console.error(`Error finding category with ID ${id}:`, err);
     throw new Error('Failed to retrieve category');
@@ -73,6 +75,31 @@ const updateCategory = async (id, category) => {
   }
 };
 
+const getCategoryByName = async (name) => {
+  try {
+
+    const allCategories = await getCategories();
+
+    // Find a specific category by name
+    const specificCategory = allCategories.find(cat => cat.name.toLowerCase() === name);
+
+    // Extract subcategories from all categories
+    const subCategories = allCategories.map(category => category.subcategories).flat();
+
+    // Find a specific subcategory by name
+    const subCategory = subCategories.find(subcat => subcat.name.toLowerCase() === name);
+
+    // Determine which category to return
+    const category = specificCategory || subCategory;
+
+    if (!category) throw new Error('Category not found');
+    return category;
+  } catch (err) {
+    console.error(`Error finding category with name ${name}:`, err);
+    throw new Error('Failed to retrieve category');
+  }
+};
+
 
 const deleteCategory = async (id) => {
   try {
@@ -108,6 +135,7 @@ const editCategory = async (id, options) => {
 export default {
   getCategories,
   getCategory,
+  getCategoryByName,
   createCategory,
   updateCategory,
   deleteCategory,
