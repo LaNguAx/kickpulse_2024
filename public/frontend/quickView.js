@@ -26,7 +26,6 @@ class QuickView {
 
     // if a product was clicked
     if (e.target.closest('.product-card > div > button')) {
-      console.log('hi')
       await this.openProductQuickView(e);
       return;
     }
@@ -40,7 +39,26 @@ class QuickView {
   handleQuickViewModalForm(e) {
     e.preventDefault();
 
-    Cart.addToCart(e);
+
+    const form = e.target;
+    const productId = form.getAttribute('data-product-id');
+    const title = form.closest('.modal-body').querySelector('.product-modal-title').innerText;
+    const price = parseInt(form.closest('.modal-body').querySelector('.product-modal-price').innerText);
+    const img = form.closest('.modal-body').querySelector('img').getAttribute('src');
+    const size = form.querySelector('#size-option').value;
+    const quantity = parseInt(form.querySelector('#quantity-option').value, 10);
+
+
+    const product = {
+      _id: productId,
+      title,
+      img,
+      size,
+      quantity,
+      price
+    }
+
+    Cart.addToCart(product);
 
     Main.renderMessage(this.quickViewModalForm, true, 'Product was added to your cart!', 'beforeend');
     setTimeout(() => {
@@ -56,6 +74,7 @@ class QuickView {
   async openProductQuickView(e) {
     const product = e.target.closest('.product-card');
     const id = product.getAttribute('data-product-id');
+    const checkoutLink = this.quickViewModal.querySelector('.modal-footer > a').href = `/product/id/${id}`;
 
     await this.updateProductQuickView(id);
 

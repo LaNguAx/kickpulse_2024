@@ -20,6 +20,18 @@ const getProduct = async (id) => {
   }
 };
 
+
+const getProductByName = async (name) => {
+  try {
+    const product = await ProductsModel.findOne({ name: new RegExp('^' + name + '$', 'i') });
+    if (!product) throw new Error('Product not found');
+    return product;
+  } catch (err) {
+    console.error(`Error finding product with name ${name}:`, err);
+    throw new Error('Failed to retrieve product');
+  }
+}
+
 const createProduct = async (product) => {
   try {
     const newProduct = new ProductsModel({
@@ -212,6 +224,7 @@ export default {
   getProducts,
   getProduct,
   getProductsByCategoryId,
+  getProductByName,
   createProduct,
   deleteProduct,
   deleteProductsBySupplierId,
