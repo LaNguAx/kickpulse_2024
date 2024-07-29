@@ -1,0 +1,12 @@
+.product-image-container {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.product-image {
+  aspect-ratio: 1;
+}
+
+.modal-body {
+  flex: none !important;
+}

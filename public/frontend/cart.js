@@ -32,26 +32,26 @@ class Cart {
 
   }
 
-  static addToCart(e) {
-    const form = e.target;
-    const productId = form.getAttribute('data-product-id');
-    const title = form.closest('.modal-body').querySelector('.product-modal-title').innerText;
-    const price = parseInt(form.closest('.modal-body').querySelector('.product-modal-price').innerText);
-    const img = form.closest('.modal-body').querySelector('img').getAttribute('src');
-    const size = form.querySelector('#size-option').value;
-    const quantity = parseInt(form.querySelector('#quantity-option').value, 10);
+  static addToCart(product) {
 
-    const cartItem = {
-      _id: productId,
-      title,
-      img,
+    const {
+      _id,
       size,
       quantity,
-      price
+    } = product
+
+
+    const cartItem = {
+      _id: product._id,
+      title: product.title,
+      img: product.img,
+      size: product.size,
+      quantity: product.quantity,
+      price: product.price
     }
 
     this.cart = Cart.getCart();
-    const productExistsIndex = this.cart.findIndex(prod => prod._id == productId && prod.size == size);
+    const productExistsIndex = this.cart.findIndex(prod => prod._id == _id && prod.size == size);
 
     if (productExistsIndex > -1)
       this.cart[productExistsIndex].quantity += quantity;

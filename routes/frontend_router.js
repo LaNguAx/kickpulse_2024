@@ -15,7 +15,12 @@ import { getIndex as getAccessibilityIndex } from '../controllers/frontend/acces
 import { getIndex as getAboutIndex } from '../controllers/frontend/aboutus_Controller.js';
 
 import { getIndex as getCategoryIndex, categoryMiddleware } from '../controllers/frontend/category_Controller.js';
+import { getIndex as getProductIndex, productMiddleware } from '../controllers/frontend/product_Controller.js';
 import { getIndex as get404Index } from '../controllers/frontend/404_Controller.js';
+
+import { getIndex as getCheckoutIndex } from '../controllers/frontend/checkout_Controller.js';
+
+
 
 const router = express.Router();
 
@@ -40,6 +45,11 @@ router.route('/category/id/:id').get(categoryMiddleware);
 router.route('/category/:name').get(getCategoryIndex);
 
 
+router.route('/product/id/:id').get(productMiddleware);
+router.route('/product/:name').get(getProductIndex);
+
+
+router.route('/checkout').get(getCheckoutIndex);
 
 
 

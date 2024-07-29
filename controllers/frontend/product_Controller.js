@@ -1,16 +1,16 @@
+
 import CategoryService from "../../services/dashboard/category_service.js";
 import ProductService from "../../services/dashboard/product_service.js";
 export async function getIndex(req, res) {
   const { name } = req.params;
   try {
-
     const categories = await CategoryService.getCategories();
-    const category = await CategoryService.getCategoryByName(name);
-    const categoryProducts = await ProductService.getProductsByCategoryId(category._id);
-    res.render('../views/frontend/category', {
+
+    const product = await ProductService.getProductByName(name);
+
+    res.render('../views/frontend/product', {
       categories,
-      category,
-      categoryProducts
+      product
     });
   }
   catch (e) {
@@ -19,15 +19,14 @@ export async function getIndex(req, res) {
 }
 
 
-export async function categoryMiddleware(req, res) {
+export async function productMiddleware(req, res) {
   const { id } = req.params;
   try {
-    const category = await CategoryService.getCategory(id);
-    res.redirect(`/category/${category.name.toLowerCase()}`);
+    const product = await ProductService.getProduct(id);
+    res.redirect(`/product/${product.name.toLowerCase()}`);
 
   } catch (e) {
     console.error(e);
     res.redirect('/404');
   }
 }
-
