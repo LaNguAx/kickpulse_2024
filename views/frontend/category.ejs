@@ -26,6 +26,18 @@
                 <div class="text-center w-75 mx-auto">
                     <h4 class="mb-2"><%= category.name %></h4>
                 </div>
+
+                <!-- 
+
+                CONTINUE FROM HERE:
+
+                You need to change the way cateogry links work, it needs to be /category/categoryname/subcategoryname if its a subcategory and if its not it needs to be /category/categoryname...
+
+                so make sure u fix it first, then:
+                category page and brand page will be different because they'll have a different filters modal, instead of filtering in the modal by brands itll filter by categories with ticks for subcategories the filtering will happen only for subcategories not main categories.
+
+                -->
+
                 <% if(categoryProducts.length == 0) { %>
                 <h3 class="text-center lead"><strong><%= category.name %></strong> category does not have any products
                     yet..</h3>
@@ -33,32 +45,48 @@
 
                 <h3 class="text-center lead mb-5">Explore our <strong><%= category.name.toLowerCase() %></strong>
                     collection</h3>
-                <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-4 g-3">
-                    <!-- Adjusted column sizes and gap -->
-                    <% categoryProducts.forEach(product => { %>
-                    <div class="col product-card" data-product-id="<%= product._id %>">
-                        <div class="card h-100">
-                            <button type="button"
-                                class="btn nav-link p-0 border-0 h-100 d-flex flex-column align-items-center"
-                                data-bs-toggle="modal" data-bs-target="#quick-view-modal">
-                                <img src="<%= product.image %>" class="card-img-top" alt="<%= product.name %>">
-                                <div class="card-body text-center p-2 d-flex flex-column mt-auto">
-                                    <h5 class="card-title flex-grow-1 d-flex align-items-center justify-content-center">
-                                        <%= product.name %></h5>
-                                    <strong class="d-block mt-2">Quick View</strong>
+                <div class="row">
+                    <!-- <div class="col-3">
+                        <div class="filters-container">
+
+                        </div>
+                    </div> -->
+                    <div class="col">
+                        <!-- <button type="button" class="btn nav-link" id="cart-btn" data-bs-toggle="modal" data-bs-target="#cart-modal">
+                            <i class="bi bi-cart2"></i>
+                          </button> -->
+                        <button type="button" id="filters-btn" class="btn btn-outline-dark m-1 mt-0"
+                            data-bs-toggle="modal" data-bs-target="#filters-modal">Show Filters</button>
+                        <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-4 g-3">
+                            <!-- Adjusted column sizes and gap -->
+                            <% categoryProducts.forEach(product => { %>
+                            <div class="col product-card" data-product-id="<%= product._id %>">
+                                <div class="card h-100">
+                                    <button type="button"
+                                        class="btn nav-link p-0 border-0 h-100 d-flex flex-column align-items-center"
+                                        data-bs-toggle="modal" data-bs-target="#quick-view-modal">
+                                        <img src="<%= product.image %>" class="card-img-top" alt="<%= product.name %>">
+                                        <div class="card-body text-center p-2 d-flex flex-column mt-auto">
+                                            <h5
+                                                class="card-title flex-grow-1 d-flex align-items-center justify-content-center">
+                                                <%= product.name %></h5>
+                                            <strong class="d-block mt-2">Quick View</strong>
+                                        </div>
+                                    </button>
                                 </div>
-                            </button>
+                            </div>
+                            <% }) %>
+                            <% } %>
+
                         </div>
                     </div>
-                    <% }) %>
-                    <% } %>
-
                 </div>
-
             </section>
         </main>
 
         <%- include('./components/footer') %>
+
+        <%- include('./components/filters-modal', {brands}) %>
 
     </div>
 

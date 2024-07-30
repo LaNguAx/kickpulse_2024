@@ -1,5 +1,6 @@
 import CategoryService from "../../services/dashboard/category_service.js";
 import ProductService from "../../services/dashboard/product_service.js";
+import BrandsService from '../../services/dashboard/brand_service.js';
 export async function getIndex(req, res) {
   const { name } = req.params;
   try {
@@ -7,10 +8,13 @@ export async function getIndex(req, res) {
     const categories = await CategoryService.getCategories();
     const category = await CategoryService.getCategoryByName(name);
     const categoryProducts = await ProductService.getProductsByCategoryId(category._id);
+    const brands = await BrandsService.getBrands();
+
     res.render('../views/frontend/category', {
       categories,
       category,
-      categoryProducts
+      categoryProducts,
+      brands
     });
   }
   catch (e) {
