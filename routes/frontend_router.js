@@ -14,7 +14,7 @@ import { getIndex as getContactIndex } from '../controllers/frontend/contact_Con
 import { getIndex as getAccessibilityIndex } from '../controllers/frontend/accessibility_Controller.js';
 import { getIndex as getAboutIndex } from '../controllers/frontend/aboutus_Controller.js';
 
-import { getIndex as getCategoryIndex, categoryMiddleware } from '../controllers/frontend/category_Controller.js';
+import { getIndex as getCategoryIndex, categoryMiddleware, getSubCategoryIndex} from '../controllers/frontend/category_Controller.js';
 import { getIndex as getProductIndex, productMiddleware } from '../controllers/frontend/product_Controller.js';
 import { getIndex as get404Index } from '../controllers/frontend/404_Controller.js';
 
@@ -43,6 +43,7 @@ router.route('/about-us').get(getAboutIndex);
 
 router.route('/category/id/:id').get(categoryMiddleware);
 router.route('/category/:name').get(getCategoryIndex);
+router.route('/category/:category/:subcategory').get(getSubCategoryIndex);
 
 
 router.route('/product/id/:id').get(productMiddleware);

@@ -77,7 +77,6 @@ const updateCategory = async (id, category) => {
 
 const getCategoryByName = async (name) => {
   try {
-
     const allCategories = await getCategories();
 
     // Find a specific category by name

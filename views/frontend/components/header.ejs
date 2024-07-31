@@ -33,7 +33,7 @@
                 <hr class="dropdown-divider">
               </li>
               <% category.subcategories.forEach(subcategory => { %>
-              <li><a class="dropdown-item" href="/category/id/<%= subcategory._id %>"><%= subcategory.name %></a></li>
+              <li><a class="dropdown-item" href="/category/<%= category.name.toLowerCase() %>/<%= subcategory.name.toLowerCase() %>"><%= subcategory.name %></a></li>
               <% }) %>
             </ul>
           </li>
