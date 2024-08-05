@@ -9,6 +9,7 @@ class Category {
   filtersModal;
   filtersModalObj;
   applyFiltersBtn;
+  resetFiltersBtn;
 
   selectedFilters = [];
 
@@ -19,15 +20,16 @@ class Category {
       keyboard: false
     });
     this.applyFiltersBtn = document.querySelector('#apply-filters-btn');
+    this.resetFiltersBtn = document.querySelector('#reset-filters-btn');
     this.categoryProductsContainer = document.querySelector('.category-products');
 
     this.initCategoryEventListeners();
   }
 
   initCategoryEventListeners() {
-
     this.filtersBtn.addEventListener('click', this.handleFiltersBtnClick.bind(this));
     this.applyFiltersBtn.addEventListener('click', this.handleApplyFiltersBtnClick.bind(this));
+    this.resetFiltersBtn.addEventListener('click', this.resetFilters.bind(this));
   }
 
   handleFiltersBtnClick(e) {
@@ -36,6 +38,7 @@ class Category {
 
   async handleApplyFiltersBtnClick(e) {
 
+    this.filtersModalObj.hide();
 
     const checkedFilters = [...document.querySelectorAll('.filter:checked')];
 
@@ -49,19 +52,30 @@ class Category {
 
     const filters = checkedFilters.map(filter => filter.getAttribute('id'));
 
+    const filterPrice = parseInt(document.getElementById('priceRange').value);
 
     const filteredProducts = products.filter(product => {
 
-      if (filters.find(filter => filter == product.brand.name) || filters.find(filter => filter.toLowerCase() == product.gender) || filters.find(filter => product.sizes.find(size => size == filter))) {
+      if (filters.find(filter => (filter == product.brand.name || filters.find(filter => filter.toLowerCase() == product.gender) || filters.find(filter => product.sizes.find(size => size == filter))) && product.price <= filterPrice)) {
         return product;
       }
 
     })
-
     Main.renderSpinner(this.categoryProductsContainer, false);
 
+    //if price range changed and other filters stayed
+    const DEFAULT_PRICE_RANGE = 2500;
+    if (checkedFilters.length == 0 && filterPrice != DEFAULT_PRICE_RANGE) {
+      const pricedProducts = products.filter(prod => prod.price <= filterPrice);
+      this.renderProducts(pricedProducts);
+      return;
+
+    }
+
+
+
+
     if (checkedFilters.length == 0) {
-      this.filtersModalObj.hide();
       this.renderProducts(products);
       return;
     }
@@ -78,7 +92,6 @@ class Category {
       return;
     }
 
-    this.filtersModalObj.hide();
 
     this.renderProducts(filteredProducts);
 
@@ -110,10 +123,25 @@ class Category {
     this.categoryProductsContainer.insertAdjacentHTML('afterbegin', HTML);
   }
 
-
   resetFilters() {
     const checkedFilters = [...document.querySelectorAll('.filter:checked')];
     checkedFilters.forEach(filter => filter.checked = false);
+    const DEFAULT_PRICE_RANGE = 2500;
+    const filterPrice = document.getElementById('priceRange');
+    filterPrice.value = DEFAULT_PRICE_RANGE;
+
+    this.collapseAllAccordions();
+    this.filtersModalObj.hide();
+  }
+
+  collapseAllAccordions() {
+    var accordionItems = document.querySelectorAll('.accordion-collapse');
+    accordionItems.forEach(function (item) {
+      var collapseInstance = new bootstrap.Collapse(item, {
+        toggle: false
+      });
+      collapseInstance.hide();
+    });
   }
 
 }
