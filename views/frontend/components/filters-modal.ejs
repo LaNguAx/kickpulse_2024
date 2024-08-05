@@ -1,5 +1,6 @@
 <!-- Cart Modal -->
-<div class="modal fade" id="filters-modal" tabindex="-1" aria-labelledby="filters-label" aria-hidden="true">
+<div class="modal fade" id="filters-modal" data-category-id="<%= category._id %>" tabindex="-1"
+  aria-labelledby="filters-label" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
@@ -22,8 +23,8 @@
                 <% brands.forEach(brand => { %>
                 <div class="form-check form-switch">
                   <input class="filter form-check-input filter-brand" type="checkbox" role="switch"
-                    id="flexSwitchCheck<%= brand.name %>">
-                  <label class="form-check-label" for="flexSwitchCheck<%= brand.name %>"><%= brand.name %></label>
+                    id="<%= brand.name %>">
+                  <label class="form-check-label" for="<%= brand.name %>"><%= brand.name %></label>
                 </div>
                 <% }) %>
               </div>
@@ -41,19 +42,16 @@
               data-bs-parent="#accordionExample">
               <div class="accordion-body">
                 <div class="form-check form-switch">
-                  <input class="filter filter-gender form-check-input" type="checkbox" role="switch"
-                    id="flexSwitchCheckMen">
-                  <label class="form-check-label" for="flexSwitchCheckMen">Men</label>
+                  <input class="filter filter-gender form-check-input" type="checkbox" role="switch" id="Men">
+                  <label class="form-check-label" for="Men">Men</label>
                 </div>
                 <div class="form-check form-switch">
-                  <input class="filter filter-gender form-check-input" type="checkbox" role="switch"
-                    id="flexSwitchCheckWomen">
-                  <label class="form-check-label" for="flexSwitchCheckWomen">Women</label>
+                  <input class="filter filter-gender form-check-input" type="checkbox" role="switch" id="Women">
+                  <label class="form-check-label" for="Women">Women</label>
                 </div>
                 <div class="form-check form-switch">
-                  <input class="filter filter-gender form-check-input" type="checkbox" role="switch"
-                    id="flexSwitchCheckKids">
-                  <label class="form-check-label" for="flexSwitchCheckKids">Kids</label>
+                  <input class="filter filter-gender form-check-input" type="checkbox" role="switch" id="Kids">
+                  <label class="form-check-label" for="Kids">Kids</label>
                 </div>
               </div>
             </div>
@@ -70,69 +68,56 @@
               <div class="accordion-body">
                 <div class="accordion-body">
                   <div class="form-check form-switch">
-                    <input class="filter form-check-input filter-size" type="checkbox" role="switch"
-                      id="flexSwitchCheck36">
-                    <label class="form-check-label" for="flexSwitchCheck36">36</label>
+                    <input class="filter form-check-input filter-size" type="checkbox" role="switch" id="36">
+                    <label class="form-check-label" for="36">36</label>
                   </div>
                   <div class="form-check form-switch">
-                    <input class="filter form-check-input filter-size" type="checkbox" role="switch"
-                      id="flexSwitchCheck37">
-                    <label class="form-check-label" for="flexSwitchCheck37">37</label>
+                    <input class="filter form-check-input filter-size" type="checkbox" role="switch" id="37">
+                    <label class="form-check-label" for="37">37</label>
                   </div>
                   <div class="form-check form-switch">
-                    <input class="filter form-check-input filter-size" type="checkbox" role="switch"
-                      id="flexSwitchCheck38">
-                    <label class="form-check-label" for="flexSwitchCheck38">38</label>
+                    <input class="filter form-check-input filter-size" type="checkbox" role="switch" id="38">
+                    <label class="form-check-label" for="38">38</label>
                   </div>
                   <div class="form-check form-switch">
-                    <input class="filter form-check-input filter-size" type="checkbox" role="switch"
-                      id="flexSwitchCheck39">
-                    <label class="form-check-label" for="flexSwitchCheck39">39</label>
+                    <input class="filter form-check-input filter-size" type="checkbox" role="switch" id="39">
+                    <label class="form-check-label" for="39">39</label>
                   </div>
                   <div class="form-check form-switch">
-                    <input class="filter form-check-input filter-size" type="checkbox" role="switch"
-                      id="flexSwitchCheck40">
-                    <label class="form-check-label" for="flexSwitchCheck40">40</label>
+                    <input class="filter form-check-input filter-size" type="checkbox" role="switch" id="40">
+                    <label class="form-check-label" for="40">40</label>
                   </div>
                   <div class="form-check form-switch">
-                    <input class="filter form-check-input filter-size" type="checkbox" role="switch"
-                      id="flexSwitchCheck41">
-                    <label class="form-check-label" for="flexSwitchCheck41">41</label>
+                    <input class="filter form-check-input filter-size" type="checkbox" role="switch" id="41">
+                    <label class="form-check-label" for="41">41</label>
                   </div>
                   <div class="form-check form-switch">
-                    <input class="filter form-check-input filter-size" type="checkbox" role="switch"
-                      id="flexSwitchCheck42">
-                    <label class="form-check-label" for="flexSwitchCheck42">42</label>
+                    <input class="filter form-check-input filter-size" type="checkbox" role="switch" id="42">
+                    <label class="form-check-label" for="42">42</label>
                   </div>
                   <div class="form-check form-switch">
-                    <input class="filter form-check-input filter-size" type="checkbox" role="switch"
-                      id="flexSwitchCheck43">
-                    <label class="form-check-label" for="flexSwitchCheck43">43</label>
+                    <input class="filter form-check-input filter-size" type="checkbox" role="switch" id="43">
+                    <label class="form-check-label" for="43">43</label>
                   </div>
                   <div class="form-check form-switch">
-                    <input class="filter form-check-input filter-size" type="checkbox" role="switch"
-                      id="flexSwitchCheck44">
-                    <label class="form-check-label" for="flexSwitchCheck44">44</label>
+                    <input class="filter form-check-input filter-size" type="checkbox" role="switch" id="44">
+                    <label class="form-check-label" for="44">44</label>
                   </div>
                   <div class="form-check form-switch">
-                    <input class="filter form-check-input filter-size" type="checkbox" role="switch"
-                      id="flexSwitchCheck45">
-                    <label class="form-check-label" for="flexSwitchCheck45">45</label>
+                    <input class="filter form-check-input filter-size" type="checkbox" role="switch" id="45">
+                    <label class="form-check-label" for="45">45</label>
                   </div>
                   <div class="form-check form-switch">
-                    <input class="filter form-check-input filter-size" type="checkbox" role="switch"
-                      id="flexSwitchCheck46">
-                    <label class="form-check-label" for="flexSwitchCheck46">46</label>
+                    <input class="filter form-check-input filter-size" type="checkbox" role="switch" id="46">
+                    <label class="form-check-label" for="46">46</label>
                   </div>
                   <div class="form-check form-switch">
-                    <input class="filter form-check-input filter-size" type="checkbox" role="switch"
-                      id="flexSwitchCheck47">
-                    <label class="form-check-label" for="flexSwitchCheck47">47</label>
+                    <input class="filter form-check-input filter-size" type="checkbox" role="switch" id="47">
+                    <label class="form-check-label" for="47">47</label>
                   </div>
                   <div class="form-check form-switch">
-                    <input class="filter form-check-input filter-size" type="checkbox" role="switch"
-                      id="flexSwitchCheck48">
-                    <label class="form-check-label" for="flexSwitchCheck48">48</label>
+                    <input class="filter form-check-input filter-size" type="checkbox" role="switch" id="48">
+                    <label class="form-check-label" for="48">48</label>
                   </div>
                 </div>
 
@@ -165,7 +150,9 @@
       </div>
       <div class="modal-footer">
         <!-- <span class="me-auto hidden fs-5"><strong>Your cart is empty..</strong></span> -->
-        <button type="button" class="btn btn-primary flex-grow-1">Apply Filters</button>
+        <button type="button" class="btn btn-outline-primary" id="reset-filters-btn">Reset Filters</button>
+
+        <button type="button" id="apply-filters-btn" class="btn btn-primary flex-grow-1">Apply Filters</button>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
       </div>
     </div>

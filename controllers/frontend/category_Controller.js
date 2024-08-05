@@ -4,7 +4,6 @@ import BrandsService from '../../services/dashboard/brand_service.js';
 export async function getIndex(req, res) {
   const { name } = req.params;
   try {
-
     const categories = await CategoryService.getCategories();
     const category = await CategoryService.getCategoryByName(name);
     const categoryProducts = await ProductService.getProductsByCategoryId(category._id);
@@ -16,6 +15,17 @@ export async function getIndex(req, res) {
       categoryProducts,
       brands
     });
+  }
+  catch (e) {
+    res.redirect('/404');
+  }
+}
+
+export async function getSubCategoryIndex(req, res) {
+  try {
+    const { subcategory } = req.params;
+    req.params.name = subcategory;
+    getIndex(req, res);
   }
   catch (e) {
     res.redirect('/404');
