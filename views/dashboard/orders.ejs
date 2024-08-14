@@ -12,6 +12,13 @@
 </head>
 
 <body>
+  <!-- Pre loader -->
+  <div class="preloader" id="preloader" style="z-index:9999">
+    <div class="spinner-border text-dark" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
   <div class="container mt-5">
     <h1 class="text-center">Admin Dashboard</h1>
     <h4 class="text-center">
@@ -37,7 +44,7 @@
                 <a class="nav-link " href="/dashboard/suppliers">Suppliers</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link " href="/dashboard/users">Users</a>
+                <a class="nav-link" href="/dashboard/users">Users</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link active" href="/dashboard/orders">Orders</a>
@@ -48,6 +55,15 @@
               <li class="nav-item">
                 <a class="nav-link " href="/dashboard/categories">Categories</a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link " href="/dashboard/branches">Branches</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/dashboard/analytics">Analytics</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link " href="/dashboard/facebook">Facebook</a>
+              </li>
             </ul>
           </div>
         </div>
@@ -55,46 +71,219 @@
     </div>
   </div>
 
+  <div class="container ">
+    <form class="d-flex align-items-end gap-2 search-form w-25" role="search">
+      <!-- <input class="form-control me-2" id="search-input" type="search" placeholder="Search" aria-label="Search"> -->
+      <div>
+        <label for="searchInput" class="form-label">Search Orders By Email</label>
+        <input class="form-control" list="searchOptions" id="searchInput" placeholder="Type to search...">
+        <datalist id="searchOptions">
+          <option value="">
+        </datalist>
+      </div>
+      <button type="submit" class="btn btn-outline-primary">
+        Search
+      </button>
+    </form>
+    <button type="button" class="btn btn-outline-primary my-3 fs-6" id="groupByShowBtn">
+      View Orders Grouped By Ordered Email
+    </button>
+  </div>
+
+  <!-- Search Modal -->
+  <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="searchModalLabel">Search</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body row">
+          <!-- Search content goes here -->
+          test
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="text-center mt-5">
+    <h5>Warning: Deleting an order will delete the user's associated order.</h5> <!--
+        <h6>Note: Changing order name will CHANGE the name in all products by this order & suppliers who are supplying this
+        order.</h6> -->
+  </div>
+
   <main class="container mt-5 mb-5">
     <div class="row">
       <div class="list-group col-lg-2 col-sm-3 tabs-container">
-        <a class="list-group-item list-group-item-action active tab all-brands-tab" id="list-home-list"
-          data-toggle="list" href="#all_brands" role="tab" aria-controls="home">All Brands</a>
-        <a class="list-group-item list-group-item-action tab add-brand-tab" id="list-profile-list" data-toggle="list"
-          href="#add_brands" role="tab" aria-controls="profile">Add Brand</a>
+        <a class="list-group-item list-group-item-action active tab all-orders-tab" id="list-home-list"
+          data-toggle="list" href="#all_orders" role="tab" aria-controls="home">All Orders</a>
+        <a class="list-group-item list-group-item-action tab supplied-order-tab" id="list-profile-list"
+          data-toggle="list" href="#supplied_orders" role="tab" aria-controls="profile">Supplied Orders</a>
 
       </div>
-      <div class="col-8 main-content">
-        <div class="row brands">
+      <div class="col-10 main-content">
+
+        <div class="row orders content-container">
+          <% if(orders.length == 0) { %>
+          <h4>You don't have any unfulfilled orders..</h4>
+          <% } else { %>
+          <% let hasUnfulfilledOrders = false; %>
+          <% orders.forEach(order => { %>
+          <% if(!order.supplied) { %>
+          <% hasUnfulfilledOrders = true; %>
+          <div class="col-md-4 col-sm-6 col-12 mb-4">
+            <div class="card position-relative" data-order-id="<%= order._id %>">
+              <button type="button" class="btn btn-outline-danger delete-order">
+                X
+              </button>
+              <div class="card-body">
+                <h5 class="card-title">Order ID: <%= order._id %></h5>
+                <p class="card-text"><strong>Name:</strong> <%= order.firstName %> <%= order.lastName %></p>
+                <p class="card-text"><strong>Email:</strong> <%= order.email %></p>
+                <p class="card-text"><strong>Address:</strong> <%= order.address %></p>
+                <p class="card-text"><strong>Country:</strong> <%= order.country %></p>
+                <p class="card-text"><strong>Zip:</strong> <%= order.zip %></p>
+                <p class="card-text"><strong>CC Name:</strong> <%= order.paymentDetails.ccName %></p>
+                <p class="card-text"><strong>CC Number:</strong> <%= order.paymentDetails.ccNumber %></p>
+                <p class="card-text"><strong>CC Expiration:</strong> <%= order.paymentDetails.ccExpiration %></p>
+                <p class="card-text"><strong>CC CVV:</strong> <%= order.paymentDetails.ccCvv %></p>
+                <h6 class="card-subtitle mb-2 text-muted">Cart Items</h6>
+                <ul class="list-group list-group-flush mb-3">
+                  <% order.cart.forEach(item => { %>
+                  <li class="list-group-item">
+                    <strong><%= item.title %></strong> - Size: <%= item.size %>, Qty: <%= item.quantity %>, Price:
+                    $<%= item.price %>
+                  </li>
+                  <% }) %>
+                </ul>
+                <h6 class="card-subtitle mb-2 text-muted">Total:
+                  <%= order.cart.reduce((total, item) => total + item.price * item.quantity, 0)%></h6>
+                <h6 class="card-subtitle mb-2 text-muted">Ordered By:
+                  <%= order.orderedBy || 'Temp User' %></h6>
+
+              </div>
+              <button type="button" class="btn btn-outline-primary supplied-order-btn">
+                <i class="bi bi-check-circle"></i>
+                <span class="visually-hidden">Supplied Order</span>
+              </button>
+            </div>
+          </div>
+          <% } %>
+          <% }) %>
+          <% if(!hasUnfulfilledOrders) { %>
+          <h4>You don't have any unfulfilled orders..</h4>
+          <% } %>
+          <% } %>
         </div>
 
 
-        <div class="col add-brand hidden">
-          <h1 class="text-center mb-4">Add Brand</h1>
 
-          <form class="row add-brand-form align-items-center flex-column" action="/api/brands" method="POST">
+
+        <div class="col row supplied-order content-container hidden">
+          <h1 class="text-center mb-4">Supplied Orders</h1>
+
+          <% if(orders.length == 0) { %>
+          <h4>You don't have any orders..</h4>
+          <% } else { %>
+          <% orders.forEach(order => { %>
+          <% if(order.supplied) { %>
+          <div class="col-md-4 col-sm-6 col-12 mb-4">
+            <div class="card position-relative" data-order-id="<%= order._id %>">
+              <!-- <button type="button" class="btn btn-outline-danger delete-order">
+                      X
+                    </button> -->
+              <div class="card-body">
+                <h5 class="card-title">Order ID: <%= order._id %></h5>
+                <p class="card-text"><strong>Name:</strong> <%= order.firstName %> <%= order.lastName %></p>
+                <p class="card-text"><strong>Email:</strong> <%= order.email %></p>
+                <p class="card-text"><strong>Address:</strong> <%= order.address %></p>
+                <p class="card-text"><strong>Country:</strong> <%= order.country %></p>
+                <p class="card-text"><strong>Zip:</strong> <%= order.zip %></p>
+                <p class="card-text"><strong>CC Name:</strong> <%= order.paymentDetails.ccName %></p>
+                <p class="card-text"><strong>CC Number:</strong> <%= order.paymentDetails.ccNumber %></p>
+                <p class="card-text"><strong>CC Expiration:</strong> <%= order.paymentDetails.ccExpiration %></p>
+                <p class="card-text"><strong>CC CVV:</strong> <%= order.paymentDetails.ccCvv %></p>
+                <h6 class="card-subtitle mb-2 text-muted">Cart Items</h6>
+                <ul class="list-group list-group-flush mb-3">
+                  <% order.cart.forEach(item => { %>
+                  <li class="list-group-item">
+                    <strong><%= item.title %></strong> - Size: <%= item.size %>, Qty: <%= item.quantity %>, Price:
+                    $<%= item.price %>
+                  </li>
+                  <% }) %>
+                </ul>
+                <h6 class="card-subtitle mb-2 text-muted">Total:
+                  <%= order.cart.reduce((total, item) => total + item.price * item.quantity, 0)%></h6>
+                <h6 class="card-subtitle mb-2 text-muted">Ordered By:
+                  <%= order.orderedBy || 'Temp User' %></h6>
+              </div>
+              <!-- <button type="button" class="mb-1 btn btn-outline-secondary edit-order-btn">
+                      <i class="bi bi-pencil-square"></i>
+                      <span class="visually-hidden">Edit Order</span>
+                    </button>
+                    <button type="button" class="btn btn-outline-primary supplied-order-btn">
+                      <i class="bi bi-check-circle"></i>
+                      <span class="visually-hidden">Supplied Order</span>
+                    </button> -->
+            </div>
+          </div>
+          <% } %>
+          <% }) %>
+          <% } %>
+          <div class="feedback-message container text-center mt-4 hidden fs-3"></div>
+        </div>
+
+
+        <!-- EDIT -->
+        <!-- <div class="col edit-order content-container hidden">
+          <h1 class="text-center mb-4">Edit Order</h1>
+
+          <form class="row edit-order-form align-items-center flex-column" action="/api/orders" method="PUT">
             <div class="col-6 mb-3 ">
-              <label for="name" class="form-label">Brand name</label>
+              <label for="name" class="form-label">Order name</label>
               <input type="text" class="form-control" name="name" id="name" value="test1" placeholder="" required>
             </div>
             <div class="d-flex align-items-center justify-content-center form-btns-container">
               <button type="submit" class="btn btn-primary mx-auto">
-                Add & Save Brand
+                Edit & Save Order
               </button>
             </div>
           </form>
           <div class="feedback-message container text-center mt-4 hidden fs-3"></div>
-        </div>
+        </div> -->
+
       </div>
     </div>
 
   </main>
 
+  <!-- Modal for Grouping Orders by Email -->
+  <div class="modal fade" id="groupByEmailModal" tabindex="-1" aria-labelledby="groupByEmailModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="groupByEmailModalLabel">Orders Grouped by Email</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Grouped orders by email will be displayed here -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"></script>
-  <script src="/dashboard/js/users.js"></script>
+  <script type="module" src="/dashboard/js/orders.js"></script>
 </body>
 
 </html>

@@ -1,6 +1,7 @@
 import Main from '../main.js';
 import QuickView from '../quickView.js';
 import Header from '../header.js';
+import FormValidator from '../formValidator.js';
 
 class Home {
 
@@ -82,6 +83,7 @@ class Home {
 
     renderProducts(products) {
         let HTML = '';
+        products.splice(4);
         products.forEach(product => {
             HTML += `
             <div class="col product-card" data-product-id="${product._id}">
@@ -108,7 +110,7 @@ class Home {
 
 }
 
-Main.initComponents([Header, QuickView, Home]);
+Main.initComponents([Header, FormValidator, Home]);
 
 Main.hidePreLoader();
 

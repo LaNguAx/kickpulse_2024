@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css" />
+
+  <link rel="stylesheet" href="/frontend/main.css">
+  <link rel="stylesheet" href="/frontend/profile/settings/settings.css">
+  <title>KickPulse My Settings</title>
+</head>
+
+<body class="mb-5">
+  <%- include('../components/preloader') %>
+  <%- include('../components/search-modal') %>
+
+  <div class="content">
+    <%- include('../components/header') %>
+
+    <main class="container-fluid mb-5 d-flex flex-column justify-content-center align-items-center">
+      <h1 class="mt-5">Settings</h1>
+      <p class="lead">Hi, how are you <%= session.name %>?<br>Change your details here..</p>
+      <form id="settings-form" class="needs-validation" novalidate action="/settings" method="POST"
+        data-user-id="<%= session.userId %>">
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="firstName" class="form-label">First Name</label>
+            <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Enter your first name"
+              required value="<%= session.name.split(' ')[0] %>">
+            <div class="invalid-feedback">
+              Please enter your first name.
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="lastName" class="form-label">Last Name</label>
+            <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Enter your last name"
+              required value="<%= session.name.split(' ')[1] %>">
+            <div class="invalid-feedback">
+              Please enter your last name.
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="email" class="form-label">Current Email address</label>
+          <input type="email" class="form-control" id="currentEmail" name="currentEmail" placeholder="name@example.com"
+            required value="<%= session.email %>" disabled>
+          <div class="invalid-feedback">
+            Please enter a valid email address.
+          </div>
+
+          <div class="form-check form-switch m-2">
+            <input class="form-check-input" type="checkbox" role="switch" id="newEmailCheckbox">
+            <label class="form-check-label" for="email">New email address?</label>
+          </div>
+
+          <div class="container hidden">
+            <label for="email" class="form-label">New Email Address</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required
+              disabled>
+            <div class="invalid-feedback">
+              Please enter a valid email address.
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="currentPassword" class="form-label">Current Password</label>
+          <input type="password" class="form-control" id="currentPassword" name="currentPassword"
+            placeholder="Enter current password" required>
+          <div class="invalid-feedback">
+            Please enter your current password.
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="newPassword" class="form-label">New Password</label>
+          <input type="password" class="form-control" id="newPassword" name="newPassword"
+            placeholder="Enter new password" required>
+          <div class="invalid-feedback">
+            Please enter a new password.
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-center">
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+      </form>
+    </main>
+
+    <%- include('../components/footer') %>
+
+  </div>
+
+
+  <!-- MODALS -->
+  <%- include('../components/cart-modal') %>
+  <%- include('../components/quickview-modal') %>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+  <script type="module" src="/frontend/profile/settings/settings.js"></script>
+</body>
+
+</html>

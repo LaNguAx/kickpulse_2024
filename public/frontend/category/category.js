@@ -39,7 +39,7 @@ class Category {
   async handleApplyFiltersBtnClick(e) {
 
     this.filtersModalObj.hide();
-
+    console.log(this.products);
     const checkedFilters = [...document.querySelectorAll('.filter:checked')];
 
     Main.renderSpinner(this.categoryProductsContainer, true);
@@ -50,36 +50,43 @@ class Category {
 
     const products = result.data;
 
+
     const filters = checkedFilters.map(filter => filter.getAttribute('id'));
 
     const filterPrice = parseInt(document.getElementById('priceRange').value);
 
-    const filteredProducts = products.filter(product => {
 
-      if (filters.find(filter => (filter == product.brand.name || filters.find(filter => filter.toLowerCase() == product.gender) || filters.find(filter => product.sizes.find(size => size == filter))) && product.price <= filterPrice)) {
-        return product;
-      }
+    // Filter and map the elements to get only the checked ones' ids
+    const brandFilters = new Set([...document.querySelectorAll('.filter-brand')]
+      .filter(el => el.checked)  // Only include checked elements
+      .map(el => el.id));        // Map to their ids
 
-    })
+    const genderFilters = new Set([...document.querySelectorAll('.filter-gender')]
+      .filter(el => el.checked)  // Only include checked elements
+      .map(el => el.id));        // Map to their ids
+
+    const sizeFilters = new Set([...document.querySelectorAll('.filter-size')]
+      .filter(el => el.checked)  // Only include checked elements
+      .map(el => el.id));        // Map to their ids
+
+    let filteredProducts = products;
+    if (brandFilters.size > 0)
+      filteredProducts = products.filter(product =>
+        brandFilters.has(product.brand.name));
+
+    if (genderFilters.size > 0)
+      filteredProducts = filteredProducts.filter(product => genderFilters.has(product.gender));
+
+    if (sizeFilters.size > 0) {
+      filteredProducts = filteredProducts.filter(product =>
+        product.sizes.some(size => sizeFilters.has(Math.floor(parseFloat(size)).toString()))
+      );
+    }
+
+    filteredProducts = filteredProducts.filter(product => product.price <= filterPrice);
+
+
     Main.renderSpinner(this.categoryProductsContainer, false);
-
-    //if price range changed and other filters stayed
-    const DEFAULT_PRICE_RANGE = 2500;
-    if (checkedFilters.length == 0 && filterPrice != DEFAULT_PRICE_RANGE) {
-      const pricedProducts = products.filter(prod => prod.price <= filterPrice);
-      this.renderProducts(pricedProducts);
-      return;
-
-    }
-
-
-
-
-    if (checkedFilters.length == 0) {
-      this.renderProducts(products);
-      return;
-    }
-
     console.log(filteredProducts)
     if (filteredProducts.length == 0) {
       this.resetFilters();
@@ -89,6 +96,21 @@ class Category {
         Main.renderMessage(this.categoryProductsContainer, false, 'No products found..', 'beforebegin'), 1500);
 
       this.filtersModalObj.hide();
+      return;
+    }
+
+    // //if price range changed and other filters stayed
+    // const DEFAULT_PRICE_RANGE = 2500;
+    // if (checkedFilters.length == 0 && filterPrice != DEFAULT_PRICE_RANGE) {
+    //   const pricedProducts = products.filter(prod => prod.price <= filterPrice);
+    //   if (pricedProducts.length == 0) this.renderProducts(produc)
+    //   this.renderProducts(pricedProducts);
+    //   return;
+
+    // }
+
+    if (checkedFilters.length == 0) {
+      this.renderProducts(products);
       return;
     }
 
@@ -129,9 +151,11 @@ class Category {
     const DEFAULT_PRICE_RANGE = 2500;
     const filterPrice = document.getElementById('priceRange');
     filterPrice.value = DEFAULT_PRICE_RANGE;
+    document.getElementById('currentPrice').innerText = filterPrice.value;
 
     this.collapseAllAccordions();
     this.filtersModalObj.hide();
+    this.applyFiltersBtn.click()
   }
 
   collapseAllAccordions() {
@@ -147,6 +171,6 @@ class Category {
 }
 
 
-Main.initComponents([Header, QuickView, Category]);
+Main.initComponents([Header, Category]);
 
 Main.hidePreLoader();

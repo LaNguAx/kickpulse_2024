@@ -58,10 +58,26 @@ const updateBrand = async (id, options) => {
   }
 };
 
+const getBrandByName = async (name) => {
+  try {
+    const allBrands = await BrandsModel.find(); // Retrieve all distinct brands
+
+    // Find a specific brand by name
+    const specificBrand = allBrands.find(brand => brand.name.toLowerCase() === name.toLowerCase());
+
+    if (!specificBrand) throw new Error('Brand not found');
+    return specificBrand;
+  } catch (err) {
+    console.error(`Error finding brand with name ${name}:`, err);
+    throw new Error('Failed to retrieve brand');
+  }
+};
+
 export default {
   getBrands,
   getBrand,
   createBrand,
   deleteBrand,
   updateBrand,
+  getBrandByName
 };

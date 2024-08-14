@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
-// Define the Product schema
+// Define the Brand schema
 const BrandSchema = new Schema(
   {
     name: {

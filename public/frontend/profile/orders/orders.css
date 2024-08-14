@@ -1,0 +1,22 @@
+@media (max-width: 768px) {
+  .table {
+    font-size: 0.875rem; /* Smaller font size on mobile devices */
+  }
+
+  .table th, .table td {
+    padding: 0.75rem 0.5rem; /* Adjust padding */
+  }
+
+  .table img {
+    width: 30px; /* Smaller images on mobile */
+    height: 30px;
+  }
+
+  .item-details {
+    font-size: 0.875rem; /* Smaller font for item details */
+  }
+
+  .table-responsive {
+    overflow-x: auto;
+  }
+}

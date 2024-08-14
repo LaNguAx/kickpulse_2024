@@ -2,12 +2,32 @@
   <nav class="navbar navbar-expand-lg bg-body-tertiary fs-5">
     <div class="container-fluid">
       <div class="d-flex align-items-center justify-content-center me-2">
-        <a class="navbar-brand" href="/"> <img src="../../photos/logo.png" alt="Kickpulse Logo" width="64" height="64">
+        <a class="navbar-brand" href="/">
+          <img class="logo" src="../../photos/logo.png" alt="Kickpulse Logo" height="64">
         </a>
-        <div class="justify-content-end d-flex gap-3 fs-3">
-          <a class="nav-link" href="#"><i class="bi bi-person-circle"></i></a>
+        <div class="justify-content-end d-flex gap-4 me-3">
+          <% if (!session.userId) { %>
+          <button type="button" class="btn nav-link" data-bs-toggle="modal" data-bs-target="#loginModal">
+            <i class="bi bi-person-circle fs-2"></i>
+          </button>
+          <% } else { %>
+          <li class="nav-item dropdown" style="list-style: none;">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-person-circle fs-2"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item disabled" href="#">Welcome <%= session.name %></a></li>
+              <hr class="dropdown-divider">
+              <!-- <li><a class="dropdown-item" href="/profile">Profile</a></li> -->
+              <li><a class="dropdown-item" href="/profile/orders">My Orders</a></li>
+              <li><a class="dropdown-item" href="/profile/settings">Settings</a></li>
+              <hr class="dropdown-divider">
+              <li><a class="dropdown-item" href="/logout">Log out</a></li>
+            </ul>
+          </li>
+          <% } %>
           <button type="button" class="btn nav-link" id="cart-btn" data-bs-toggle="modal" data-bs-target="#cart-modal">
-            <i class="bi bi-cart2"></i>
+            <i class="bi bi-cart2 fs-2"></i>
           </button>
         </div>
       </div>
@@ -20,31 +40,54 @@
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="/">Home</a>
           </li>
-
           <% categories.forEach(category => { %>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               <%= category.name %>
             </a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="/category/id/<%= category._id %>">All
-                  <%= category.name %></a></li>
+              <li><a class="dropdown-item" href="/category/id/<%= category._id %>">All <%= category.name %></a></li>
               <li>
                 <hr class="dropdown-divider">
               </li>
               <% category.subcategories.forEach(subcategory => { %>
-              <li><a class="dropdown-item" href="/category/<%= category.name.toLowerCase() %>/<%= subcategory.name.toLowerCase() %>"><%= subcategory.name %></a></li>
+              <li><a class="dropdown-item"
+                  href="/category/<%= category.name.toLowerCase() %>/<%= subcategory.name.toLowerCase() %>"><%= subcategory.name %></a>
+              </li>
               <% }) %>
             </ul>
           </li>
           <% }) %>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Brands
+            </a>
+            <ul class="dropdown-menu">
+              <% categories.brandNames.forEach((category, index) => { %>
+              <li><a class="dropdown-item" href="/brand/<%= category.name.toLowerCase() %>"><%= category.name %></a>
+              </li>
+              <% if (index < categories.brandNames.length - 1) { %>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <% } %>
+              <% }) %>
+            </ul>
+          </li>
+
         </ul>
-        <form class="d-flex search-form" role="search">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success search-btn" type="submit">Search</button>
+        <form class="d-flex align-items-end gap-2 search-form" role="search">
+          <!-- <input class="form-control me-2" id="search-input" type="search" placeholder="Search" aria-label="Search"> -->
+          <div>
+            <!-- <label for="searchInput" class="form-label">Search Users</label> -->
+            <input class="form-control" list="searchOptions" id="searchInput" placeholder="Type to search...">
+            <datalist id="searchOptions">
+              <option value="">
+            </datalist>
+          </div>
+          <button class="btn btn-outline-primary search-btn" type="submit">Search</button>
         </form>
       </div>
-
     </div>
   </nav>
 </header>

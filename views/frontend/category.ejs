@@ -16,6 +16,7 @@
 
 <body class="mb-5">
     <%- include('./components/preloader') %>
+    <%- include('./components/search-modal') %>
 
     <div class="content">
 
@@ -86,7 +87,7 @@
 
         <%- include('./components/footer') %>
 
-        <%- include('./components/filters-modal', {brands}) %>
+        <%- include('./components/filters-modal', {brands, brand:[]}) %>
 
     </div>
 
@@ -94,6 +95,10 @@
     <!-- MODALS -->
     <%- include('./components/cart-modal') %>
     <%- include('./components/quickview-modal') %>
+    <% if(!session.userId) { %>
+    <%- include('./components/register-modal') %>
+    <%- include('./components/login-modal') %>
+    <% } %>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"

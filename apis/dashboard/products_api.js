@@ -22,6 +22,21 @@ export async function createProduct(req, res) {
     res.status(500).json({ success: false, message: 'Server error' });
   }
 }
+// update a product
+export async function updateProduct(req, res) {
+  try {
+    const product = { ...req.body.product };
+    const productId = req.body.prodId;
+
+    const updatedProduct = await ProductService.updateProduct(product, productId);
+    res.status(201).json({ success: true, data: updatedProduct });
+  } catch (error) {
+    console.error('Error updating product:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+}
+
+
 
 // Get a single product by ID
 export async function getProduct(req, res) {
