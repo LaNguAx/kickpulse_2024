@@ -159,8 +159,7 @@ class Categories {
       const generatedField = this.addSubCategory({ target: this.formEditCategory });
       const input = generatedField.querySelector('input[name="subcategory-name"]');
 
-      input.value = subcat.name
-        ;
+      input.value = subcat.name;
 
       input.setAttribute('data-subcategory-id', subcat._id);
     });
@@ -380,3 +379,14 @@ class Categories {
 document.addEventListener('DOMContentLoaded', () => {
   new Categories();
 });
+
+
+function hidePreLoader() {
+  window.addEventListener('load', function () {
+    const preloader = document.getElementById('preloader');
+    preloader.style.display = 'none';
+  });
+}
+
+hidePreLoader();
+

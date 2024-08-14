@@ -48,7 +48,7 @@ class Main {
 
     this.message = document.createElement('div');
     this.message.classList.add('message', 'd-flex', 'justify-content-center', 'my-2');
-    this.message.innerHTML = `<span><strong>${msg}</strong></span>`;
+    this.message.innerHTML = `<span class="lean">${msg}</span>`;
     element.insertAdjacentElement(option, this.message);
 
     this.messageVisible = true;

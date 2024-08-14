@@ -12,6 +12,13 @@
 </head>
 
 <body>
+  <!-- Pre loader -->
+  <div class="preloader" id="preloader" style="z-index:9999">
+    <div class="spinner-border text-dark" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
   <div class="container mt-5">
     <h1 class="text-center">Admin Dashboard</h1>
     <h4 class="text-center">
@@ -48,53 +55,131 @@
               <li class="nav-item">
                 <a class="nav-link " href="/dashboard/categories">Categories</a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link " href="/dashboard/branches">Branches</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/dashboard/analytics">Analytics</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link " href="/dashboard/facebook">Facebook</a>
+              </li>
             </ul>
           </div>
         </div>
       </nav>
     </div>
   </div>
+  <div class="container ">
+    <form class="d-flex align-items-end gap-2 search-form w-25" role="search">
+      <!-- <input class="form-control me-2" id="search-input" type="search" placeholder="Search" aria-label="Search"> -->
+      <div>
+        <label for="searchInput" class="form-label">Search Users</label>
+        <input class="form-control" list="searchOptions" id="searchInput" placeholder="Type to search...">
+        <datalist id="searchOptions">
+          <option value="">
+        </datalist>
+      </div>
+      <button type="submit" class="btn btn-outline-primary">
+        Search
+      </button>
+    </form>
+  </div>
 
+  <!-- Search Modal -->
+  <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="searchModalLabel">Search</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body row">
+          <!-- Search content goes here -->
+          test
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="text-center mt-5">
+    <h5>Warning: Deleting a user will orders associated with him..</h5> <!--
+        <h6>Note: Changing order name will CHANGE the name in all products by this order & suppliers who are supplying this
+        order.</h6> -->
+  </div>
   <main class="container mt-5 mb-5">
     <div class="row">
       <div class="list-group col-lg-2 col-sm-3 tabs-container">
-        <a class="list-group-item list-group-item-action active tab all-brands-tab" id="list-home-list"
-          data-toggle="list" href="#all_brands" role="tab" aria-controls="home">All Brands</a>
-        <a class="list-group-item list-group-item-action tab add-brand-tab" id="list-profile-list" data-toggle="list"
-          href="#add_brands" role="tab" aria-controls="profile">Add Brand</a>
+        <a class="list-group-item list-group-item-action active tab all-users-tab" id="list-home-list"
+          data-toggle="list" href="#all_users" role="tab" aria-controls="home">All users</a>
 
       </div>
       <div class="col-8 main-content">
-        <div class="row brands">
-        </div>
-
-
-        <div class="col add-brand hidden">
-          <h1 class="text-center mb-4">Add Brand</h1>
-
-          <form class="row add-brand-form align-items-center flex-column" action="/api/brands" method="POST">
-            <div class="col-6 mb-3 ">
-              <label for="name" class="form-label">Brand name</label>
-              <input type="text" class="form-control" name="name" id="name" value="test1" placeholder="" required>
-            </div>
-            <div class="d-flex align-items-center justify-content-center form-btns-container">
-              <button type="submit" class="btn btn-primary mx-auto">
-                Add & Save Brand
-              </button>
-            </div>
-          </form>
-          <div class="feedback-message container text-center mt-4 hidden fs-3"></div>
+        <div class="row users">
+          <div class="col-12">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">First Name</th>
+                  <th scope="col">Last Name</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Orders</th>
+                  <th scope="col">Role</th>
+                  <th scope="col">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% users.forEach((user, index) => { %>
+                <tr data-user-id="<%= user.email %>">
+                  <th scope="row"><%= index + 1 %></th>
+                  <td><%= user.firstName %></td>
+                  <td><%= user.lastName %></td>
+                  <td><%= user.email %></td>
+                  <td><%= user.orders.length %> orders</td>
+                  <td id="user-role" data-role="<%= user.role ? true : false %>"><%= user.role ? 'Admin' : 'User' %>
+                  </td>
+                  <td>
+                    <button class="btn btn-info btn-sm view-orders-btn">View Orders</button>
+                    <button class="btn btn-warning btn-sm change-role-btn">Change Role</button>
+                    <button class="btn btn-danger btn-sm delete-user-btn">Delete</button>
+                  </td>
+                </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
 
   </main>
 
+  <!-- View Orders Modal -->
+  <div class="modal fade" id="viewOrdersModal" tabindex="-1" aria-labelledby="viewOrdersModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="viewOrdersModalLabel">User Orders</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"></script>
-  <script src="/dashboard/js/users.js"></script>
+  <script type="module" src="/dashboard/js/users.js"></script>
 </body>
 
 </html>

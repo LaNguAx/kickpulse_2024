@@ -1,5 +1,4 @@
 import { CategoriesModel } from '../../models/dashboard/category.js';
-import product_service from './product_service.js';
 
 const getCategories = async () => {
   try {

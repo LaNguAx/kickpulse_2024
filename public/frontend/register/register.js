@@ -1,59 +1,86 @@
-document.addEventListener("DOMContentLoaded", function() {
-    const form = document.querySelector("form");
-    const firstNameInput = document.getElementById("firstName");
-    const lastNameInput = document.getElementById("lastName");
-    const phoneInput = document.getElementById("phone");
-    const emailInput = document.getElementById("email");
+import Main from '../main.js';
+import QuickView from '../quickView.js';
+import Header from '../header.js';
+import FormValidator from '../formValidator.js';
 
-    form.addEventListener("submit", function(event) {
-        let valid = true;
-        let errorMessage = "";
+class Register {
 
-        // Validate first name
-        if (!isValidName(firstNameInput.value)) {
-            valid = false;
-            errorMessage += "First name must be at least two characters long and not contain numbers.\n";
-            firstNameInput.focus();
-        }
+    registerFormContainer;
+    registerForm;
 
-        // Validate last name
-        if (!isValidName(lastNameInput.value)) {
-            valid = false;
-            errorMessage += "Last name must be at least two characters long and not contain numbers.\n";
-            lastNameInput.focus();
-        }
+    constructor() {
+        this.registerFormContainer = document.querySelector('.register-form');
+        this.registerForm = this.registerFormContainer.querySelector('form');
 
-        // Validate phone number
-        if (!isValidPhoneNumber(phoneInput.value)) {
-            valid = false;
-            errorMessage += "Phone number must be exactly 9 digits and contain no letters or symbols.\n";
-            phoneInput.focus();
-        }
-
-        // Validate email
-        if (!isValidEmail(emailInput.value)) {
-            valid = false;
-            errorMessage += "Invalid email address.\n";
-            emailInput.focus();
-        }
-
-        if (!valid) {
-            alert(errorMessage);
-            event.preventDefault();
-        }
-    });
-
-    function isValidName(name) {
-        return name.length >= 2 && /^[A-Za-zא-ת]+$/.test(name);
+        this.initRegisterEventListeners();
     }
 
-    function isValidPhoneNumber(phone) {
-        return /^\d{9}$/.test(phone);
+    initRegisterEventListeners() {
+        this.registerForm.addEventListener('submit', this.handleRegisterFormSubmit.bind(this));
     }
 
-    function isValidEmail(email) {
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailPattern.test(email);
-    }
-});
+    async handleRegisterFormSubmit(e) {
+        e.preventDefault();
+        if (!this.registerForm.checkValidity())
+            return;
+        const formData = new FormData(this.registerForm);
+        const form = Object.fromEntries(formData.entries());
 
+
+        await this.registerUser(form);
+    }
+
+
+    async registerUser(form) {
+        const registerBtn = this.registerForm.querySelector('button');
+
+        try {
+            Main.renderSpinner(registerBtn, true);
+
+            const response = await fetch('/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(form),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Registration failed');
+            }
+
+            const data = await response.json();
+            Main.renderSpinner(registerBtn, false);
+
+            console.log('User registered successfully:', data);
+
+            // Display success message to the user
+            const successMessage = document.createElement('div');
+            successMessage.className = 'alert alert-success';
+            successMessage.innerHTML = 'Registration successful!<br>Redirecting to your profile...';
+            this.registerForm.prepend(successMessage);
+            setTimeout(() => {
+                successMessage.remove();
+                window.location.href = '/profile';
+            }, 1000);
+
+        } catch (error) {
+            Main.renderSpinner(registerBtn, false);
+
+            console.error('Error during registration:', error);
+
+            // Display error message to the user
+            const errorMessage = document.createElement('div');
+            errorMessage.className = 'alert alert-danger';
+            errorMessage.innerHTML = `${error.message}<br>Please choose a different email.`;
+            this.registerForm.prepend(errorMessage);
+            setTimeout(() => errorMessage.remove(), 2000);
+        }
+    }
+}
+
+
+Main.initComponents([Header, Register, FormValidator]);
+
+Main.hidePreLoader();

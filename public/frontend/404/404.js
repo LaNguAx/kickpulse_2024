@@ -1,5 +1,4 @@
 import Main from '../main.js';
-import QuickView from '../quickView.js';
 import Header from '../header.js';
 
 class PageNotFound {
@@ -9,6 +8,6 @@ class PageNotFound {
 }
 
 
-Main.initComponents([Header, QuickView]);
+Main.initComponents([Header, PageNotFound]);
 
 Main.hidePreLoader();

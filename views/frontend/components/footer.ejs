@@ -3,96 +3,80 @@
     <div class="col-lg-4 col-md-6">
       <h5>Our Brands</h5>
       <ul class="list-group">
-        <a href="#" class="text-decoration-none">
-          <li class="list-group-item">Nike</li>
+        <% categories.brandNames.forEach(function(brand) { %>
+        <a href="/brand/<%= brand.name %>" class="text-decoration-none">
+          <li class="list-group-item"><%= brand.name %></li>
         </a>
-        <a href="#" class="text-decoration-none">
-          <li class="list-group-item">Jordan</li>
-        </a>
-        <a href="#" class="text-decoration-none">
-          <li class="list-group-item">New Balance</li>
-        </a>
-        <a href="#" class="text-decoration-none">
-          <li class="list-group-item">Converse</li>
-        </a>
-        <a href="#" class="text-decoration-none">
-          <li class="list-group-item">Vans</li>
-        </a>
-        <a href="#" class="text-decoration-none">
-          <li class="list-group-item">On Cloud</li>
-        </a>
+        <% }); %>
       </ul>
+
     </div>
     <div class="col-lg-4 col-md-6">
       <h5>Customer Service</h5>
       <ul class="list-group">
-        <a href="#" class="text-decoration-none">
-          <li class="list-group-item">Nike</li>
+        <a href="/faq" class="text-decoration-none">
+          <li class="list-group-item">FAQ</li>
         </a>
-        <a href="#" class="text-decoration-none">
-          <li class="list-group-item">Jordan</li>
+        <a href="/shipping" class="text-decoration-none">
+          <li class="list-group-item">Shipping and Returns</li>
         </a>
-        <a href="#" class="text-decoration-none">
-          <li class="list-group-item">New Balance</li>
-        </a>
-        <a href="#" class="text-decoration-none">
-          <li class="list-group-item">Converse</li>
-        </a>
-        <a href="#" class="text-decoration-none">
-          <li class="list-group-item">Vans</li>
-        </a>
-        <a href="#" class="text-decoration-none">
-          <li class="list-group-item">On Cloud</li>
-        </a>
+        <li class="list-group-item"><b>Reach us :</b></li>
+        <li class="list-group-item">
+          <i class="bi bi-geo-alt"></i> 19830 W dixie Hwy, Aventura, FL 33180
+        </li>
+        <li class="list-group-item">
+          <i class="bi bi-telephone"></i> +1 (954) 592-9223
+        </li>
+        <li class="list-group-item">
+          <i class="bi bi-envelope"></i> kickpulse@gmail.com
+        </li>
+        <li class="list-group-item d-flex justify-content-center">
+          <a href="https://www.facebook.com/profile.php?id=61564294345044" class="text-decoration-none text-black">
+            <i class="bi bi-facebook"></i>
+          </a>
+        </li>
       </ul>
     </div>
     <div class="col-lg-4 col-md-6">
       <h5>About Us</h5>
       <ul class="list-group">
-        <a href="#" class="text-decoration-none">
+        <a href="/about-us" class="text-decoration-none">
           <li class="list-group-item">Company Info</li>
         </a>
-        <a href="#" class="text-decoration-none">
-          <li class="list-group-item">Careers</li>
+        <a href="/ourstores" class="text-decoration-none">
+          <li class="list-group-item">Our Stores</li>
         </a>
-        <a href="#" class="text-decoration-none">
-          <li class="list-group-item">Press</li>
+        <a href="/terms" class="text-decoration-none">
+          <li class="list-group-item">Terms and Conditions</li>
         </a>
-        <a href="#" class="text-decoration-none">
-          <li class="list-group-item">Blog</li>
+        <a href="/privacy" class="text-decoration-none">
+          <li class="list-group-item">Privacy Policy</li>
         </a>
-        <a href="#" class="text-decoration-none">
-          <li class="list-group-item">Affiliate Program</li>
+        <a href="/accessibility" class="text-decoration-none">
+          <li class="list-group-item">Accessibility Statement</li>
         </a>
-        <a href="#" class="text-decoration-none">
-          <li class="list-group-item">Corporate Responsibility</li>
-        </a>
-      </ul>
-    </div>
-    <div class="col-lg-4 col-md-6 ">
-      <h5>Contact Us</h5>
-      <ul class="list-group">
-        <li class="list-group-item">
-          <i class="bi bi-geo-alt"></i> 123 Main St, City, Country
-        </li>
-        <li class="list-group-item">
-          <i class="bi bi-telephone"></i> +1 (123) 456-7890
-        </li>
-        <li class="list-group-item">
-          <i class="bi bi-envelope"></i> info@example.com
-        </li>
-        <li class="list-group-item d-flex justify-content-between">
-          <a href="#" class="text-decoration-none text-black">
-            <i class="bi bi-facebook"></i>
-          </a>
-          <a href="#" class="text-decoration-none text-black">
-            <i class="bi bi-twitter"></i>
-          </a>
-          <a href="#" class="text-decoration-none text-black">
-            <i class="bi bi-instagram"></i>
-          </a>
-        </li>
       </ul>
     </div>
   </div>
+  <div class="d-flex justify-content-center">
+    <canvas id="originalsCanvas" width="300" height="150"></canvas>
+
+  </div>
+  <script>
+    const canvas = document.getElementById('originalsCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // Set background color
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Set text style
+    ctx.font = 'bold 30px Arial';
+    ctx.fillStyle = '#000000';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+
+    // Draw the text on the canvas
+    ctx.fillText('Originals', canvas.width / 2, canvas.height / 2);
+  </script>
 </footer>

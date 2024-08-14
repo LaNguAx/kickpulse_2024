@@ -220,11 +220,57 @@ const updateProductsCategoryName = async (category) => {
   }
 };
 
+
+const updateProduct = async (updatedProduct, prodId) => {
+
+  try {
+
+    const oldProduct = await getProduct(prodId);
+
+    oldProduct.name = updatedProduct.name;
+    oldProduct.sizes = updatedProduct.sizes;
+    oldProduct.price = updatedProduct.price;
+    oldProduct.quantity = updatedProduct.quantity;
+    oldProduct.description = updatedProduct.description;
+    oldProduct.supplier = updatedProduct.supplier;
+    oldProduct.image = updatedProduct.image;
+    oldProduct.brand = updatedProduct.brand;
+    oldProduct.category = updatedProduct.category;
+    oldProduct.gender = updatedProduct.gender;
+
+
+    return await oldProduct.save();
+
+  } catch (err) {
+    console.error('Error saving product:', err);
+    throw new Error('Failed to save product');
+  }
+
+
+}
+
+const getProductsByBrandName = async (brandName) => {
+  try {
+    console.log(brandName)
+    const products = await ProductsModel.find({
+      'brand.name': new RegExp('^' + brandName + '$', 'i') // Case-insensitive search for brand name
+    });
+
+    if (products.length === 0) null;
+
+    return products;
+  } catch (err) {
+    console.error(`Error finding products for brand name ${brandName}:`, err);
+    throw new Error('Failed to retrieve products');
+  }
+};
+
 export default {
   getProducts,
   getProduct,
   getProductsByCategoryId,
   getProductByName,
+  getProductsByBrandName,
   createProduct,
   deleteProduct,
   deleteProductsBySupplierId,
@@ -233,5 +279,6 @@ export default {
   editProduct,
   updateProductsBrandName,
   updateProductsCategoryName,
-  getProductsByGender
+  getProductsByGender,
+  updateProduct
 };

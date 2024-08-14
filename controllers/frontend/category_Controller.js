@@ -4,16 +4,19 @@ import BrandsService from '../../services/dashboard/brand_service.js';
 export async function getIndex(req, res) {
   const { name } = req.params;
   try {
+    console.log('test')
     const categories = await CategoryService.getCategories();
     const category = await CategoryService.getCategoryByName(name);
     const categoryProducts = await ProductService.getProductsByCategoryId(category._id);
     const brands = await BrandsService.getBrands();
+    categories.brandNames = brands;
 
     res.render('../views/frontend/category', {
       categories,
       category,
       categoryProducts,
-      brands
+      brands,
+      session: req.session,
     });
   }
   catch (e) {
@@ -45,3 +48,31 @@ export async function categoryMiddleware(req, res) {
   }
 }
 
+
+
+export async function getBrandIndex(req, res) {
+  const { name } = req.params;
+
+  try {
+    const categories = await CategoryService.getCategories();
+    const brand = await BrandsService.getBrandByName(name);
+    // const categoryProducts = await ProductService.getProductsByCategoryId(category._id);
+    // const brands = await BrandsService.getBrands();
+    const brandProducts = await ProductService.getProductsByBrandName(brand.name);
+    const brandNames = await BrandsService.getBrands();
+    categories.brandNames = brandNames;
+
+    res.render('../views/frontend/brand', {
+      categories,
+      brand,
+      brandProducts,
+      session: req.session,
+      brandNames
+    })
+
+  } catch (e) {
+    console.error(e);
+    res.redirect('/404');
+  }
+
+}

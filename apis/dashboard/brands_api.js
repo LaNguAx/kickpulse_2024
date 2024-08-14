@@ -94,3 +94,28 @@ export async function deleteBrand(req, res) {
     res.status(500).json({ success: false, message: 'Server error' });
   }
 }
+
+// Get a single brand by name
+export async function getBrandByName(req, res) {
+  const { name } = req.params;
+  try {
+    const brand = await BrandService.getBrandByName(name);
+    res.status(200).json({ success: true, data: brand });
+  } catch (error) {
+    console.error(`Error fetching brand with name ${name}:`, error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+}
+
+
+export async function getProductsByBrandName(req, res) {
+  const { name: id } = req.params;
+  try {
+    const brand = await BrandService.getBrand(id);
+    const products = await ProductsService.getProductsByBrandName(brand.name);
+    return res.status(200).json({ success: true, data: products });
+  } catch (err) {
+    console.error(`Error finding products for brand name ${name}:`, err);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+};

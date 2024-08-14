@@ -250,3 +250,12 @@ class Suppliers {
 document.addEventListener('DOMContentLoaded', () => {
   new Suppliers();
 });
+
+function hidePreLoader() {
+  window.addEventListener('load', function () {
+    const preloader = document.getElementById('preloader');
+    preloader.style.display = 'none';
+  });
+}
+
+hidePreLoader();

@@ -17,3 +17,7 @@ video {
     }
 }
 
+
+.gender-link.active {
+  font-weight: bold;
+}

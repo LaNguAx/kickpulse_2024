@@ -1,7 +1,3 @@
-// admin dashboard
-export function usersIndex(req, res) {
-  res.render('../views/dashboard/users');
-}
-export function ordersIndex(req, res) {
-  res.render('../views/dashboard/orders');
+export async function getAdminLoginIndex(req, res) {
+  res.render('../views/dashboard/login', {});
 }
